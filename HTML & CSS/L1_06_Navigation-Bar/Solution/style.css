@@ -1,0 +1,20 @@
+head{
+background-color: royalblue;
+}
+nav{
+    background: darkblue;
+}
+nav ul li a{
+    text-decoration: none;
+    color: white;
+}
+nav ul li a{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    display: inline-block;
+  text-align: center;
+    margin: 10px;
+
+}
+ul body{
+    margin: 0;
+}

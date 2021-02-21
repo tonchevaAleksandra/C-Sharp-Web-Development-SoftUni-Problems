@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,19 +11,103 @@ namespace Test
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-            //ConcurrentQueueDequeue();
+        //public Task<IActionResult> SaveData()
+        //{
+        //    //==
+        //    await sbContext.SaveChangesAsync();
 
+        //    return this.View();
+        //}
+
+        //
+        static async Task Main(string[] args)
+        {
+            //78668
+          //  00:00:04.0500773
+            var sw = Stopwatch.StartNew();
+            var count = 0;
+            //for (int i = 0; i < 1000000; i++)
+
+            //78598 => not correct answer - Parallel without lock
+            // 00:00:00.8275223
+
+            //78667 => with lock on count variable
+           // 00:00:00.7447448
+           var obj = new object();
+            Parallel.For(1, 1000001, (i) =>
+            {
+                bool isPrime = true;
+                for (int div = 2; div < Math.Sqrt(i); div++)
+                {
+                    if (i % div == 0)
+                    {
+
+                        isPrime = false;
+                    }
+                }
+
+                if (isPrime)
+                {
+                    lock (obj)
+                    {
+                        count++;
+                    }
+                   
+                }
+            });
+
+            Console.WriteLine(count);
+            Console.WriteLine(sw.Elapsed);
+            //await HttpClientAsync();
+
+
+            //ConcurrentQueueDequeue();
 
             //TwoThreadsCountPrimeNumbers();
             //IncreaseMoney();
 
             //DeadLockCondition();
 
-
             //Task Parallel Library
             //TaskParallelLibrary();
+
+            //BananaCode();
+        }
+
+        private static async Task HttpClientAsync()
+        {
+            try
+            {
+                var httpClient = new HttpClient();
+                var httpResponse = await httpClient.GetAsync("http://softuni2.bg");
+                var result = await httpResponse.Content.ReadAsStringAsync();
+
+                Console.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.WriteLine("jkgkg");
+        }
+
+        private static void BananaCode()
+        {
+            var httpClient = new HttpClient();
+            httpClient.GetAsync("http://softuni.bg")
+                .ContinueWith((previousTask) =>
+                {
+                    previousTask.Result.Content.ReadAsStringAsync()
+                        .ContinueWith((readAsStringTask) =>
+                        {
+                            //readAsStringTask.Exception.Message;
+                            if (!readAsStringTask.IsFaulted)
+                            {
+                                Console.WriteLine(readAsStringTask.Result);
+                            }
+                        });
+                });
         }
 
         private static void TaskParallelLibrary()

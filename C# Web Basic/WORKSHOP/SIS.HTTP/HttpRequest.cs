@@ -48,7 +48,7 @@ namespace SIS.HTTP
                 _ => HttpVersionType.Http11
             };
             bool isInHeader = true;
-            StringBuilder sb = new StringBuilder();
+            StringBuilder bodyBuilder = new StringBuilder();
             for (int i = 1; i < lines.Length; i++)
             {
                 var line = lines[i];
@@ -70,7 +70,7 @@ namespace SIS.HTTP
                 }
                 else
                 {
-
+                    bodyBuilder.AppendLine(line);
                 }
             }
         }

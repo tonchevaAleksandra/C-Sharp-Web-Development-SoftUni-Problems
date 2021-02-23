@@ -46,27 +46,31 @@ namespace SIS.HTTP
            
             using NetworkStream networkStream = client.GetStream();
             byte[] requestBytes = new byte[1000000]; //TODO: Use buffer
+
             int bytesRead = await networkStream.ReadAsync(requestBytes, 0, requestBytes.Length);
-            string request = Encoding.UTF8.GetString(requestBytes, 0, bytesRead);
-            byte[] fileContent = Encoding.UTF8.GetBytes("<form method='post'><input name='username' /><input type='submit' /></form><h1>Hello, World!</h1>");
+            string requestAsString = Encoding.UTF8.GetString(requestBytes, 0, bytesRead);
+           
+            var request = new HttpRequest(requestAsString);
+            string content = "<h1>random page</h1>";
+            if (request.Path=="/")
+            {
+                content= "<h1>Home page</h1>";
+            }
+            else if (request.Path=="/users/login")
+            {
+                content = "<h1>Login page</h1>";
+            }
+            
+            
+            byte[] stringContent = Encoding.UTF8.GetBytes(content);
+            var response = new HttpResponse(HttpResponseCode.Ok, stringContent);
+            response.Headers.Add(new Header("Sever", "SoftUniServer/1.0"));
+            response.Headers.Add(new Header("Content-Type", "text/html"));
+           
+            byte[] responseBytes = Encoding.UTF8.GetBytes(response.ToString());
+            await networkStream.WriteAsync(responseBytes, 0, responseBytes.Length);
+            await networkStream.WriteAsync(response.Body, 0, response.Body.Length);
 
-            var match = Regex.Match(request, @"Cookie: user=[^\n]*");
-            var username = match.ToString().Split('=').Last();
-            /*string responseText = "<h1>Hello Header</h>";*/
-            //string responseText = "<form> <input type=text name='username' /> </form>";
-            string responseText = @"<h1>" + username + "</h1>" + "<h1>" + DateTime.UtcNow + "</h1>";
-
-            //Thread.Sleep(10000);
-
-            string headers = "HTTP/1.0 307 OK" + HttpConstants.NewLine +
-                             "Server: SoftUniServer/1.0" + HttpConstants.NewLine +
-                             "Content-Type: text/html" + HttpConstants.NewLine +
-                             "Content-Length: " +
-                             fileContent.Length + HttpConstants.NewLine +
-                             HttpConstants.NewLine;
-            byte[] headersBytes = Encoding.UTF8.GetBytes(headers);
-            await networkStream.WriteAsync(headersBytes, 0, headersBytes.Length);
-            await networkStream.WriteAsync(fileContent, 0, fileContent.Length);
 
             Console.WriteLine(request);
             Console.WriteLine(new string('=', 60));

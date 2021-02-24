@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,13 +51,21 @@ namespace SIS.HTTP
 
                 int bytesRead = await networkStream.ReadAsync(requestBytes, 0, requestBytes.Length);
                 string requestAsString = Encoding.UTF8.GetString(requestBytes, 0, bytesRead);
-
                 var request = new HttpRequest(requestAsString);
                 var sessionCookie = request.Cookies.FirstOrDefault(x => x.Name == HttpConstants.SessionIdCookieName);
-                if (sessionCookie!=null && this.sessions.ContainsKey(sessionCookie.Value))
+                string newSessionId = null;
+                if (sessionCookie != null && this.sessions.ContainsKey(sessionCookie.Value))
                 {
                     request.SessionData = this.sessions[sessionCookie.Value];
                 }
+                else
+                {
+                    newSessionId = Guid.NewGuid().ToString();
+                    var dictionary = new Dictionary<string, string>();
+                    this.sessions.Add(newSessionId, dictionary);
+                    request.SessionData = dictionary;
+                }
+
                 Console.WriteLine($"{request.Method} {request.Path}");
 
                 var route = this.routeTable.FirstOrDefault(
@@ -75,15 +82,12 @@ namespace SIS.HTTP
                 }
 
                 response.Headers.Add(new Header("Sever", "SoftUniServer/1.0"));
-               
-                if (sessionCookie == null || !this.sessions.ContainsKey(sessionCookie.Value))
+
+                if (newSessionId != null)
                 {
-                    var newSessionId = Guid.NewGuid().ToString();
-                    this.sessions.Add(newSessionId, new Dictionary<string, string>());
                     response.Cookies.Add(new ResponseCookie(HttpConstants.SessionIdCookieName, newSessionId)
                     { HttpOnly = true, MaxAge = 30 * 3600 });
                 }
-
 
                 byte[] responseBytes = Encoding.UTF8.GetBytes(response.ToString());
                 await networkStream.WriteAsync(responseBytes, 0, responseBytes.Length);

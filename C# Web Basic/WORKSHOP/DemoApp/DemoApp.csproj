@@ -9,4 +9,10 @@
     <ProjectReference Include="..\SIS.MvcFramewok\SIS.MvcFramework.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="wwwroot\favicon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

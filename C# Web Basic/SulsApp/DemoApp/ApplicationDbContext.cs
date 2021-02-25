@@ -4,7 +4,7 @@ namespace DemoApp
 {
     public class ApplicationDbContext : DbContext
     {
-        private DbSet<Tweet> Tweets { get; set; }
+        public DbSet<Tweet> Tweets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

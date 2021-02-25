@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DemoApp
 {
-    class Tweet
+    public class Tweet
     {
         public int Id { get; set; }
         public DateTime CreatedOn { get; set; }

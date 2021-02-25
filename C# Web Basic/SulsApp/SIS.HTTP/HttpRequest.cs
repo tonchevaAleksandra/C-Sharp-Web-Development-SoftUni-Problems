@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 
 namespace SIS.HTTP
 {
@@ -15,6 +16,8 @@ namespace SIS.HTTP
         {
             this.Headers = new List<Header>();
             this.Cookies = new List<Cookie>();
+            this.SessionData = new Dictionary<string, string>();
+            this.FormData = new Dictionary<string, string>();
             //StringReader reader = new StringReader(httpRequestAsString);
             //reader.ReadLine();
 
@@ -91,6 +94,15 @@ namespace SIS.HTTP
                     bodyBuilder.AppendLine(line);
                 }
             }
+
+            this.Body = bodyBuilder.ToString().TrimEnd('\r', '\n');
+            var bodyParts = this.Body.Split('&', StringSplitOptions.RemoveEmptyEntries);
+            foreach (var bodyPart in bodyParts)
+            {
+                var parameters = bodyPart.Split(new char[] { '=' }, 2);
+                this.FormData.Add(HttpUtility.UrlDecode(parameters[0]), HttpUtility.UrlDecode(parameters[1]));
+            }
+
         }
         public HttpMethodType Method { get; set; }
         public string Path { get; set; }
@@ -100,6 +112,7 @@ namespace SIS.HTTP
         public IList<Cookie> Cookies { get; set; }
 
         public string Body { get; set; }
+        public IDictionary<string, string> FormData { get; set; }
         public IDictionary<string, string> SessionData { get; set; }
     }
 

@@ -7,12 +7,12 @@ namespace SulsApp.Controllers
     {
         public HttpResponse Login(HttpRequest request)
         {
-            return this.View("Users/login.html");
+            return this.View();
 
         }
         public HttpResponse Register(HttpRequest request)
         {
-            return this.View("Users/register.html");
+            return this.View();
 
         }
     }

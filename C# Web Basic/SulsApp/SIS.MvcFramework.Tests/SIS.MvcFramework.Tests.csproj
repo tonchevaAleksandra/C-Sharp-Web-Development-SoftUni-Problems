@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SIS.MvcFramewok\SIS.MvcFramework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="ViewTests\ForForeachIfView.Expected.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

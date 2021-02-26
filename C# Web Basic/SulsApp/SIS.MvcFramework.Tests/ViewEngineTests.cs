@@ -4,13 +4,13 @@ using Xunit;
 
 namespace SIS.MvcFramework.Tests
 {
-    public class UnitTest1
+    public class ViewEngineTests
     {
         [Theory]
         [InlineData("OnlyHtmlView")]
         [InlineData("ForForeachIfView")]
         [InlineData("ViewModelView")]
-        public void Test1(string testName)
+        public void GetHtmlTest(string testName)
         {
             var viewModel = new TestViewModel()
             {
@@ -19,10 +19,12 @@ namespace SIS.MvcFramework.Tests
                 Numbers = new List<int> { 1, 10, 100, 1000, 10000 }
             };
 
-            var viewContent = File.ReadAllText($"{testName}.html");
-            var expectedResult = File.ReadAllText($"{testName}.Expected.html");
+            var viewContent = File.ReadAllText($"ViewTests/{testName}.html");
+            var expectedResult = File.ReadAllText($"ViewTests/{testName}.Expected.html");
 
-            Assert
+            IViewEngine viewEngine = new ViewEngine();
+            var actualResult = viewEngine.GetHtml(viewContent, viewModel);
+            Assert.Equal(expectedResult, actualResult);
         }
     }
 }

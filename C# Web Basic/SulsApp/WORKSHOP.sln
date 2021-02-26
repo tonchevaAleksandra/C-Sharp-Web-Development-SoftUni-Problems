@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SulsApp", "SulsApp\SulsApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.MvcFramework.Tests", "SIS.MvcFramework.Tests\SIS.MvcFramework.Tests.csproj", "{FF0DAD2E-63F5-42DE-B0BE-59B9141D25B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConverter", "TestConverter\TestConverter.csproj", "{3BA5A634-D566-45FE-840C-58306022F90A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FF0DAD2E-63F5-42DE-B0BE-59B9141D25B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF0DAD2E-63F5-42DE-B0BE-59B9141D25B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF0DAD2E-63F5-42DE-B0BE-59B9141D25B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BA5A634-D566-45FE-840C-58306022F90A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BA5A634-D566-45FE-840C-58306022F90A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BA5A634-D566-45FE-840C-58306022F90A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BA5A634-D566-45FE-840C-58306022F90A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

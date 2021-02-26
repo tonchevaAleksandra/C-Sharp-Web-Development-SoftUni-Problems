@@ -1,4 +1,5 @@
-﻿using SIS.HTTP;
+﻿using System.IO;
+using SIS.HTTP;
 using SIS.HTTP.Response;
 
 namespace SulsApp.Controllers
@@ -7,7 +8,10 @@ namespace SulsApp.Controllers
     {
         public HttpResponse Index(HttpRequest request)
         {
-            return new HtmlResponse("<h1>Welcome to SULS Platform!</h1><p><a href='/Users/Login' target='_blanc'>Login</a> to use the Platform.</p><p><a href='/Users/Register' target='_blanc'>Register</a> if you don't have an account.</p>");
+            var layout = File.ReadAllText("Views/Shared/layout.html");
+            var html = File.ReadAllText("Views/Home/index.html");
+            var bodyWithLayout = layout.Replace("@RenderBody()", html);
+            return new HtmlResponse(bodyWithLayout);
         }
     }
 }

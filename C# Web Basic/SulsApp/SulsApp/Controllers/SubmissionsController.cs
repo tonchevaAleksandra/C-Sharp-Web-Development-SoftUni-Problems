@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SIS.HTTP;
+using SIS.MvcFramework;
 
 namespace SulsApp.Controllers
 {
-    public class SubmissionsController
+    public class SubmissionsController : Controller
     {
+        public HttpResponse Index(HttpRequest request)
+        {
+            return this.View("Submissions/submission.html");
+        }
     }
 }

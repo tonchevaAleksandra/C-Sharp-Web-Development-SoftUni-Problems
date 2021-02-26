@@ -16,6 +16,13 @@ namespace SulsApp
             var routeTable = new List<Route>
             {
                 new Route("/", HttpMethodType.Get, new HomeController().Index),
+                new Route("/Users/Login", HttpMethodType.Get, new UsersController().Login),
+                new Route("/Users/Register", HttpMethodType.Get, new UsersController().Register),
+                new Route("/Submissions", HttpMethodType.Get, new SubmissionsController().Index),
+                new Route("/css/bootstrap.min.css", HttpMethodType.Get, new StaticFilesController().Bootstrap),
+                new Route("/css/site.css", HttpMethodType.Get,new StaticFilesController().Site),
+                new Route("/css/reset-css.css", HttpMethodType.Get, new StaticFilesController().Reset),
+             
 
             };
 

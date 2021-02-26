@@ -1,6 +1,9 @@
-﻿namespace SulsApp.Controllers
+﻿using SIS.MvcFramework;
+
+namespace SulsApp.Controllers
 {
-    public class ProblemsController
+    public class ProblemsController:Controller
     {
+
     }
 }

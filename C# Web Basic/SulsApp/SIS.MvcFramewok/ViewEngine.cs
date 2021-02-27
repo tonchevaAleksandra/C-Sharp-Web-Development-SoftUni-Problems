@@ -1,5 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -17,15 +22,16 @@ namespace SIS.MvcFramework
             using SIS.MvcFramework;
             namespace AppViewNamespace
             {{
-            public class AppViewCode : IView
-{{
-public string GetHtml(object model)
-{{
-var html= new StringBuilder();
-{methodCode}
-return html.ToString();
-}}
-}}
+                 public class AppViewCode : IView
+                 {{
+                     public string GetHtml(object model)
+                      {{
+                          var Model= model as {model.GetType().FullName};
+                          var html= new StringBuilder();
+                          {methodCode}
+                          return html.ToString();
+                      }} 
+                 }}
             }}";
 
             IView view = GetInstanceFromCode(code, model);
@@ -41,7 +47,7 @@ return html.ToString();
                   .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
                   .AddReferences(MetadataReference.CreateFromFile(model.GetType().Assembly.Location));
 
-            var libraries = Assembly.Load(new AssemblyName("netstandart")).GetReferencedAssemblies();
+            var libraries = Assembly.Load(new AssemblyName("netstandard")).GetReferencedAssemblies();
 
             foreach (var library in libraries)
             {
@@ -49,16 +55,64 @@ return html.ToString();
             }
 
             compilation = compilation.AddSyntaxTrees(SyntaxFactory.ParseSyntaxTree(code));
-
-            compilation.Emit("a.dll");
-
-            return null;
+            using var memoryStream = new MemoryStream();
+            var compilationResult = compilation.Emit(memoryStream);
+            if (!compilationResult.Success)
+            {
+                return new ErrorView(compilationResult.Diagnostics.Where(x => x.Severity == DiagnosticSeverity.Error)
+                    .Select(x => x.GetMessage()));
+            }
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            var assemblyByteArray = memoryStream.ToArray();
+            var assembly = Assembly.Load(assemblyByteArray);
+            var type = assembly.GetType("AppViewNamespace.AppViewCode");
+            var instance = Activator.CreateInstance(type) as IView;
+            return instance;
 
         }
 
         private string PrepareCSharpCode(string templateHtml)
         {
-            return string.Empty;
+            var cSharpExpressionRegex = new Regex(@"[^\<\""\s]+", RegexOptions.Compiled);
+            var supportedOperators = new[] { "if", "for", "foreach", "else" };
+            StringBuilder cSharpCode = new StringBuilder();
+            StringReader reader = new StringReader(templateHtml);
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (line.TrimStart().StartsWith("{")
+                    || line.TrimStart().StartsWith("}"))
+                {
+                    cSharpCode.AppendLine(line);
+                }
+                else if (supportedOperators.Any(x => line.TrimStart().StartsWith("@" + x)))
+                {
+                    var indexOfAt = line.IndexOf("@");
+                    line = line.Remove(indexOfAt, 1);
+                    cSharpCode.AppendLine(line);
+                }
+                else 
+                {
+                    var currentCSharpLine = new StringBuilder("html.AppendLine(@\"");
+                    while (line.Contains("@"))
+                    {
+                        var atSignLocation = line.IndexOf("@");
+                        var before = line.Substring(0, atSignLocation);
+                        currentCSharpLine.Append(before.Replace("\"","\"\"") + "\" + ");
+                        var cSharpAndEndOfLine = line.Substring(atSignLocation + 1);
+                        var cSharpExpression = cSharpExpressionRegex.Match(cSharpAndEndOfLine);
+                        currentCSharpLine.Append(cSharpExpression.Value + " + @\"");
+                        var after = cSharpAndEndOfLine.Substring(cSharpExpression.Length);
+                        line = after;
+
+                    }
+
+                    currentCSharpLine.Append(line.Replace("\"", "\"\"") + "\");");
+                    cSharpCode.AppendLine(currentCSharpLine.ToString());
+                }
+            }
+
+            return cSharpCode.ToString();
         }
     }
 }

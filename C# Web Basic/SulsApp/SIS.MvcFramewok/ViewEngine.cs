@@ -15,6 +15,11 @@ namespace SIS.MvcFramework
         public string GetHtml(string templateHtml, object model)
         {
             var methodCode = PrepareCSharpCode(templateHtml);
+            var typeName = model.GetType().FullName;
+            if (model.GetType().IsGenericType)
+            {
+                typeName = model.GetType().Name.Replace("`1", string.Empty) + "<" + model.GetType().GenericTypeArguments.First().Name + ">";
+            }
             string code = @$"using System;
             using System.Text;
             using System.Linq;
@@ -26,7 +31,7 @@ namespace SIS.MvcFramework
                  {{
                      public string GetHtml(object model)
                       {{
-                          var Model= model as {model.GetType().FullName};
+                          var Model= model as {typeName};
                           var html= new StringBuilder();
                           {methodCode}
                           return html.ToString();

@@ -15,8 +15,8 @@ namespace SIS.MvcFramework
         public string GetHtml(string templateHtml, object model)
         {
             var methodCode = PrepareCSharpCode(templateHtml);
-            var typeName = model.GetType().FullName;
-            if (model.GetType().IsGenericType)
+            var typeName = model?.GetType().FullName ?? "object";
+            if (model?.GetType().IsGenericType == true) // null/true/false bool?
             {
                 typeName = model.GetType().Name.Replace("`1", string.Empty) + "<" + model.GetType().GenericTypeArguments.First().Name + ">";
             }
@@ -32,6 +32,7 @@ namespace SIS.MvcFramework
                      public string GetHtml(object model)
                       {{
                           var Model= model as {typeName};
+                          object User= null;
                           var html= new StringBuilder();
                           {methodCode}
                           return html.ToString();
@@ -50,7 +51,11 @@ namespace SIS.MvcFramework
                   .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
                   .AddReferences(MetadataReference.CreateFromFile(typeof(IView).Assembly.Location))
                   .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
-                  .AddReferences(MetadataReference.CreateFromFile(model.GetType().Assembly.Location));
+                ;
+            if (model != null)
+            {
+                compilation = compilation.AddReferences(MetadataReference.CreateFromFile(model.GetType().Assembly.Location));
+            }
 
             var libraries = Assembly.Load(new AssemblyName("netstandard")).GetReferencedAssemblies();
 
@@ -96,14 +101,14 @@ namespace SIS.MvcFramework
                     line = line.Remove(indexOfAt, 1);
                     cSharpCode.AppendLine(line);
                 }
-                else 
+                else
                 {
                     var currentCSharpLine = new StringBuilder("html.AppendLine(@\"");
                     while (line.Contains("@"))
                     {
                         var atSignLocation = line.IndexOf("@");
                         var before = line.Substring(0, atSignLocation);
-                        currentCSharpLine.Append(before.Replace("\"","\"\"") + "\" + ");
+                        currentCSharpLine.Append(before.Replace("\"", "\"\"") + "\" + ");
                         var cSharpAndEndOfLine = line.Substring(atSignLocation + 1);
                         var cSharpExpression = cSharpExpressionRegex.Match(cSharpAndEndOfLine);
                         currentCSharpLine.Append(cSharpExpression.Value + " + @\"");

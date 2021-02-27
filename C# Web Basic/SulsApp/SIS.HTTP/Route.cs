@@ -15,5 +15,9 @@ namespace SIS.HTTP
         public HttpMethodType HttpMethod { get; set; }
         public Func<HttpRequest, HttpResponse> Action { get; set; }
 
+        public override string ToString()
+        {
+            return $"{this.HttpMethod} => {this.Path} ({this.Action.Method.Name})";
+        }
     }
 }

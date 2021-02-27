@@ -10,24 +10,24 @@ namespace SIS.MvcFramework
 {
     public abstract class Controller
     {
-        protected HttpResponse View([CallerMemberName] string viewFileName=null)
+        protected HttpResponse View<T>(T viewModel = null, [CallerMemberName] string viewName = null)
+        where T : class
         {
-           //Environment.StackTrace() => First option
-           //var stackTrace = new StackTrace();
-           //stackTrace.GetFrames().Skip().Take(); => Second option
-           //try
-           //{
-           //    throw new Exception();
-           //}
-           //catch (Exception e)
-           //{
-           //   e.StackTrace  => Third option for dummies :D
-           //}
-            var layout = File.ReadAllText("Views/Shared/layout.html");
-            var controllerName = this.GetType().Name.Replace("Controller", string.Empty);
-            var html = File.ReadAllText("Views/" + controllerName + "/" + viewFileName + ".html");
+            IViewEngine viewEngine = new ViewEngine();
+            var typeName = this.GetType().Name;
+            var controllerName = typeName.Substring(0, typeName.Length - 10);
+            var html = File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
+            html = viewEngine.GetHtml(html, null);
+
+            var layout = File.ReadAllText("Views/Shared/_Layout.html");
             var bodyWithLayout = layout.Replace("@RenderBody()", html);
+            bodyWithLayout = viewEngine.GetHtml(bodyWithLayout, viewModel);
             return new HtmlResponse(bodyWithLayout);
+        }
+        protected HttpResponse View([CallerMemberName] string viewName = null)
+        {
+            return this.View<object>(null, viewName);
+
         }
     }
 }

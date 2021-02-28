@@ -5,11 +5,17 @@ using SIS.HTTP;
 using SIS.HTTP.Response;
 using SIS.MvcFramework;
 using SulsApp.Models;
+using SulsApp.Services;
 
 namespace SulsApp.Controllers
 {
     public class UsersController : Controller
     {
+        private IUsersService usersService;
+        public UsersController()
+        {
+            this.usersService = new UsersService();
+        }
 
         public HttpResponse Login()
         {
@@ -56,18 +62,10 @@ namespace SulsApp.Controllers
                 return this.Error("Invalid email address.");
             }
 
-            var user = new User()
-            {
-                Username = username,
-                Email = email,
-                Password = this.Hash(password)
-            };
-            var db = new ApplicationDbContext();
-            db.Users.Add(user);
-            db.SaveChanges();
+            this.usersService.CreateUser(username, email, password);
 
             //TODO: log in
-        
+
             return this.Redirect("/");
 
         }

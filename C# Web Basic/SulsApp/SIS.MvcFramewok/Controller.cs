@@ -37,19 +37,7 @@ namespace SIS.MvcFramework
             return new RedirectResponse(url);
         }
 
-        protected string Hash(string input)
-        {
-            var crypt = new SHA256Managed();
-            StringBuilder hash = new StringBuilder();
-            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            foreach (byte cryptoByte in crypto)
-            {
-                hash .Append(cryptoByte.ToString("x2")); //255 => FF
-            }
-
-            return hash.ToString();
-        }
+      
 
         private HttpResponse ViewByName<T>(string viewPath, object viewModel)
         {

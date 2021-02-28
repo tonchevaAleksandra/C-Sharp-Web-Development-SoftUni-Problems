@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using SulsApp.Models;
 
 namespace SulsApp.Services
 {
     public class UsersService : IUsersService
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db;
 
         public UsersService(ApplicationDbContext db)
         {
@@ -14,22 +16,41 @@ namespace SulsApp.Services
         }
         public void CreateUser(string username, string email, string password)
         {
-            throw new NotImplementedException();
+            var user = new User()
+            {
+                Username = username,
+                Email = email,
+                Password = this.Hash(password)
+            };
+
+            this.db.Users.Add(user);
+            this.db.SaveChanges();
         }
 
         public bool IsValidUser(string username, string password)
         {
-            throw new NotImplementedException();
+            var passwordHash = this.Hash(password);
+            return this.db.Users.Any(x => x.Username == username && x.Password == passwordHash);
         }
 
         public void ChangePassword(string username, string newPassword)
         {
-            throw new NotImplementedException();
+            var user = this.db.Users.FirstOrDefault(x =>
+                x.Username == username/* && x.Password == this.Hash(newPassword)*/);
+
+            if (user==null)
+            {
+                return;
+            }
+
+            user.Password = this.Hash(newPassword);
+            this.db.SaveChanges();
+
         }
 
         public int CountUsers()
         {
-            throw new NotImplementedException();
+            return this.db.Users.Count();
         }
 
         private string Hash(string input)

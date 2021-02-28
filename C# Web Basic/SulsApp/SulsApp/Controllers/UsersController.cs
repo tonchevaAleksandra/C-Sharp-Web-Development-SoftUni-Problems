@@ -11,10 +11,11 @@ namespace SulsApp.Controllers
 {
     public class UsersController : Controller
     {
-        private IUsersService usersService;
+        private readonly IUsersService usersService;
+
         public UsersController()
         {
-            this.usersService = new UsersService();
+            this.usersService = new UsersService(new ApplicationDbContext());
         }
 
         public HttpResponse Login()

@@ -11,18 +11,12 @@ namespace SulsApp
         public void ConfigureServices()
         {
             var db = new ApplicationDbContext();
-            db.Database.Migrate();
+            //db.Database.EnsureCreated();
         }
 
         public void Configure(IList<Route> routeTable)
         {
-            routeTable.Add(new Route("/", HttpMethodType.Get, new HomeController().Index));
-            routeTable.Add(new Route("/Users/Login", HttpMethodType.Get, new UsersController().Login));
-            routeTable.Add(new Route("/Users/Register", HttpMethodType.Get, new UsersController().Register));
-            routeTable.Add(new Route("/Submissions", HttpMethodType.Get, new SubmissionsController().Index));
-    
+            
         }
-
-      
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using SIS.HTTP;
+﻿using SIS.HTTP;
 using SIS.HTTP.Response;
+using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace SIS.MvcFramework
 {

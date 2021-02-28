@@ -10,14 +10,14 @@ namespace SIS.HTTP
 {
     public class HttpServer : IHttpServer
     {
-        private readonly IList<Route> routeTable;
         private readonly TcpListener tcpListener;
+        private readonly IList<Route> routeTable;
         private readonly IDictionary<string, IDictionary<string, string>> sessions;
 
         public HttpServer(int port, IList<Route> routeTable)
         {
-            this.routeTable = routeTable;
             this.tcpListener = new TcpListener(IPAddress.Loopback, port);
+            this.routeTable = routeTable;
             this.sessions = new Dictionary<string, IDictionary<string, string>>();
         }
         public async Task StartAsync()
@@ -42,15 +42,16 @@ namespace SIS.HTTP
             this.tcpListener.Stop();
         }
 
-        private async Task ProcessClientAsync(TcpClient client)
+        private async Task ProcessClientAsync(TcpClient tcpClient)
         {
-            using NetworkStream networkStream = client.GetStream();
+            using NetworkStream networkStream = tcpClient.GetStream();
             try
             {
                 byte[] requestBytes = new byte[1000000]; //TODO: Use buffer
 
                 int bytesRead = await networkStream.ReadAsync(requestBytes, 0, requestBytes.Length);
                 string requestAsString = Encoding.UTF8.GetString(requestBytes, 0, bytesRead);
+              
                 var request = new HttpRequest(requestAsString);
                 var sessionCookie = request.Cookies.FirstOrDefault(x => x.Name == HttpConstants.SessionIdCookieName);
                 string newSessionId = null;
@@ -69,7 +70,7 @@ namespace SIS.HTTP
                 Console.WriteLine($"{request.Method} {request.Path}");
 
                 var route = this.routeTable.FirstOrDefault(
-                    x => x.HttpMethod == request.Method && x.Path == request.Path);
+                    x => x.HttpMethod == request.Method && string.Compare(x.Path, request.Path, true)==0);
                 HttpResponse response;
 
                 if (route == null)

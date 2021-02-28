@@ -15,10 +15,11 @@ namespace SIS.MvcFramework
         public string GetHtml(string templateHtml, object model)
         {
             var methodCode = PrepareCSharpCode(templateHtml);
-            var typeName = model?.GetType().FullName ?? "object";
-            if (model?.GetType().IsGenericType == true) // null/true/false bool?
+            var modelType = model?.GetType() ?? typeof(object);
+            var typeName = modelType.FullName;
+            if (modelType.IsGenericType) // null/true/false bool?
             {
-                typeName = model.GetType().Name.Replace("`1", string.Empty) + "<" + model.GetType().GenericTypeArguments.First().Name + ">";
+                typeName = GetGenericTypeFullName(modelType);
             }
             string code = @$"using System;
             using System.Text;
@@ -32,7 +33,7 @@ namespace SIS.MvcFramework
                      public string GetHtml(object model)
                       {{
                           var Model= model as {typeName};
-                          object User= null;
+                          //object User= null;
                           var html= new StringBuilder();
                           {methodCode}
                           return html.ToString();
@@ -43,6 +44,24 @@ namespace SIS.MvcFramework
             IView view = GetInstanceFromCode(code, model);
             string html = view.GetHtml(model);
             return html;
+        }
+        private string GetGenericTypeFullName(Type modelType)
+        {
+            var argumentCountBeginning = modelType.Name.LastIndexOf('`');
+            var genericModelTypeName = modelType.Name.Substring(0, argumentCountBeginning);
+            var genericTypeFullName = $"{modelType.Namespace}.{genericModelTypeName}";
+            var genericTypeArguments = modelType.GenericTypeArguments.Select(GetGenericTypeArgumentFullName);
+            var modelTypeName = $"{genericTypeFullName}<{string.Join(", ", genericTypeArguments)}>";
+            return modelTypeName;
+        }
+        private string GetGenericTypeArgumentFullName(Type genericTypeArgument)
+        {
+            if (genericTypeArgument.IsGenericType)
+            {
+                return GetGenericTypeFullName(genericTypeArgument);
+            }
+
+            return genericTypeArgument.FullName;
         }
 
         private IView GetInstanceFromCode(string code, object model)
@@ -65,7 +84,9 @@ namespace SIS.MvcFramework
             }
 
             compilation = compilation.AddSyntaxTrees(SyntaxFactory.ParseSyntaxTree(code));
+
             using var memoryStream = new MemoryStream();
+
             var compilationResult = compilation.Emit(memoryStream);
             if (!compilationResult.Success)
             {
@@ -83,8 +104,8 @@ namespace SIS.MvcFramework
 
         private string PrepareCSharpCode(string templateHtml)
         {
-            var cSharpExpressionRegex = new Regex(@"[^\<\""\s]+", RegexOptions.Compiled);
-            var supportedOperators = new[] { "if", "for", "foreach", "else" };
+            var cSharpExpressionRegex = new Regex(@"[^\<\""\s&]+", RegexOptions.Compiled);
+            var supportedOpperators = new[] { "if", "for", "foreach", "else" };
             StringBuilder cSharpCode = new StringBuilder();
             StringReader reader = new StringReader(templateHtml);
             string line;
@@ -95,7 +116,7 @@ namespace SIS.MvcFramework
                 {
                     cSharpCode.AppendLine(line);
                 }
-                else if (supportedOperators.Any(x => line.TrimStart().StartsWith("@" + x)))
+                else if (supportedOpperators.Any(x => line.TrimStart().StartsWith("@" + x)))
                 {
                     var indexOfAt = line.IndexOf("@");
                     line = line.Remove(indexOfAt, 1);
@@ -114,7 +135,6 @@ namespace SIS.MvcFramework
                         currentCSharpLine.Append(cSharpExpression.Value + " + @\"");
                         var after = cSharpAndEndOfLine.Substring(cSharpExpression.Length);
                         line = after;
-
                     }
 
                     currentCSharpLine.Append(line.Replace("\"", "\"\"") + "\");");

@@ -5,7 +5,7 @@ namespace SulsApp.Controllers
 {
     public class SubmissionsController : Controller
     {
-        public HttpResponse Index(HttpRequest request)
+        public HttpResponse Index()
         {
             return this.View();
         }

@@ -36,7 +36,10 @@ namespace SIS.MvcFramework
             foreach (var type in types)
             {
                 Console.WriteLine(type.GetType().FullName);
-                var methods = type.GetMethods().Where(x => !x.IsSpecialName && !x.IsConstructor && x.DeclaringType == type);
+                var methods = type.GetMethods().Where(x => !x.IsSpecialName
+                                                           && !x.IsConstructor
+                                                           && x.IsPublic
+                                                           && x.DeclaringType == type);
                 foreach (var methodInfo in methods)
                 {
 
@@ -57,9 +60,9 @@ namespace SIS.MvcFramework
                     {
                         // instance of controller
                         var controller = Activator.CreateInstance(type) as Controller;
-
+                        controller.Request = request;
                         // invoke the action of this instance
-                        var response = methodInfo.Invoke(controller, new[] {request}) as HttpResponse;
+                        var response = methodInfo.Invoke(controller, new object[] {}) as HttpResponse;
 
                         // pass the httpRequest
                         return response;

@@ -14,8 +14,8 @@ namespace SIS.MvcFramework
         public static async Task StartAsync(IMvcApplication application)
         {
             var routeTable = new List<Route>();
-            application.ConfigureServices();
             application.Configure(routeTable);
+            application.ConfigureServices();
             AutoRegisterStaticFilesRoutes(routeTable);
             AutoRegisterActionRoutes(routeTable, application);
             Console.WriteLine("Registered routes:");

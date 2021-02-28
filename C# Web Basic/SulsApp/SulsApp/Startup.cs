@@ -10,13 +10,13 @@ namespace SulsApp
     {
         public void ConfigureServices()
         {
-            var db = new ApplicationDbContext();
-            //db.Database.Migrate();
+          
         }
 
         public void Configure(IList<Route> routeTable)
         {
-            
+            var db = new ApplicationDbContext();
+            //db.Database.Migrate();
         }
     }
 }

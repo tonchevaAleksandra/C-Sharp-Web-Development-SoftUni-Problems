@@ -1,12 +1,10 @@
-﻿using System;
-using System.Net.Mail;
-using System.Security.Cryptography;
-using SIS.HTTP;
+﻿using SIS.HTTP;
 using SIS.HTTP.Logging;
 using SIS.MvcFramework;
-using SulsApp.Models;
 using SulsApp.Services;
 using SulsApp.ViewModels.Users;
+using System;
+using System.Net.Mail;
 
 namespace SulsApp.Controllers
 {
@@ -49,6 +47,11 @@ namespace SulsApp.Controllers
         }
         public HttpResponse Logout()
         {
+            if (!this.IsUserLoggedIn())
+            {
+                return this.Redirect("Users/Login");
+            }
+
             this.SignOut();
             return this.Redirect("/");
         }
@@ -62,7 +65,7 @@ namespace SulsApp.Controllers
         [HttpPost]
         public HttpResponse Register(RegisterInputModel input)
         {
-         
+
             if (input.Password != input.ConfirmedPassword)
             {
                 return this.Error("Passwords should be the same.");
@@ -80,6 +83,16 @@ namespace SulsApp.Controllers
             if (!this.IsValid(input.Email))
             {
                 return this.Error("Invalid email address.");
+            }
+
+            if (this.usersService.IsUsernameUsed(input.Username))
+            {
+                return this.Error("This username already exist!");
+            }
+
+            if (this.usersService.IsEmailUsed(input.Email))
+            {
+                return this.Error("This email already used!");
             }
 
             this.usersService.CreateUser(input.Username, input.Email, input.Password);

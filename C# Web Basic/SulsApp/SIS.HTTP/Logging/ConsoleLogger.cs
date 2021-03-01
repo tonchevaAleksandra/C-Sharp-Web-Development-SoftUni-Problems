@@ -7,7 +7,7 @@ namespace SIS.HTTP.Logging
     {
         public void Log(string message)
         {
-            Console.WriteLine($"[{DateTime.Now.ToString(CultureInfo.InvariantCulture)}] {message}");
+            Console.WriteLine($"[{DateTime.Now.ToString()}] {message}");
         }
     }
 }

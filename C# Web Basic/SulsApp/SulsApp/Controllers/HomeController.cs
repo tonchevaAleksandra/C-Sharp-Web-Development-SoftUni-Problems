@@ -3,6 +3,7 @@ using SIS.HTTP.Logging;
 using SIS.MvcFramework;
 using SulsApp.ViewModels;
 using System;
+using SulsApp.ViewModels.Home;
 
 namespace SulsApp.Controllers
 {
@@ -17,7 +18,7 @@ namespace SulsApp.Controllers
         [HttpGet("/")]
         public HttpResponse Index()
         {
-            
+
             var viewModel = new IndexViewModel
             {
                 Message = "Welcome to SULS Platform!",

@@ -51,6 +51,16 @@ namespace SulsApp.Services
 
         }
 
+        public bool IsUsernameUsed(string username)
+        {
+            return this.db.Users.Any(x => x.Username == username);
+        }
+
+        public bool IsEmailUsed(string email)
+        {
+            return this.db.Users.Any(x => x.Email == email);
+        }
+
         public int CountUsers()
         {
             return this.db.Users.Count();

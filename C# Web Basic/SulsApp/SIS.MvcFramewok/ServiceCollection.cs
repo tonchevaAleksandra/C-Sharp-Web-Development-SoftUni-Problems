@@ -7,10 +7,11 @@ using System.Text;
 
 namespace SIS.MvcFramework
 {
-  public class ServiceCollection:IServiceCollection
-  {
-      private IDictionary<Type, Type> dependancyContainer = new ConcurrentDictionary<Type, Type>();
+    public class ServiceCollection : IServiceCollection
+    {
+        private IDictionary<Type, Type> dependancyContainer = new ConcurrentDictionary<Type, Type>();
         public void Add<TSource, TDestination>()
+        where TDestination : TSource
         {
             dependancyContainer[typeof(TSource)] = typeof(TDestination);
         }
@@ -35,7 +36,7 @@ namespace SIS.MvcFramework
 
         public T CreateInstance<T>()
         {
-            return (T) this.CreateInstance(typeof(T));
+            return (T)this.CreateInstance(typeof(T));
         }
-  }
+    }
 }

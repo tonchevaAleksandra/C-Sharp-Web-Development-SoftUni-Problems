@@ -6,7 +6,7 @@ namespace SIS.MvcFramework
 {
    public interface  IServiceCollection
    {
-       void Add<TSource, TDestination>();
+       void Add<TSource, TDestination>() where TDestination : TSource;
 
        object CreateInstance(Type type);
 

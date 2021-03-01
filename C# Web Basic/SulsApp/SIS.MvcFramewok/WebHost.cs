@@ -83,7 +83,7 @@ namespace SIS.MvcFramework
                 if (value == null)
                 {
                     // if enter here => complex type
-                    var parameterValue = serviceCollection.CreateInstance(parameter.ParameterType);
+                    var parameterValue = Activator.CreateInstance(parameter.ParameterType);
                     foreach (var property in parameter.ParameterType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                     {
                         var propertyValue = GetValueFromRequest(request, property.Name);
@@ -92,6 +92,10 @@ namespace SIS.MvcFramework
 
                     actionParametersValues.Add(parameterValue);
 
+                }
+                else
+                {
+                    actionParametersValues.Add(value);
                 }
             }
 

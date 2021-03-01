@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using SIS.MvcFramework;
 using SulsApp.Models;
 
 namespace SulsApp.Services
@@ -20,17 +21,19 @@ namespace SulsApp.Services
             {
                 Username = username,
                 Email = email,
-                Password = this.Hash(password)
+                Password = this.Hash(password),
+                Role = IdentityRole.User,
             };
 
             this.db.Users.Add(user);
             this.db.SaveChanges();
         }
 
-        public bool IsValidUser(string username, string password)
+        public string GetUserId(string username, string password)
         {
             var passwordHash = this.Hash(password);
-            return this.db.Users.Any(x => x.Username == username && x.Password == passwordHash);
+
+            return this.db.Users.Where(x => x.Username == username && x.Password == passwordHash).Select(x=>x.Id).FirstOrDefault();
         }
 
         public void ChangePassword(string username, string newPassword)

@@ -13,8 +13,7 @@ namespace SulsApp.Controllers
         {
             var viewModel = new IndexViewModel
             {
-                Message = this.Request.Headers.FirstOrDefault(x=>x.Name=="User-Agent").Value,
-                //Message = "Welcome to SULS Platform!",
+                Message = "Welcome to SULS Platform!",
                 Year = DateTime.UtcNow.Year,
             };
             return this.View(viewModel);

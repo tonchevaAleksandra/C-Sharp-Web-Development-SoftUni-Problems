@@ -13,6 +13,8 @@ namespace SIS.MvcFramework
     {
         public static async Task StartAsync(IMvcApplication application)
         {
+            IServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection.Add<ILogger, ConsoleLogger>();
             var routeTable = new List<Route>();
             application.Configure(routeTable);
             application.ConfigureServices();
@@ -32,22 +34,26 @@ namespace SIS.MvcFramework
 
         private static void AutoRegisterActionRoutes(List<Route> routeTable, IMvcApplication application)
         {
-            var types = application.GetType().Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Controller)) && !t.IsAbstract);
-            foreach (var type in types)
+            var controllers = application.GetType().Assembly.GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(Controller)) && !type.IsAbstract);
+            foreach (var controller in controllers)
             {
-                Console.WriteLine(type.GetType().FullName);
-                var methods = type.GetMethods().Where(x => !x.IsSpecialName
-                                                           && !x.IsConstructor
-                                                           && x.IsPublic
-                                                           && x.DeclaringType == type);
-                foreach (var methodInfo in methods)
+
+                var actions = controller.GetMethods()
+                    .Where(x => !x.IsSpecialName
+                                && !x.IsConstructor
+                                && x.IsPublic
+                                && x.DeclaringType == controller);
+                foreach (var action in actions)
                 {
 
-                    string url = "/" + type.GetType().Name.Replace("Controller", "/") + methodInfo.GetType().Name;
-                    var attribute = methodInfo.GetCustomAttributes()
-                        .FirstOrDefault(x => x.GetType().IsSubclassOf(typeof(HttpMethodAttribute))) as HttpMethodAttribute;
+                    string url = "/" + controller.Name.Replace("Controller", string.Empty) + "/" + action.Name;
+                    var attribute = action.GetCustomAttributes()
+                            .FirstOrDefault(x => x.GetType()
+                                .IsSubclassOf(typeof(HttpMethodAttribute)))
+                        as HttpMethodAttribute;
                     var httpActionType = HttpMethodType.Get;
-                    if (attribute!=null)
+                    if (attribute != null)
                     {
                         httpActionType = attribute.Type;
                         if (attribute.Url != null)
@@ -56,17 +62,17 @@ namespace SIS.MvcFramework
                         }
                     }
 
-                    routeTable.Add(new Route(url,httpActionType, (request) =>
-                    {
+                    routeTable.Add(new Route(url, httpActionType, (request) =>
+                     {
                         // instance of controller
-                        var controller = Activator.CreateInstance(type) as Controller;
-                        controller.Request = request;
+                        var controllerClass = Activator.CreateInstance(controller) as Controller;
+                        controllerClass.Request = request;
                         // invoke the action of this instance
-                        var response = methodInfo.Invoke(controller, new object[] {}) as HttpResponse;
+                        var response = action.Invoke(controller, new object[] { }) as HttpResponse;
 
                         // pass the httpRequest
                         return response;
-                    }));
+                     }));
                     Console.WriteLine("    " + url);
                 }
             }
@@ -93,17 +99,16 @@ namespace SIS.MvcFramework
                         ".jpeg" => "image/jpeg",
                         ".png" => "image/png",
                         ".gif" => "image/gif",
-                        ".csv" => "text/csv",
-                        ".doc" => "application/msword",
-                        ".ics" => "text/calendar",
-                        ".json" => "application/json",
-                        ".pdf" => "application/pdf",
-                        ".xls" => "application/vnd.ms-excel",
-                        ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        //".csv" => "text/csv",
+                        //".doc" => "application/msword",
+                        //".ics" => "text/calendar",
+                        //".json" => "application/json",
+                        //".pdf" => "application/pdf",
+                        //".xls" => "application/vnd.ms-excel",
+                        //".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        //".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         _ => "text/plain",
                     };
-
 
 
                     return new FileResponse(File.ReadAllBytes(file), contentType);

@@ -4,7 +4,7 @@
     {
         void CreateUser(string username, string email, string password);
 
-        bool IsValidUser(string username, string password);
+        string GetUserId(string username, string password);
 
         void ChangePassword(string username, string newPassword);
 

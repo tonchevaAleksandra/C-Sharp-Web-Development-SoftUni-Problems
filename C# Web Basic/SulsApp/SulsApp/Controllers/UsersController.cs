@@ -12,23 +12,39 @@ namespace SulsApp.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService usersService;
+        private ILogger logger;
 
-        public UsersController()
+        public UsersController(IUsersService usersService, ILogger logger)
         {
-            this.usersService = new UsersService(new ApplicationDbContext());
+            this.usersService = usersService;
+            this.logger = logger;
         }
 
         public HttpResponse Login()
         {
+
             return this.View();
 
         }
 
-        [HttpPost("/Users/Login")]
-        public HttpResponse DoLogin()
+        [HttpPost()]
+        public HttpResponse DoLogin(string username, string password)
         {
-            return this.View();
+            var userId = this.usersService.GetUserId(username, password);
+            if (userId == null)
+            {
+                return this.Redirect("/Users/Login");
+            }
 
+            this.SignIn(userId);
+            this.logger.Log("User logged in: " + username);
+            return this.Redirect("/");
+
+        }
+        public HttpResponse Logout()
+        {
+            this.SignOut();
+            return this.Redirect("/");
         }
 
         public HttpResponse Register()
@@ -65,9 +81,8 @@ namespace SulsApp.Controllers
 
             this.usersService.CreateUser(username, email, password);
 
-            //TODO: log in
-
-            return this.Redirect("/");
+            this.logger.Log("New user: " + username);
+            return this.Redirect("/Users/Login");
 
         }
 

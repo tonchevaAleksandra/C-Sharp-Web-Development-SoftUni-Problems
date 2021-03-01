@@ -53,6 +53,7 @@ namespace SIS.MvcFramework
         protected void SignIn(string userId)
         {
             this.Request.SessionData["UserId"] = userId;
+          
         }
 
         protected void SignOut()
@@ -65,6 +66,7 @@ namespace SIS.MvcFramework
         }
 
         public string User => this.Request.SessionData.ContainsKey("UserId") ? this.Request.SessionData["UserId"] : null;
+
 
     }
 }

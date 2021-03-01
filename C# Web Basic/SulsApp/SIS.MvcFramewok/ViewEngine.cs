@@ -33,7 +33,7 @@ namespace SIS.MvcFramework
                      public string GetHtml(object model, string user)
                       {{
                           var Model= model as {typeName};
-                          object User= null;
+                          var User= user;
                           var html= new StringBuilder();
                           {methodCode}
                           return html.ToString();

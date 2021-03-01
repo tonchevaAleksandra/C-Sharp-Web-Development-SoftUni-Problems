@@ -23,7 +23,7 @@ namespace SIS.MvcFramework
             AutoRegisterStaticFilesRoutes(routeTable);
             AutoRegisterActionRoutes(routeTable, application, serviceCollection);
             var logger = serviceCollection.CreateInstance<ILogger>();
-           logger.Log("Registered routes:");
+            logger.Log("Registered routes:");
             foreach (var route in routeTable)
             {
                 logger.Log(route.ToString());
@@ -69,13 +69,30 @@ namespace SIS.MvcFramework
                 }
             }
         }
-        private static  HttpResponse InvokeAction(HttpRequest request, IServiceCollection serviceCollection, Type controllerType, MethodInfo actionMethod)
+        private static HttpResponse InvokeAction(HttpRequest request, IServiceCollection serviceCollection, Type controllerType, MethodInfo actionMethod)
         {
-
             var controller = serviceCollection.CreateInstance(controllerType) as Controller;
             controller.Request = request;
 
-            var response = actionMethod.Invoke(controllerType, new object[] { }) as HttpResponse;
+            var actionParametersValues = new List<object>();
+            var actionParameters = actionMethod.GetParameters();
+            foreach (var parameter in actionParameters)
+            {
+                var parameterName = parameter.Name.ToLower();
+                object value = null;
+                if (request.QueryData.Any(x => x.Key.ToLower() == parameterName))
+                {
+                    value = request.QueryData.FirstOrDefault(x => x.Key.ToLower() == parameter.Name.ToLower()).Value;
+                }
+                else if (request.FormData.Any(x => x.Key.ToLower() == parameterName))
+                {
+                    value = request.FormData.FirstOrDefault(x => x.Key.ToLower() == parameter.Name.ToLower()).Value;
+                }
+
+                actionParametersValues.Add(value);
+            }
+
+            var response = actionMethod.Invoke(controller, actionParametersValues.ToArray()) as HttpResponse;
 
             return response;
         }
@@ -105,7 +122,7 @@ namespace SIS.MvcFramework
                     return new FileResponse(File.ReadAllBytes(staticFile), contentType);
                 }));
             }
-        
+
         }
     }
 }

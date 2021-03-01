@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -96,14 +97,35 @@ namespace SIS.HTTP
             }
 
             this.Body = bodyBuilder.ToString().TrimEnd('\r', '\n');
-            var bodyParts = this.Body.Split('&', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var bodyPart in bodyParts)
+            this.FormData = new Dictionary<string, string>();
+            ParseDate(this.FormData, this.Body);
+
+            this.QueryData = new Dictionary<string, string>();
+            this.Query = string.Empty;
+
+            if (this.Path.Contains("?"))
             {
-                var parameters = bodyPart.Split(new char[] { '=' }, 2);
-                this.FormData.Add(HttpUtility.UrlDecode(parameters[0]), HttpUtility.UrlDecode(parameters[1]));
+                var parts= this.Path.Split(new char[] { '?' }, 2);
+                this.Path= parts[0];
+                this.Query = parts[1];
             }
 
+            ParseDate(this.QueryData, this.Query);
+
         }
+
+        private void ParseDate(IDictionary<string, string> output, string input)
+        {
+            var dataParts = input.Split('&', StringSplitOptions.RemoveEmptyEntries);
+            foreach (var dataPart in dataParts)
+            {
+                var parameters = dataPart.Split(new char[] { '=' }, 2);
+                output.Add(
+                    HttpUtility.UrlDecode(parameters[0]),
+                    HttpUtility.UrlDecode(parameters[1]));
+            }
+        }
+
         public HttpMethodType Method { get; set; }
         public string Path { get; set; }
         public HttpVersionType Version { get; set; }
@@ -112,8 +134,14 @@ namespace SIS.HTTP
         public IList<Cookie> Cookies { get; set; }
 
         public string Body { get; set; }
+        public string Query { get; set; }
+
         public IDictionary<string, string> FormData { get; set; }
+        public IDictionary<string, string> QueryData { get; set; }
+
         public IDictionary<string, string> SessionData { get; set; }
+
+
     }
 
 }

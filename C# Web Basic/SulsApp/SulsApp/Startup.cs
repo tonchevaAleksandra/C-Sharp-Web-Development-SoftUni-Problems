@@ -3,7 +3,7 @@ using SIS.HTTP.Logging;
 using SIS.MvcFramework;
 using SulsApp.Services;
 using System.Collections.Generic;
-using ILogger = SIS.HTTP.Logging.ILogger;
+using Microsoft.EntityFrameworkCore;
 
 namespace SulsApp
 {
@@ -19,7 +19,7 @@ namespace SulsApp
         public void Configure(IList<Route> routeTable)
         {
             var db = new ApplicationDbContext();
-            //db.Database.Migrate();
+            db.Database.Migrate();
         }
     }
 }

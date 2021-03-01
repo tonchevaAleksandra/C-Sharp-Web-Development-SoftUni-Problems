@@ -17,7 +17,7 @@ namespace SulsApp.Controllers
         [HttpGet("/")]
         public HttpResponse Index()
         {
-
+            
             var viewModel = new IndexViewModel
             {
                 Message = "Welcome to SULS Platform!",

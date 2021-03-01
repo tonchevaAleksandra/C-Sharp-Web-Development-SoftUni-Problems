@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SulsApp.Services
+namespace SIS.HTTP.Logging
 {
     public class FileLogger : ILogger
     {

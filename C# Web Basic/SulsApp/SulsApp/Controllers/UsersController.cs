@@ -2,7 +2,7 @@
 using System.Net.Mail;
 using System.Security.Cryptography;
 using SIS.HTTP;
-using SIS.HTTP.Response;
+using SIS.HTTP.Logging;
 using SIS.MvcFramework;
 using SulsApp.Models;
 using SulsApp.Services;
@@ -27,7 +27,7 @@ namespace SulsApp.Controllers
 
         }
 
-        [HttpPost()]
+        [HttpPost("Users/Login")]
         public HttpResponse DoLogin(string username, string password)
         {
             var userId = this.usersService.GetUserId(username, password);

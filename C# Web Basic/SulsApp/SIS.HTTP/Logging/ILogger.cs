@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace SulsApp.Services
+namespace SIS.HTTP.Logging
 {
     public interface ILogger
     {

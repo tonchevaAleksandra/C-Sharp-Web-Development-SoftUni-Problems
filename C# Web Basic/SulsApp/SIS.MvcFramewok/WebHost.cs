@@ -78,24 +78,21 @@ namespace SIS.MvcFramework
             var actionParameters = actionMethod.GetParameters();
             foreach (var parameter in actionParameters)
             {
-                object value = GetValueFromRequest(request, parameter.Name);
+                object value = Convert.ChangeType(GetValueFromRequest(request, parameter.Name), parameter.ParameterType);
 
-                try
+                if (value == null)
                 {
-                    actionParametersValues.Add(Convert.ChangeType(value, parameter.ParameterType));
+                    // if enter here => complex type
+                    var parameterValue = serviceCollection.CreateInstance(parameter.ParameterType);
+                    foreach (var property in parameter.ParameterType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        var propertyValue = GetValueFromRequest(request, property.Name);
+                        property.SetValue(parameterValue, Convert.ChangeType(propertyValue, property.PropertyType));
+                    }
+
+                    actionParametersValues.Add(parameterValue);
+
                 }
-                catch 
-                {
-                   // if enter here => complex type
-                   var parameterValue = serviceCollection.CreateInstance(parameter.ParameterType);
-                   foreach (var property in parameter.ParameterType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
-                   {
-                       var propertyValue = GetValueFromRequest(request, property.Name);
-                       property.SetValue(parameterValue, Convert.ChangeType(propertyValue, property.PropertyType));
-                   }
-                   actionParametersValues.Add(parameterValue);
-                }
-               
             }
 
             var response = actionMethod.Invoke(controller, actionParametersValues.ToArray()) as HttpResponse;

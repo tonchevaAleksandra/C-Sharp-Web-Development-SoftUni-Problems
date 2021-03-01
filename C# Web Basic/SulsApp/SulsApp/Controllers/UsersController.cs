@@ -33,8 +33,8 @@ namespace SulsApp.Controllers
 
         }
 
-        [HttpPost("Users/Login")]
-        public HttpResponse DoLogin(string username, string password)
+        [HttpPost]
+        public HttpResponse Login(string username, string password)
         {
             var userId = this.usersService.GetUserId(username, password);
             if (userId == null)
@@ -59,8 +59,8 @@ namespace SulsApp.Controllers
 
         }
 
-        [HttpPost("/Users/Register")]
-        public HttpResponse DoRegister(RegisterInputModel input)
+        [HttpPost]
+        public HttpResponse Register(RegisterInputModel input)
         {
          
             if (input.Password != input.ConfirmedPassword)
@@ -85,6 +85,7 @@ namespace SulsApp.Controllers
             this.usersService.CreateUser(input.Username, input.Email, input.Password);
 
             this.logger.Log("New user: " + input.Username);
+
             return this.Redirect("/Users/Login");
 
         }

@@ -78,23 +78,44 @@ namespace SIS.MvcFramework
             var actionParameters = actionMethod.GetParameters();
             foreach (var parameter in actionParameters)
             {
-                var parameterName = parameter.Name.ToLower();
-                object value = null;
-                if (request.QueryData.Any(x => x.Key.ToLower() == parameterName))
-                {
-                    value = request.QueryData.FirstOrDefault(x => x.Key.ToLower() == parameter.Name.ToLower()).Value;
-                }
-                else if (request.FormData.Any(x => x.Key.ToLower() == parameterName))
-                {
-                    value = request.FormData.FirstOrDefault(x => x.Key.ToLower() == parameter.Name.ToLower()).Value;
-                }
+                object value = GetValueFromRequest(request, parameter.Name);
 
-                actionParametersValues.Add(value);
+                try
+                {
+                    actionParametersValues.Add(Convert.ChangeType(value, parameter.ParameterType));
+                }
+                catch 
+                {
+                   // if enter here => complex type
+                   var parameterValue = serviceCollection.CreateInstance(parameter.ParameterType);
+                   foreach (var property in parameter.ParameterType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                   {
+                       var propertyValue = GetValueFromRequest(request, property.Name);
+                       property.SetValue(parameterValue, Convert.ChangeType(propertyValue, property.PropertyType));
+                   }
+                   actionParametersValues.Add(parameterValue);
+                }
+               
             }
 
             var response = actionMethod.Invoke(controller, actionParametersValues.ToArray()) as HttpResponse;
 
             return response;
+        }
+
+        private static object GetValueFromRequest(HttpRequest request, string parameterName)
+        {
+            object value = null;
+            if (request.QueryData.Any(x => x.Key.ToLower() == parameterName.ToLower()))
+            {
+                value = request.QueryData.FirstOrDefault(x => x.Key.ToLower() == parameterName.ToLower()).Value;
+            }
+            else if (request.FormData.Any(x => x.Key.ToLower() == parameterName.ToLower()))
+            {
+                value = request.FormData.FirstOrDefault(x => x.Key.ToLower() == parameterName.ToLower()).Value;
+            }
+
+            return value;
         }
 
         private static void AutoRegisterStaticFilesRoutes(IList<Route> routeTable)

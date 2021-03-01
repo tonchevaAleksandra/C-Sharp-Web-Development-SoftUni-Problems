@@ -7,9 +7,8 @@ namespace SIS.HTTP
     public class HttpResponse
     {
         public HttpResponse(HttpResponseCode statusCode, byte[] body)
-        :this()
+            : this()
         {
-            
             this.StatusCode = statusCode;
             this.Body = body;
             if (body?.Length > 0)
@@ -20,7 +19,7 @@ namespace SIS.HTTP
 
         internal HttpResponse()
         {
-            this.Version = HttpVersionType.Http11;
+            this.Version = HttpVersionType.Http10;
             this.Headers = new List<Header>();
             this.Cookies = new List<ResponseCookie>();
         }
@@ -37,7 +36,7 @@ namespace SIS.HTTP
                 HttpVersionType.Http10 => "HTTP/1.0",
                 HttpVersionType.Http11 => "HTTP/1.1",
                 HttpVersionType.Http20 => "HTTP/2.0",
-                _ => "HTTP/1.1"
+                _ => "HTTP/1.0"
             };
 
             responseAsString.Append($"{httpVersionAsString} {(int)this.StatusCode} {this.StatusCode}" + HttpConstants.NewLine);

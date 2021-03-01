@@ -6,6 +6,7 @@ using SIS.HTTP.Logging;
 using SIS.MvcFramework;
 using SulsApp.Models;
 using SulsApp.Services;
+using SulsApp.ViewModels.Users;
 
 namespace SulsApp.Controllers
 {
@@ -22,6 +23,11 @@ namespace SulsApp.Controllers
 
         public HttpResponse Login()
         {
+
+            if (this.IsUserLoggedIn())
+            {
+                return this.Redirect("/");
+            }
 
             return this.View();
 
@@ -54,34 +60,31 @@ namespace SulsApp.Controllers
         }
 
         [HttpPost("/Users/Register")]
-        public HttpResponse DoRegister()
+        public HttpResponse DoRegister(RegisterInputModel input)
         {
-            var username = this.Request.FormData["username"];
-            var email = this.Request.FormData["email"];
-            var password = this.Request.FormData["password"];
-            var confirmPassword = this.Request.FormData["confirmPassword"];
-            if (password != confirmPassword)
+         
+            if (input.Password != input.ConfirmedPassword)
             {
                 return this.Error("Passwords should be the same.");
             }
 
-            if (username?.Length < 5 || username?.Length > 20)
+            if (input.Username?.Length < 5 || input.Username?.Length > 20)
             {
                 return this.Error("Username should be between 5 and 20 characters.");
             }
-            if (password?.Length < 6 || password?.Length > 20)
+            if (input.Password?.Length < 6 || input.Password?.Length > 20)
             {
                 return this.Error("Password should be between 6 and 20 characters.");
             }
 
-            if (!this.IsValid(email))
+            if (!this.IsValid(input.Email))
             {
                 return this.Error("Invalid email address.");
             }
 
-            this.usersService.CreateUser(username, email, password);
+            this.usersService.CreateUser(input.Username, input.Email, input.Password);
 
-            this.logger.Log("New user: " + username);
+            this.logger.Log("New user: " + input.Username);
             return this.Redirect("/Users/Login");
 
         }

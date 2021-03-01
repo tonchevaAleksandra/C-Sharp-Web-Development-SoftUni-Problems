@@ -13,12 +13,14 @@ namespace SIS.HTTP
     {
         private readonly TcpListener tcpListener;
         private readonly IList<Route> routeTable;
+        private readonly ILogger logger;
         private readonly IDictionary<string, IDictionary<string, string>> sessions;
 
         public HttpServer(int port, IList<Route> routeTable, ILogger logger)
         {
             this.tcpListener = new TcpListener(IPAddress.Loopback, port);
             this.routeTable = routeTable;
+            this.logger = logger;
             this.sessions = new Dictionary<string, IDictionary<string, string>>();
         }
         public async Task StartAsync()
@@ -26,9 +28,10 @@ namespace SIS.HTTP
             this.tcpListener.Start();
             while (true)
             {
-                TcpClient client = await tcpListener.AcceptTcpClientAsync();
-                Task.Run(() => ProcessClientAsync(client));
-
+                TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                Task.Run(() => ProcessClientAsync(tcpClient));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
         }
 
@@ -83,7 +86,7 @@ namespace SIS.HTTP
                     response = route.Action(request);
                 }
 
-                response.Headers.Add(new Header("Sever", "SoftUniServer/1.0"));
+                response.Headers.Add(new Header("Server", "SoftUniServer/1.0"));
 
                 if (newSessionId != null)
                 {
@@ -100,7 +103,7 @@ namespace SIS.HTTP
             catch (Exception ex)
             {
                 var errorResponse = new HttpResponse(HttpResponseCode.InternalServerError,
-                    Encoding.UTF8.GetBytes(ex.Message));
+                    Encoding.UTF8.GetBytes(ex.ToString()));
                 errorResponse.Headers.Add(new Header("Content-Type", "text/plain"));
                 byte[] responseBytes = Encoding.UTF8.GetBytes(errorResponse.ToString());
                 await networkStream.WriteAsync(responseBytes, 0, responseBytes.Length);

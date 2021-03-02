@@ -8,7 +8,7 @@ namespace SulsApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Problem",
+                name: "Problems",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -17,11 +17,11 @@ namespace SulsApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Problem", x => x.Id);
+                    table.PrimaryKey("PK_Problems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -31,11 +31,11 @@ namespace SulsApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Submission",
+                name: "Submissions",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -47,42 +47,42 @@ namespace SulsApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Submission", x => x.Id);
+                    table.PrimaryKey("PK_Submissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Submission_Problem_ProblemId",
+                        name: "FK_Submissions_Problems_ProblemId",
                         column: x => x.ProblemId,
-                        principalTable: "Problem",
+                        principalTable: "Problems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Submission_User_UserId",
+                        name: "FK_Submissions_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Submission_ProblemId",
-                table: "Submission",
+                name: "IX_Submissions_ProblemId",
+                table: "Submissions",
                 column: "ProblemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Submission_UserId",
-                table: "Submission",
+                name: "IX_Submissions_UserId",
+                table: "Submissions",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Submission");
+                name: "Submissions");
 
             migrationBuilder.DropTable(
-                name: "Problem");
+                name: "Problems");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

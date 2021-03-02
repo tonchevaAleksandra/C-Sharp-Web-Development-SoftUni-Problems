@@ -10,7 +10,7 @@ using SulsApp;
 namespace SulsApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210302122706_InitialMigrate")]
+    [Migration("20210302145337_InitialMigrate")]
     partial class InitialMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace SulsApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Problem");
+                    b.ToTable("Problems");
                 });
 
             modelBuilder.Entity("SulsApp.Models.Submission", b =>
@@ -67,7 +67,7 @@ namespace SulsApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Submission");
+                    b.ToTable("Submissions");
                 });
 
             modelBuilder.Entity("SulsApp.Models.User", b =>
@@ -90,7 +90,7 @@ namespace SulsApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SulsApp.Models.Submission", b =>

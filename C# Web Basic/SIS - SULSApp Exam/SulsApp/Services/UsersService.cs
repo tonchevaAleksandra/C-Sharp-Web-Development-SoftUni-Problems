@@ -31,9 +31,9 @@ namespace SulsApp.Services
 
         public string GetUserId(string username, string password)
         {
-            var user = this.db.Users.FirstOrDefault(x => x.Username == username && x.Password == this.Hash(password));
+            var userId = this.db.Users.Where(x => x.Username == username && x.Password == this.Hash(password)).Select(x=>x.Id).FirstOrDefault();
 
-            return user?.Id;
+            return userId;
         }
 
         public void ChangePassword(string username, string newPassword)

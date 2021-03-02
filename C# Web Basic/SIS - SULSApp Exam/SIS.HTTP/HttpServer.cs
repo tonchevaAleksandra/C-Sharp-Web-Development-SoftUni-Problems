@@ -1,14 +1,14 @@
-﻿using SIS.HTTP.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SIS.HTTP
+﻿namespace SIS.HTTP
 {
+    using Logging;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class HttpServer : IHttpServer
     {
         private readonly TcpListener tcpListener;
@@ -23,6 +23,19 @@ namespace SIS.HTTP
             this.logger = logger;
             this.sessions = new Dictionary<string, IDictionary<string, string>>();
         }
+
+        /// <summary>
+        /// Resets the HTTP Server asynchronously.
+        /// </summary>
+        public async Task ResetAsync()
+        {
+            this.Stop();
+            await this.StartAsync();
+        }
+
+        /// <summary>
+        /// Starts the HTTP Server asynchronously.
+        /// </summary>
         public async Task StartAsync()
         {
             this.tcpListener.Start();
@@ -35,30 +48,31 @@ namespace SIS.HTTP
             }
         }
 
-        public async Task ResetAsync()
-        {
-            this.Stop();
-            await this.StartAsync();
-        }
-
+        /// <summary>
+        /// Stops the HTTP Server.
+        /// </summary>
         public void Stop()
         {
             this.tcpListener.Stop();
         }
 
+        /// <summary>
+        /// Processes the <see cref="TcpClient"/> asynchronously and returns HTTP Response for the browser.
+        /// </summary>
+        /// <param name="tcpClient">TCP Client</param>
+        /// <returns></returns>
         private async Task ProcessClientAsync(TcpClient tcpClient)
         {
             using NetworkStream networkStream = tcpClient.GetStream();
             try
             {
-                byte[] requestBytes = new byte[1000000]; //TODO: Use buffer
-
+                byte[] requestBytes = new byte[1000000]; // TODO: Use buffer
                 int bytesRead = await networkStream.ReadAsync(requestBytes, 0, requestBytes.Length);
                 string requestAsString = Encoding.UTF8.GetString(requestBytes, 0, bytesRead);
 
                 var request = new HttpRequest(requestAsString);
-                var sessionCookie = request.Cookies.FirstOrDefault(x => x.Name == HttpConstants.SessionIdCookieName);
                 string newSessionId = null;
+                var sessionCookie = request.Cookies.FirstOrDefault(x => x.Name == HttpConstants.SessionIdCookieName);
                 if (sessionCookie != null && this.sessions.ContainsKey(sessionCookie.Value))
                 {
                     request.SessionData = this.sessions[sessionCookie.Value];
@@ -71,12 +85,11 @@ namespace SIS.HTTP
                     request.SessionData = dictionary;
                 }
 
-                Console.WriteLine($"{request.Method} {request.Path}");
+                this.logger.Log($"{request.Method} {request.Path}");
 
                 var route = this.routeTable.FirstOrDefault(
                     x => x.HttpMethod == request.Method && string.Compare(x.Path, request.Path, true) == 0);
                 HttpResponse response;
-
                 if (route == null)
                 {
                     response = new HttpResponse(HttpResponseCode.NotFound, new byte[0]);
@@ -90,21 +103,19 @@ namespace SIS.HTTP
 
                 if (newSessionId != null)
                 {
-                    response.Cookies.Add(new ResponseCookie(HttpConstants.SessionIdCookieName, newSessionId)
-                    { HttpOnly = true, MaxAge = 30 * 3600 });
+                    response.Cookies.Add(
+                        new ResponseCookie(HttpConstants.SessionIdCookieName, newSessionId)
+                        { HttpOnly = true, MaxAge = 30 * 3600, });
                 }
 
                 byte[] responseBytes = Encoding.UTF8.GetBytes(response.ToString());
                 await networkStream.WriteAsync(responseBytes, 0, responseBytes.Length);
                 await networkStream.WriteAsync(response.Body, 0, response.Body.Length);
-
-                Console.WriteLine(new string('=', 60));
-
             }
-
             catch (Exception ex)
             {
-                var errorResponse = new HttpResponse(HttpResponseCode.InternalServerError,
+                var errorResponse = new HttpResponse(
+                    HttpResponseCode.InternalServerError,
                     Encoding.UTF8.GetBytes(ex.ToString()));
                 errorResponse.Headers.Add(new Header("Content-Type", "text/plain"));
                 byte[] responseBytes = Encoding.UTF8.GetBytes(errorResponse.ToString());

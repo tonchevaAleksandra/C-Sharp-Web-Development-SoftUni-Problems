@@ -21,7 +21,7 @@ namespace SulsApp.Controllers
 
         public HttpResponse Login()
         {
-            if (this.IsUserLoggedIn())
+            if (!this.IsUserLoggedIn())
             {
                 return this.Redirect("/");
             }

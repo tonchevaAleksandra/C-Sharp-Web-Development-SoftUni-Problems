@@ -13,7 +13,7 @@ namespace SulsApp
         {
             var db = new ApplicationDbContext();
             //db.Database.Migrate();
-            Console.WriteLine("Database migrated successfully");
+            //Console.WriteLine("Database migrated successfully");
         }
 
         public void ConfigureServices(IServiceCollection serviceCollection)

@@ -2,6 +2,7 @@
 using SIS.MvcFramework;
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace SulsApp
 {
@@ -10,7 +11,7 @@ namespace SulsApp
         public void Configure(IList<Route> routeTable)
         {
             var db = new ApplicationDbContext();
-            db.Database.EnsureCreated();
+            db.Database.MigrateAsync();
             Console.WriteLine("Created SULS database");
         }
 

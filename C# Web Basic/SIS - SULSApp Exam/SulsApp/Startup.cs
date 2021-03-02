@@ -12,7 +12,7 @@ namespace SulsApp
         public void Configure(IList<Route> routeTable)
         {
             var db = new ApplicationDbContext();
-            db.Database.EnsureCreated();
+            //db.Database.Migrate();
             Console.WriteLine("Database migrated successfully");
         }
 

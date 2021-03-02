@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace SulsApp.Models
 {
     public class User
     {
+        public User()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
         [Key]
         public string Id { get; set; }
 

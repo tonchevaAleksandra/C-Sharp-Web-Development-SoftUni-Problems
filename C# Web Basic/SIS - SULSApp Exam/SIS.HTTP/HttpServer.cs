@@ -89,7 +89,7 @@
 
                 var route = this.routeTable.FirstOrDefault(
                     x => x.HttpMethod == request.Method && string.Compare(x.Path, request.Path, true) == 0);
-                HttpResponse response;
+                HttpResponse response= new HttpResponse();
                 if (route == null)
                 {
                     response = new HttpResponse(HttpResponseCode.NotFound, new byte[0]);
@@ -110,6 +110,7 @@
 
                 byte[] responseBytes = Encoding.UTF8.GetBytes(response.ToString());
                 await networkStream.WriteAsync(responseBytes, 0, responseBytes.Length);
+                
                 await networkStream.WriteAsync(response.Body, 0, response.Body.Length);
             }
             catch (Exception ex)

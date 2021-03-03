@@ -24,7 +24,7 @@ namespace SUS.MvcFramework
             var viewContent = System.IO.File.ReadAllText(
                 "Views/" +
                 this.GetType().Name.Replace("Controller", string.Empty) +
-                "/" + viewPath + ".cshtml");
+                "/" + viewPath + ".html");
             viewContent = this.viewEngine.GetHtml(viewContent, viewModel, this.GetUserId());
 
             var responseHtml = this.PutViewInLayout(viewContent, viewModel);

@@ -77,7 +77,7 @@ namespace SUS.MvcFramework
 
         private string PutViewInLayout(string viewContent, object viewModel = null)
         {
-            var layout = System.IO.File.ReadAllText("Views/Shared/_Layout.cshtml");
+            var layout = System.IO.File.ReadAllText("Views/Shared/_Layout.html");
             layout = layout.Replace("@RenderBody()", "____VIEW_GOES_HERE____");
             layout = this.viewEngine.GetHtml(layout, viewModel, this.GetUserId());
             var responseHtml = layout.Replace("____VIEW_GOES_HERE____", viewContent);

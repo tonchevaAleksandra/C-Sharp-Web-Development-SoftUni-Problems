@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IRunes.Services
+﻿namespace IRunes.Services
 {
     public interface IUsersService
     {
-        void Create();
+        string GetUserId(string username, string password);
+        void Register(string username, string email, string password);
+        bool IsUsernameAvailable(string username);
+        bool IsEmailAvailable(string email);
+        string GetUsername(string id);
     }
 }

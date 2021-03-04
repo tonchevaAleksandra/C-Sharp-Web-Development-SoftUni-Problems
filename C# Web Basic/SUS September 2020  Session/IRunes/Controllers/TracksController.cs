@@ -24,7 +24,7 @@ namespace IRunes.Controllers
                 AlbumId = albumId
             };
           
-            return this.View();
+            return this.View(viewModel);
         }
         [HttpPost]
         public HttpResponse Create(TrackInputModel input)
@@ -53,17 +53,21 @@ namespace IRunes.Controllers
             return this.Redirect("/Albums/Details?id=" + input.AlbumId);
         }
 
-        public HttpResponse Details()
+        public HttpResponse Details(string trackId)
         {
             if (!this.IsUserSignedIn())
             {
                 return this.Redirect("/Users/Login");
             }
-            //var track= new TrackDetailsModel
-            //{
 
-            //}
-            return this.View();
+          
+            var vieaModel = this._tracksService.GetDetails(trackId);
+            if (vieaModel==null)
+            {
+                return this.Error("This track not exist.");
+            }
+
+            return this.View(vieaModel);
         }
     }
 }

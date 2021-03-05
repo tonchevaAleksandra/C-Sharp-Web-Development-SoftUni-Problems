@@ -20,8 +20,10 @@ namespace BattleCards.Migrations
 
             modelBuilder.Entity("BattleCards.Models.Card", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Attack")
                         .HasColumnType("int");
@@ -80,8 +82,8 @@ namespace BattleCards.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CardId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "CardId");
 

@@ -47,7 +47,7 @@ namespace BattleCards.Controllers
                 return this.Redirect("Cards/Add");
             }
 
-            if (input.Description.Length > 200 || input.Description==null)
+            if (input.Description.Length > 200 || input.Description == null)
             {
                 return this.Redirect("Cards/Add");
             }
@@ -75,8 +75,8 @@ namespace BattleCards.Controllers
                 return this.Redirect("Users/Login");
             }
 
-            this._cardsService.GetAllCardsToUser(this.User);
-            return this.View();
+            var viewModel = this._cardsService.GetAllCardsToUser(this.User);
+            return this.View(viewModel);
         }
     }
 }

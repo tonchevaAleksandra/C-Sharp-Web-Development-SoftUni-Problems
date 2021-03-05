@@ -8,12 +8,12 @@ namespace BattleCards.Models
     {
         public Card()
         {
-            this.Id = Guid.NewGuid().ToString();
+           
             this.UserCards = new HashSet<UserCard>();
         }
 
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(15)]

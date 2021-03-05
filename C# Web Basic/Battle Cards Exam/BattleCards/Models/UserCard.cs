@@ -8,8 +8,7 @@ namespace BattleCards.Models
         public string UserId { get; set; }
         public virtual User User { get; set; }
 
-        [Required]
-        public string CardId { get; set; }
+        public int CardId { get; set; }
         public virtual Card Card { get; set; }
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BattleCards.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210305115720_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210305172955_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,8 +22,10 @@ namespace BattleCards.Migrations
 
             modelBuilder.Entity("BattleCards.Models.Card", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Attack")
                         .HasColumnType("int");
@@ -82,8 +84,8 @@ namespace BattleCards.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CardId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "CardId");
 

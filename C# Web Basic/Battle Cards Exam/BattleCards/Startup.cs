@@ -19,6 +19,7 @@ namespace BattleCards
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<ICardsService, CardService>();
         }
     }
 }

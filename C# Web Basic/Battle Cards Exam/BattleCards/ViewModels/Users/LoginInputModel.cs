@@ -1,4 +1,4 @@
-﻿namespace BattleCards.ViewModels
+﻿namespace BattleCards.ViewModels.Users
 {
     public class LoginInputModel
     {

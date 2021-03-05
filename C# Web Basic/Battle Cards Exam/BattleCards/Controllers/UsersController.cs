@@ -1,5 +1,7 @@
-﻿using BattleCards.Services;
+﻿using System;
+using BattleCards.Services;
 using BattleCards.ViewModels;
+using BattleCards.ViewModels.Users;
 using SIS.HTTP;
 using SIS.MvcFramework;
 
@@ -24,7 +26,7 @@ namespace BattleCards.Controllers
             var userId = this._usersService.GetUserId(input.Username, input.Password);
             if (userId == null)
             {
-                return this.Redirect("/Users/Login");
+                return this.Redirect("/Login");
             }
 
             this.SignIn(userId);
@@ -39,6 +41,11 @@ namespace BattleCards.Controllers
         [HttpPost]
         public HttpResponse Register(RegisterInputModel input)
         {
+            if (String.IsNullOrEmpty(input.Email))
+            {
+                return this.Redirect("/Users/Register");
+            }
+
             if (!this._usersService.IsUsernameAvailable(input.Username))
             {
                 return this.Redirect("/Users/Register");
@@ -66,7 +73,7 @@ namespace BattleCards.Controllers
 
             this._usersService.Register(input.Username, input.Email, input.Password);
 
-            return this.Redirect("Users/Login");
+            return this.Redirect("/Login");
         }
 
         public HttpResponse Logout()

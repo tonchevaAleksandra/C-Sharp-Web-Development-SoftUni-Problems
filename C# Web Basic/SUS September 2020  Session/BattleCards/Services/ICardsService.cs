@@ -4,7 +4,7 @@ namespace BattleCards.Services
 {
     public interface ICardsService
     {
-        int Create(string  name, string url, string keyword, int attack, int health, string description);
+        int AddCard(string  name, string url, string keyword, int attack, int health, string description);
 
         void AddCardToUserCollection(string userId, int cardId);
         AllCardsViewModel GetAll();

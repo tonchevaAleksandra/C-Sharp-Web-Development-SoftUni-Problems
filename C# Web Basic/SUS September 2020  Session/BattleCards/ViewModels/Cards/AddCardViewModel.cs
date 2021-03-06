@@ -3,7 +3,7 @@
     public class AddCardViewModel
     {
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public string Image { get; set; }
         public string Keyword { get; set; }
         public int Attack { get; set; }
         public int Health { get; set; }

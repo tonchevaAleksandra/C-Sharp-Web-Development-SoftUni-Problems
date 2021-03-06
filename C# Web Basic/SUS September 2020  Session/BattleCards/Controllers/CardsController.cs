@@ -52,7 +52,7 @@ namespace BattleCards.Controllers
                 return this.Redirect("/Cards/Add");
             }
 
-            var cardId = this._cardsService.Create(input.Name, input.ImageUrl, input.Keyword, input.Attack, input.Health, input.Description);
+            var cardId = this._cardsService.AddCard(input.Name, input.Image, input.Keyword, input.Attack, input.Health, input.Description);
             var userId = this.GetUserId();
             this._cardsService.AddCardToUserCollection(userId,cardId);
             return this.Redirect("/Cards/All");

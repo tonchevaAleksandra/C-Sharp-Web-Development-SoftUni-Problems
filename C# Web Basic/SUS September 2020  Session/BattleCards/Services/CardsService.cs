@@ -14,12 +14,12 @@ namespace BattleCards.Services
             _db = db;
         }
 
-        public int Create(string name, string url, string keyword, int attack, int health, string description)
+        public int AddCard(string name, string image, string keyword, int attack, int health, string description)
         {
             var card = new Card()
             {
                 Name = name,
-                ImageUrl = url,
+                ImageUrl = image,
                 Keyword = keyword,
                 Attack = attack,
                 Health = health,
@@ -54,7 +54,7 @@ namespace BattleCards.Services
                 Description = x.Description,
                 Attack = x.Attack,
                 Health = x.Health,
-                ImageUrl = x.ImageUrl,
+                Image = x.ImageUrl,
                 Keyword = x.Keyword,
                 Name = x.Name
             })
@@ -69,13 +69,13 @@ namespace BattleCards.Services
 
         public AllCardsViewModel GetAllCardsToUser(string userId)
         {
-            var cards = this._db.Users.Find(userId).UserCards.Select(x => new CardViewModel()
+            var cards = this._db.UserCards.Where(u=>u.UserId==userId).Select(x => new CardViewModel()
             {
                 Id = x.CardId,
                 Description = x.Card.Description,
                 Attack = x.Card.Attack,
                 Health = x.Card.Health,
-                ImageUrl = x.Card.ImageUrl,
+                Image = x.Card.ImageUrl,
                 Keyword = x.Card.Keyword,
                 Name = x.Card.Name
             })

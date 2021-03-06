@@ -92,19 +92,19 @@ namespace BattleCards.Controllers
 
             this._usersService.Register(input.Username, input.Email, input.Password);
 
-            return this.Redirect("/Login");
+            return this.Redirect("/Users/Login");
         }
 
         public HttpResponse Logout()
         {
             if (!this.IsUserSignedIn())
             {
-                return this.Redirect("Users/Login");
+                return this.Redirect("/Users/Login");
             }
 
             this.SignOut();
 
-            return this.Redirect("Home");
+            return this.Redirect("/");
         }
     }
 }

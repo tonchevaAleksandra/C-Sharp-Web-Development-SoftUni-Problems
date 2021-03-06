@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Suls", "Suls\Suls.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes", "IRunes\IRunes.csproj", "{BE0E2544-368F-401D-B570-00710CB994E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleCards", "BattleCards\BattleCards.csproj", "{6ACD4F9C-418C-4507-830C-9EBCFCC4824A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleCards", "BattleCards\BattleCards.csproj", "{6ACD4F9C-418C-4507-830C-9EBCFCC4824A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedTrip", "SharedTrip\SharedTrip.csproj", "{1820BC8F-BC30-48EE-8C66-6168323D54C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{6ACD4F9C-418C-4507-830C-9EBCFCC4824A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ACD4F9C-418C-4507-830C-9EBCFCC4824A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ACD4F9C-418C-4507-830C-9EBCFCC4824A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1820BC8F-BC30-48EE-8C66-6168323D54C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1820BC8F-BC30-48EE-8C66-6168323D54C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1820BC8F-BC30-48EE-8C66-6168323D54C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1820BC8F-BC30-48EE-8C66-6168323D54C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{E40D03A7-7149-49C4-8A33-EB13428DCFA9} = {BD048EBA-23D6-4C13-B4EC-18D31D4CD578}
 		{BE0E2544-368F-401D-B570-00710CB994E5} = {BD048EBA-23D6-4C13-B4EC-18D31D4CD578}
 		{6ACD4F9C-418C-4507-830C-9EBCFCC4824A} = {BD048EBA-23D6-4C13-B4EC-18D31D4CD578}
+		{1820BC8F-BC30-48EE-8C66-6168323D54C5} = {BD048EBA-23D6-4C13-B4EC-18D31D4CD578}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247731E7-2536-4353-ACEA-F0F0C5212665}

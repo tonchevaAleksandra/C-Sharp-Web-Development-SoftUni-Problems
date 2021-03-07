@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using SharedTrip.ViewModels.Trips;
+using SharedTrip.ViewModels.Users;
 
 namespace SharedTrip.Services
 {
@@ -13,5 +15,12 @@ namespace SharedTrip.Services
         AllTripsViewModel GetAllTrips();
 
         TripViewModel GetDetailsForTrip(string tripId);
+
+
+        bool HasAvailableSeats( string tripId);
+
+        bool AddUserToTrip(string userId, string tripId);
+
+        ICollection<UsersToTripViewModel> GetAllUsersToCurrentTrip(string tripId);
     }
 }

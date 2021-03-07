@@ -6,6 +6,7 @@ using System.Text;
 using SharedTrip.Data;
 using SharedTrip.Models;
 using SharedTrip.ViewModels.Trips;
+using SharedTrip.ViewModels.Users;
 
 namespace SharedTrip.Services
 {
@@ -24,7 +25,7 @@ namespace SharedTrip.Services
                 DepartureTime = DateTime.ParseExact(departureTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
                 Description = description,
                 ImagePath = imagePath,
-                Seats = (byte) seats,
+                Seats = (byte)seats,
                 StartPoint = startPoint,
                 EndPoint = endPoint
             };
@@ -44,32 +45,77 @@ namespace SharedTrip.Services
 
         public AllTripsViewModel GetAllTrips()
         {
-            var trips = this.db.Trips.Select(x => new TripViewModel()
+            var trips = this.db.Trips.OrderBy(x=>x.StartPoint).ThenBy(x=>x.EndPoint).ToList().Where(x=>HasAvailableSeats(x.Id)).Select(x => new TripViewModel()
             {
-                DepartureTime = x.DepartureTime.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
+                DepartureTimeAsDateTime = x.DepartureTime,
                 Description = x.Description,
                 EndPoint = x.EndPoint,
                 Id = x.Id,
                 ImagePath = x.ImagePath,
-                Seats = x.Seats,
+                Seats =(int)(x.Seats - x.UserTrips.Count),
                 StartPoint = x.StartPoint
             }).ToList();
 
-            return new AllTripsViewModel() {Trips = trips};
+            return new AllTripsViewModel() { Trips = trips };
         }
 
         public TripViewModel GetDetailsForTrip(string tripId)
         {
-           return this.db.Trips.Where(x => x.Id == tripId).Select(x => new TripViewModel()
+            return this.db.Trips.ToList().Where(x => x.Id == tripId && HasAvailableSeats(tripId)).Select(x => new TripViewModel()
             {
                 Description = x.Description,
-                DepartureTime = x.DepartureTime.ToString("dd.MM.yyyy HH:mm"/*, CultureInfo.InvariantCulture*/),
+                DepartureTimeAsDateTime = x.DepartureTime,
                 EndPoint = x.EndPoint,
                 Id = x.Id,
                 ImagePath = x.ImagePath,
-                Seats = x.Seats,
+                Seats = (int)(x.Seats - x.UserTrips.Count),
                 StartPoint = x.StartPoint
             }).FirstOrDefault();
+        }
+
+        public bool HasAvailableSeats(string tripId)
+        {
+            var trip = this.db.Trips.Where(x => x.Id == tripId)
+                .Select(x => new
+                {
+                    x.Seats,
+                    TakenSeats = x.UserTrips.Count,
+                    x.UserTrips
+                }).FirstOrDefault();
+
+            return trip.Seats - trip.TakenSeats > 0;
+        }
+
+        public bool AddUserToTrip(string userId, string tripId)
+        {
+            if (this.db.Trips.Find(tripId).UserTrips.Any(x => x.UserId == userId))
+            {
+                return false;
+            }
+
+            var userTrip = new UserTrip()
+            {
+                UserId = userId,
+                TripId = tripId
+            };
+
+            this.db.UserTrips.Add(userTrip);
+            this.db.SaveChanges();
+
+            return true;
+        }
+
+        public ICollection<UsersToTripViewModel> GetAllUsersToCurrentTrip(string tripId)
+        {
+            var users = this.db.UserTrips.Where(x => x.TripId == tripId).Select(x => new UsersToTripViewModel()
+                {
+                    Username = x.User.Username,
+                    Email = x.User.Email
+                })
+                .OrderBy(x => x.Username)
+                .ToList();
+
+            return users;
         }
     }
 }

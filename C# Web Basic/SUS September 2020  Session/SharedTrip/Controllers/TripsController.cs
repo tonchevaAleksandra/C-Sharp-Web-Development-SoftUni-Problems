@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SharedTrip.Services;
 using SharedTrip.ViewModels.Trips;
 using SUS.HTTP;
@@ -85,6 +86,47 @@ namespace SharedTrip.Controllers
             }
 
             var viewModel = this.tripsService.GetDetailsForTrip(tripId);
+            return this.View(viewModel);
+        }
+
+        public HttpResponse AddUserToTrip(string tripId)
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
+
+            var userId = this.GetUserId();
+
+            if (!this.tripsService.HasAvailableSeats(tripId))
+            {
+                return this.Error("You can not join this trip. There is no available seats.");
+            }
+
+            var isUserAdded = this.tripsService.AddUserToTrip(userId, tripId);
+            if (!isUserAdded)
+            {
+                return this.Redirect("/Trips/Details?tripId=" + tripId);
+            }
+            return this.Redirect("/Trips/All");
+        }
+
+        public HttpResponse JoinedUsers(string tripId)
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
+
+            var viewModel = new AllUsersJoined
+            {
+                Users = this.tripsService.GetAllUsersToCurrentTrip(tripId)
+            };
+
+            if (!viewModel.Users.Any())
+            {
+                return this.Error("There is no users joined this trip.");
+            }
             return this.View(viewModel);
         }
     }

@@ -64,6 +64,16 @@ namespace SharedTrip.Controllers
 
             }
 
+            if (!this.usersService.IsUsernameAvailable(model.Username))
+            {
+                return this.Error("The username already exist.");
+            }
+
+            if (!this.usersService.IsEmailAvailable(model.Email))
+            {
+                return this.Error("Email already exist.");
+            }
+
             this.usersService.Create(model.Username, model.Email, model.Password);
 
             return this.Redirect("/Users/Login");

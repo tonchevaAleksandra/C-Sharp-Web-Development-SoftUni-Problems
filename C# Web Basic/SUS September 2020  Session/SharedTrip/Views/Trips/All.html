@@ -13,7 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                @(foreach trip in Model.Trips)
+                @foreach(var trip in Model.Trips)
                 {
                 <tr>
                     <th scope="row">@trip.StartPoint</th>

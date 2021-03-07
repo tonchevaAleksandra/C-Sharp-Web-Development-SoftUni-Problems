@@ -3,7 +3,7 @@
         <h1 style="margin: 2%; text-align: center;">Trip</h1>
         <div>
             <div class="form-group text-center">
-                <img src="ImagePath" class="img-fluid">
+                <img src="@Model.ImagePath" class="img-fluid">
             </div>
             <div class="form-group">
                 <label for="startPoint">Starting Point</label>
@@ -27,7 +27,7 @@
             </div>
             <div class="form-group text-center">
                 <div class="button-holder">
-                    <a href="/Trips/AddUserToTrip?tripId=@trip.Id" class="btn btn-primary btn-block text-uppercase">Join</a>
+                    <a href="/Trips/AddUserToTrip?tripId=@Model.Id" class="btn btn-primary btn-block text-uppercase">Join</a>
                 </div>
             </div>
         </div>

@@ -11,5 +11,7 @@ namespace SharedTrip.Services
         bool IsDepartureTimeValid(string departureTime);
 
         AllTripsViewModel GetAllTrips();
+
+        TripViewModel GetDetailsForTrip(string tripId);
     }
 }

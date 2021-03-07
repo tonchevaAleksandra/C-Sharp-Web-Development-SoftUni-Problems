@@ -55,9 +55,9 @@ namespace SharedTrip.Controllers
                 return this.Error("Seats can be not less then 2 and  not more then 6.");
             }
 
-            if (model.Description.Length == 0 || model.Description.Length > 80)
+            if (String.IsNullOrEmpty(model.Description) || model.Description.Length > 80)
             {
-                return this.Error("Description should be less then 80 characters.");
+                return this.Error("Description can not be null and should be less then 80 characters.");
             }
 
             this.tripsService.Create(model.StartPoint, model.EndPoint, model.DepartureTime, model.ImagePath, model.Seats, model.Description);
@@ -84,8 +84,8 @@ namespace SharedTrip.Controllers
                 return this.Redirect("/");
             }
 
-
-            return this.View();
+            var viewModel = this.tripsService.GetDetailsForTrip(tripId);
+            return this.View(viewModel);
         }
     }
 }

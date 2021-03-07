@@ -21,7 +21,7 @@ namespace SharedTrip.Services
         {
             var trip = new Trip()
             {
-                DepartureTime = DateTime.Parse(departureTime, new CultureInfo("dd.MM.yyyy HH:mm")),
+                DepartureTime = DateTime.ParseExact(departureTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
                 Description = description,
                 ImagePath = imagePath,
                 Seats = (byte) seats,
@@ -56,6 +56,20 @@ namespace SharedTrip.Services
             }).ToList();
 
             return new AllTripsViewModel() {Trips = trips};
+        }
+
+        public TripViewModel GetDetailsForTrip(string tripId)
+        {
+           return this.db.Trips.Where(x => x.Id == tripId).Select(x => new TripViewModel()
+            {
+                Description = x.Description,
+                DepartureTime = x.DepartureTime.ToString("dd.MM.yyyy HH:mm"/*, CultureInfo.InvariantCulture*/),
+                EndPoint = x.EndPoint,
+                Id = x.Id,
+                ImagePath = x.ImagePath,
+                Seats = x.Seats,
+                StartPoint = x.StartPoint
+            }).FirstOrDefault();
         }
     }
 }

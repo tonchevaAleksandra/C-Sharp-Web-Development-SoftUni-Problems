@@ -1,0 +1,24 @@
+﻿<section class="py-5">
+<div class="container">
+    <h1 style="margin: 2%; text-align: center;">Joined users</h1>
+    <div style="padding: 5%;">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach(var userTrip in Model.Users)
+            {
+            <tr>
+                <th scope="row">@userTrip.Username</th>
+                <td>@userTrip.Email</td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+</section>

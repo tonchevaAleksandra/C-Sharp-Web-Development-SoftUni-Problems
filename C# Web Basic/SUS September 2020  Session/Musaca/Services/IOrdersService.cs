@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Musaca.Services
+﻿namespace Musaca.Services
 {
- public   interface IOrdersService
+    public interface IOrdersService
     {
+        void Create(string userId);
     }
 }

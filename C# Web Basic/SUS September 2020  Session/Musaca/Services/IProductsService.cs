@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Musaca.Services
+﻿namespace Musaca.Services
 {
     public interface IProductsService
     {
+        void Create(string name, decimal price);
     }
 }

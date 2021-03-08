@@ -10,9 +10,14 @@ namespace Musaca.Controllers
         {
             if (this.IsUserSignedIn())
             {
-                return this.Redirect("/");
+                return this.Redirect("/Products/All");
             }
             return this.View();
+        }
+        [HttpGet("/Home/Index")]
+        public HttpResponse IndexPage()
+        {
+            return this.Redirect("/");
         }
     }
 }

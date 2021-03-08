@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Musaca.Services;
 using Musaca.ViewModels.Users;
@@ -11,10 +12,14 @@ namespace Musaca.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService usersService;
+        private readonly IOrdersService ordersService;
 
-        public UsersController(IUsersService usersService)
+
+        public UsersController(IUsersService usersService, IOrdersService ordersService)
         {
             this.usersService = usersService;
+            this.ordersService = ordersService;
+          
         }
         public HttpResponse Login()
         {
@@ -87,9 +92,20 @@ namespace Musaca.Controllers
                 return this.Redirect("/Users/Register");
             }
 
-            this.usersService.Create(model.Username, model.Email, model.Password);
+            var userId = this.usersService.Create(model.Username, model.Email, model.Password);
+            this.ordersService.Create(userId);
 
             return this.Redirect("/Users/Login");
+        }
+
+        public HttpResponse Profile()
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
+            return this.View();
         }
 
         public HttpResponse Logout()

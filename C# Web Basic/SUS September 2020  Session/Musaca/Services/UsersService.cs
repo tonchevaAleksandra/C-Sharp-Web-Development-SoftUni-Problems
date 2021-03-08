@@ -22,7 +22,7 @@ namespace Musaca.Services
             return userId;
         }
 
-        public void Create(string username, string email, string password)
+        public string Create(string username, string email, string password)
         {
             var pass = this.Hash(password);
             var user = new User()
@@ -34,6 +34,7 @@ namespace Musaca.Services
 
             this.db.Users.Add(user);
             this.db.SaveChanges();
+            return user.Id;
         }
 
         public bool IsUsernameAvailable(string username)

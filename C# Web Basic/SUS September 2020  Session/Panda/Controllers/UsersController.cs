@@ -17,17 +17,48 @@ namespace Panda.Controllers
         }
         public HttpResponse Login()
         {
+            if (IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
             return this.View();
+        }
+
+        [HttpPost]
+        public HttpResponse Login(LoginInputModel input)
+        {
+            if (IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
+
+            var userId = this.usersService.GetUserId(input.Username, input.Password);
+            if (userId==null)
+            {
+                return this.Redirect("/Users/Login");
+            }
+
+            this.SignIn(userId);
+            return this.Redirect("/");
         }
 
         public HttpResponse Register()
         {
+            if (IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
             return this.View();
         }
 
         [HttpPost]
         public HttpResponse Register(RegisterInputModel input)
         {
+            if (IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
+
             if (String.IsNullOrEmpty(input.Username) || input.Username.Length<5 || input.Username.Length>20)
             {
                 return this.Register();
@@ -57,6 +88,18 @@ namespace Panda.Controllers
             }
 
             this.usersService.Create(input.Username, input.Email, input.Password);
+
+            return this.Redirect("/Users/Login");
+        }
+
+        public HttpResponse Logout()
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
+            this.SignOut();
 
             return this.Redirect("/");
         }

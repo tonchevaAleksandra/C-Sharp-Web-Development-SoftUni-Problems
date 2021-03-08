@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Panda.Data;
@@ -36,6 +37,33 @@ namespace Panda.Services
 
             this.db.Users.Add(user);
             this.db.SaveChanges();
+        }
+
+        public string GetUserId(string username, string password)
+        {
+            var hashedPass = Hash(password);
+            var userId = this.db.Users.Where(x => x.Username == username && x.Password == hashedPass)
+                .Select(x => x.Id).FirstOrDefault();
+
+            return userId;
+        }
+
+        public string GetUserIdByUsername(string username)
+        {
+            var userId = this.db.Users.Where(x => x.Username == username )
+                .Select(x => x.Id).FirstOrDefault();
+
+            return userId;
+        }
+
+        public ICollection<string> GetAllUsernames()
+        {
+            return this.db.Users.Select(x => x.Username).ToList();
+        }
+
+        public string GetUsername(string id)
+        {
+            return this.db.Users.Where(x => x.Id == id).Select(x => x.Username).FirstOrDefault();
         }
 
         private static string Hash(string password)

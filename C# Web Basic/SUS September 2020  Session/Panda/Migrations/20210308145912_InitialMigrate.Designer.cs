@@ -10,7 +10,7 @@ using Panda.Data;
 namespace Panda.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210308122622_InitialMigrate")]
+    [Migration("20210308145912_InitialMigrate")]
     partial class InitialMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace Panda.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SippingAddress")
+                    b.Property<string>("ShippingAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")

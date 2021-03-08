@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Panda.Services;
 using SUS.HTTP;
 using SUS.MvcFramework;
 
 namespace Panda.Controllers
 {
-  public  class HomeController:Controller
+    public class HomeController : Controller
     {
+        private readonly IUsersService usersService;
+
+        public HomeController(IUsersService usersService)
+        {
+            this.usersService = usersService;
+        }
         [HttpGet("/")]
         public HttpResponse IndexSlash()
         {
@@ -25,7 +29,14 @@ namespace Panda.Controllers
 
         public HttpResponse IndexLoggedIn()
         {
-            return this.View();
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
+
+            var userId = this.GetUserId();
+            var model = this.usersService.GetUsername(userId);
+            return this.View(model);
         }
     }
 }

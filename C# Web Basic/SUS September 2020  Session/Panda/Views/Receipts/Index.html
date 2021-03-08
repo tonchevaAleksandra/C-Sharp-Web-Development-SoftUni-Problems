@@ -12,12 +12,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="row">
-                    <th scope="row" class="col-lg-4 d-flex justify-content-center">d</th>
-                    <td class="col-lg-2 d-flex justify-content-center">Fee</td>
-                    <td class="col-lg-3 d-flex justify-content-center">IssuedOn</td>
-                    <td class="col-lg-3 d-flex justify-content-center">Recipient Name</td>
-                </tr>
+            @foreach(var item in Model.ToList())
+            {
+            <tr class="row">
+                <th scope="row" class="col-lg-4 d-flex justify-content-center">@item.Id</th>
+                <td class="col-lg-2 d-flex justify-content-center">@item.Fee</td>
+                <td class="col-lg-3 d-flex justify-content-center">@item.IssuedOn</td>
+                <td class="col-lg-3 d-flex justify-content-center">@item.RecipientName</td>
+            </tr>
+            }
             </tbody>
         </table>
     </div>

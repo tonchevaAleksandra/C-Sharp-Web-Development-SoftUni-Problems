@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Views\Commits\All.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

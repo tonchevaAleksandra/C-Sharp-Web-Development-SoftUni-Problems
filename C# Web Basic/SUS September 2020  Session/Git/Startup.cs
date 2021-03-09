@@ -1,4 +1,5 @@
-﻿using IRunes.Data;
+﻿using Git.Data;
+using Git.Services;
 using Microsoft.EntityFrameworkCore;
 using SUS.HTTP;
 using SUS.MvcFramework;
@@ -10,7 +11,7 @@ namespace Git
     {
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
-            //serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<IUsersService, UsersService>();
             //serviceCollection.Add<ITracksService, TracksService>();
             //serviceCollection.Add<IAlbumsService, AlbumsService>();
         }

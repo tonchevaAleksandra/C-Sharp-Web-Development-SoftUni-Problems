@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Andreys.Data;
+using Andreys.Services;
 using Microsoft.EntityFrameworkCore;
 using SUS.HTTP;
 using SUS.MvcFramework;
@@ -12,7 +13,7 @@ namespace Andreys
     {
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
-            //serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<IUsersService, UsersService>();
             //serviceCollection.Add<IPackagesService, PackagesService>();
             //serviceCollection.Add<IReceiptsService, ReceiptsService>();
         }

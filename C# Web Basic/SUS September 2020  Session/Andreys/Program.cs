@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
+using SUS.MvcFramework;
 
 namespace Andreys
 {
-    class Program
+   public class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            await Host.CreateHostAsync(new Startup());
         }
     }
 }

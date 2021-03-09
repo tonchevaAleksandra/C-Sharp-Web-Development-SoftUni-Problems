@@ -12,7 +12,7 @@ namespace Git
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.Add<IUsersService, UsersService>();
-            //serviceCollection.Add<ITracksService, TracksService>();
+            serviceCollection.Add<IRepositoriesService, RepositoriesService>();
             //serviceCollection.Add<IAlbumsService, AlbumsService>();
         }
 

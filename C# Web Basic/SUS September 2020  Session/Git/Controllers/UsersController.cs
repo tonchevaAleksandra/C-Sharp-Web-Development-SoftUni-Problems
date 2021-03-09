@@ -98,5 +98,17 @@ namespace Git.Controllers
 
             return this.Redirect("/Users/Login");
         }
+
+        public HttpResponse Logout()
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
+            this.SignOut();
+
+            return this.Redirect("/");
+        }
     }
 }

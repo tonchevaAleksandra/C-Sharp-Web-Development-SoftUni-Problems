@@ -10,7 +10,7 @@ namespace Andreys.Controllers
 {
     public class UsersController : Controller
     {
-        private IUsersService usersService;
+        private readonly IUsersService usersService;
 
         public UsersController(IUsersService usersService)
         {

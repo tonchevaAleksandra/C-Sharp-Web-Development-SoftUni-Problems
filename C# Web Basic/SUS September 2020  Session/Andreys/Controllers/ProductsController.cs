@@ -8,7 +8,7 @@ namespace Andreys.Controllers
 {
     public class ProductsController : Controller
     {
-        private IProductsService productsService;
+        private readonly IProductsService productsService;
 
         public ProductsController(IProductsService productsService)
         {
@@ -19,12 +19,13 @@ namespace Andreys.Controllers
         {
             if (!this.IsUserSignedIn())
             {
-                return this.Redirect("/");
+                return this.Redirect("/Home/Index");
             }
 
             return this.View();
         }
 
+        [HttpPost]
         public HttpResponse Add(AddProductInputModel model)
         {
             if (!this.IsUserSignedIn())
@@ -32,7 +33,7 @@ namespace Andreys.Controllers
                 return this.Redirect("/");
             }
 
-            if (String.IsNullOrEmpty(model.Name) || model.Name.Length<4 || model.Name.Length>20)
+            if (String.IsNullOrEmpty(model.Name) || model.Name.Length< 4 || model.Name.Length> 20)
             {
                 return this.Error("Name of the product should be between [4-20] characters.");
             }
@@ -56,6 +57,31 @@ namespace Andreys.Controllers
             {
                 return this.Error("Gender cannot be empty.");
             }
+
+            this.productsService.Create(model.Name, model.Description, model.ImageUrl,model.Category, model.Gender, model.Price);
+            return this.Redirect("/");
+        }
+
+        public HttpResponse Details(int id)
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Home/Index");
+            }
+
+            var viewModel = this.productsService.GetDetails(id);
+
+            return this.View(viewModel);
+        }
+
+        public HttpResponse Delete(int id)
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Home/Index");
+            }
+
+            this.productsService.DeleteProduct(id);
 
             return this.Redirect("/");
         }

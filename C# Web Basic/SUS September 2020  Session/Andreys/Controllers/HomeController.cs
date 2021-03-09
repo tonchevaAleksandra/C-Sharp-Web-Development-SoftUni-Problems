@@ -1,4 +1,5 @@
-﻿using SUS.HTTP;
+﻿using Andreys.Services;
+using SUS.HTTP;
 using SUS.MvcFramework;
 
 namespace Andreys.App.Controllers
@@ -6,6 +7,12 @@ namespace Andreys.App.Controllers
 
     public class HomeController : Controller
     {
+        private readonly IProductsService productsService;
+
+        public HomeController(IProductsService productsService)
+        {
+            this.productsService = productsService;
+        }
         public HttpResponse Index()
         {
             if (this.IsUserSignedIn())
@@ -23,7 +30,8 @@ namespace Andreys.App.Controllers
                 return this.Redirect("/Home/Index");
             }
 
-            return this.View();
+            var viewModel = this.productsService.GetAllProducts();
+            return this.View(viewModel);
         }
     }
 }

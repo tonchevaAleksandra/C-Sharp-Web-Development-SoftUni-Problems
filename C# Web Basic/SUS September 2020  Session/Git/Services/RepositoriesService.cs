@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Git.Data;
+﻿using Git.Data;
 using Git.Models;
 using Git.ViewModels.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Git.Services
 {
     public class RepositoriesService : IRepositoriesService
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db;
 
         public RepositoriesService(ApplicationDbContext db)
         {
@@ -31,9 +31,9 @@ namespace Git.Services
 
         public ICollection<RepositoryViewModel> GetAllPublicRepositories()
         {
-           return this.db.Repositories.Where(x => x.IsPublic).Select(x => new RepositoryViewModel()
+            return this.db.Repositories.Where(x => x.IsPublic).Select(x => new RepositoryViewModel()
             {
-                Id=x.Id,
+                Id = x.Id,
                 CommitsCount = x.Commits.Count,
                 CreatedOn = x.CreatedOn,
                 Name = x.Name,

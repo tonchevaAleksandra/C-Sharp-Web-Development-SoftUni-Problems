@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Git.Services;
+﻿using Git.Services;
 using Git.ViewModels.Repositories;
 using SUS.HTTP;
 using SUS.MvcFramework;
+using System;
 
 namespace Git.Controllers
 {
     public class RepositoriesController : Controller
     {
-        private IRepositoriesService repositoriesService;
+        private readonly IRepositoriesService repositoriesService;
 
         public RepositoriesController(IRepositoriesService repositoriesService)
         {

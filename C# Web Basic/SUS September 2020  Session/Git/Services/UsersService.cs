@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Git.Data;
+using Git.Models;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Git.Data;
-using Git.Models;
 
 namespace Git.Services
 {
     public class UsersService : IUsersService
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db;
 
         public UsersService(ApplicationDbContext db)
         {

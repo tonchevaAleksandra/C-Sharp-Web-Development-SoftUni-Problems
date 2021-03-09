@@ -9,7 +9,7 @@ namespace Git.Services
 {
     public class CommitsService : ICommitsService
     {
-        private ApplicationDbContext db;
+        private readonly ApplicationDbContext db;
 
         public CommitsService(ApplicationDbContext db)
         {
@@ -33,10 +33,26 @@ namespace Git.Services
         {
             return this.db.Commits.Where(x => x.CreatorId == userId).Select(x => new CommitViewModel()
             {
+                Id = x.Id,
                 CreatedOn = x.CreatedOn,
                 Description = x.Description,
                 RepositoryName = x.Repository.Name
             }).ToList();
+        }
+
+        public bool CanUserDeleteThisCommit(string userId, string commitId)
+        {
+            var repositoryOwnerId = this.db.Commits.Where(x => x.Id == commitId).Select(x => x.Repository.OwnerId).FirstOrDefault();
+
+            return repositoryOwnerId == userId ? true : false;
+
+        }
+
+        public void DeleteCommmit(string commitId)
+        {
+            var commmit = this.db.Commits.Find(commitId);
+            this.db.Commits.Remove(commmit);
+            this.db.SaveChanges();
         }
     }
 }

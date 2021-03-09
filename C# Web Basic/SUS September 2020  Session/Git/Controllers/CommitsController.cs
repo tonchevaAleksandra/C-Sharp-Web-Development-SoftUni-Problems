@@ -1,15 +1,15 @@
-﻿using System;
-using Git.Services;
+﻿using Git.Services;
 using Git.ViewModels.Commits;
 using SUS.HTTP;
 using SUS.MvcFramework;
+using System;
 
 namespace Git.Controllers
 {
     public class CommitsController : Controller
     {
-        private ICommitsService commitsService;
-        private IRepositoriesService repositoriesService;
+        private readonly ICommitsService commitsService;
+        private readonly IRepositoriesService repositoriesService;
 
         public CommitsController(ICommitsService commitsService, IRepositoriesService repositoriesService)
         {
@@ -24,14 +24,14 @@ namespace Git.Controllers
                 return this.Redirect("/");
             }
 
-           var repositoryName= this.repositoriesService.GetRepositoryName(id);
-           var viewModel = new CreateCommitToRepoViewModel()
-           {
-               Id = id,
-               Name = repositoryName
-           };
+            var repositoryName = this.repositoriesService.GetRepositoryName(id);
+            var viewModel = new CreateCommitToRepoViewModel()
+            {
+                Id = id,
+                Name = repositoryName
+            };
 
-           return this.View(viewModel);
+            return this.View(viewModel);
         }
 
         [HttpPost]
@@ -42,7 +42,7 @@ namespace Git.Controllers
                 return this.Redirect("/");
             }
 
-            if (String.IsNullOrEmpty(model.Description) || model.Description.Length<5)
+            if (String.IsNullOrEmpty(model.Description) || model.Description.Length < 5)
             {
                 return this.Redirect("/Commits/Create");
             }
@@ -63,6 +63,23 @@ namespace Git.Controllers
             var userId = this.GetUserId();
             var viewModel = this.commitsService.GetAllCommitsFromUser(userId);
             return this.View(viewModel);
+        }
+
+        public HttpResponse Delete(string id)
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/");
+            }
+
+            var userId = this.GetUserId();
+            if (!this.commitsService.CanUserDeleteThisCommit(userId, id))
+            {
+                return this.Redirect("/Commits/All");
+            }
+
+            this.commitsService.DeleteCommmit(id);
+            return this.Redirect("/Repositories/All");
         }
     }
 }

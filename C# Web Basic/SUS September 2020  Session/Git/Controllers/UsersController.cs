@@ -1,15 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Git.Services;
+﻿using Git.Services;
 using Git.ViewModels.Users;
 using SUS.HTTP;
 using SUS.MvcFramework;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Git.Controllers
 {
-    public class UsersController:Controller
+    public class UsersController : Controller
     {
-        private IUsersService usersService;
+        private readonly IUsersService usersService;
 
         public UsersController(IUsersService usersService)
         {
@@ -37,7 +37,7 @@ namespace Git.Controllers
 
             var userId = this.usersService.GetUserId(model.Username, model.Password);
 
-            if (userId==null)
+            if (userId == null)
             {
                 return this.Redirect("/Users/Login");
             }
@@ -64,22 +64,22 @@ namespace Git.Controllers
                 return this.Redirect("/Repositories/All");
             }
 
-            if (String.IsNullOrEmpty(model.Username) || model.Username.Length<5 || model.Username.Length>20)
+            if (String.IsNullOrEmpty(model.Username) || model.Username.Length < 5 || model.Username.Length > 20)
             {
                 return this.Redirect("/Users/Register");
             }
 
-            if (String.IsNullOrEmpty(model.Email) || ! new EmailAddressAttribute().IsValid(model.Email))
+            if (String.IsNullOrEmpty(model.Email) || !new EmailAddressAttribute().IsValid(model.Email))
             {
                 return this.Redirect("/Users/Register");
             }
 
-            if (model.Password.Length<6 || model.Password.Length>20)
+            if (model.Password.Length < 6 || model.Password.Length > 20)
             {
                 return this.Redirect("/Users/Register");
             }
 
-            if (model.Password!=model.ConfirmPassword)
+            if (model.Password != model.ConfirmPassword)
             {
                 return this.Redirect("/Users/Register");
             }

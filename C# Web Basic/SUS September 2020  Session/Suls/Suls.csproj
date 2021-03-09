@@ -23,28 +23,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Views\Home\Index.cshtml">
+    <None Update="Views\Home\Index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Home\IndexLoggedIn.cshtml">
+    <None Update="Views\Home\IndexLoggedIn.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Problems\Create.cshtml">
+    <None Update="Views\Problems\Create.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Problems\Details.cshtml">
+    <None Update="Views\Problems\Details.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Shared\_Layout.cshtml">
+    <None Update="Views\Shared\_Layout.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Submissions\Create.cshtml">
+    <None Update="Views\Submissions\Create.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Users\Login.cshtml">
+    <None Update="Views\Users\Login.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Views\Users\Register.cshtml">
+    <None Update="Views\Users\Register.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="wwwroot\css\bootstrap.min.css">

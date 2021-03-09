@@ -17,14 +17,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach(var item int Model.ToList())
+                        @foreach(var item in Model.ToList())
                         {
                         <tr class="table-light">
                             <th scope="row">@item.RepositoryName</th>
                             <td>@item.Description</td>
                             <td>@item.CreatedOn</td>
                             <td>
-                                <a class="btn btn-block btn-primary text-white mb-3" href="/Commits/Delete">Delete</a>
+                                <a class="btn btn-block btn-primary text-white mb-3" href="/Commits/Delete?id=@item.Id">Delete</a>
                             </td>
                         </tr>
                         }

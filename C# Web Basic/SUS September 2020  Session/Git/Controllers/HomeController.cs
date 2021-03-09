@@ -1,7 +1,7 @@
-﻿namespace Git.Controllers
+﻿using SUS.HTTP;
+using SUS.MvcFramework;
+namespace Git.Controllers
 {
-    using SUS.HTTP;
-    using SUS.MvcFramework;
 
     public class HomeController : Controller
     {

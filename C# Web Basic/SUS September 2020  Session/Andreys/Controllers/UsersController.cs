@@ -37,13 +37,15 @@ namespace Andreys.Controllers
 
             if (String.IsNullOrEmpty(model.Username))
             {
-                return this.Error("Username cannot be empty.");
+                return this.Redirect("/Users/Login");
+                //return this.Error("Username cannot be empty.");
             }
 
             var userId = this.usersService.GetUserId(model.Username, model.Password);
             if (userId==null)
             {
-                return this.Error("not existing user.");
+                return this.Redirect("/Users/Login");
+                //return this.Error("not existing user.");
             }
             this.SignIn(userId);
 
@@ -68,22 +70,26 @@ namespace Andreys.Controllers
             }
             if (String.IsNullOrEmpty(model.Username) || model.Username.Length<4 || model.Username.Length>10)
             {
-                return this.Error("Username should be between [4-10] characters.");
+                return this.Redirect("/Users/Register");
+                //return this.Error("Username should be between [4-10] characters.");
             }
 
             if (!this.usersService.IsUsernameAvailable(model.Username))
             {
-                return this.Error("Username is not available.");
+                return this.Redirect("/Users/Register");
+                //return this.Error("Username is not available.");
             }
 
             if (!String.IsNullOrEmpty(model.Email)  && !new EmailAddressAttribute().IsValid(model.Email) || !this.usersService.IsEmailAvailable(model.Email))
             {
-                return this.Error("Email address is not valid or available.");
+                return this.Redirect("/Users/Register");
+                //return this.Error("Email address is not valid or available.");
             }
 
             if (model.Password!=model.ConfirmPassword )
             {
-                return this.Error("Passwords should match.");
+                return this.Redirect("/Users/Register");
+                //return this.Error("Passwords should match.");
             }
 
             this.usersService.RegisterUser(model.Username, model.Email, model.Password);

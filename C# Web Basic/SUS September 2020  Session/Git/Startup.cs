@@ -13,7 +13,7 @@ namespace Git
         {
             serviceCollection.Add<IUsersService, UsersService>();
             serviceCollection.Add<IRepositoriesService, RepositoriesService>();
-            //serviceCollection.Add<IAlbumsService, AlbumsService>();
+            serviceCollection.Add<ICommitsService, CommitsService>();
         }
 
         public void Configure(List<Route> routeTable)

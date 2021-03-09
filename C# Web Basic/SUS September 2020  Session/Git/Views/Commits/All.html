@@ -14,18 +14,20 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Created On</th>
                                 <th scope="col">Delete</th>
-
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-light">
-                                <th scope="row">ASP.NET Core Template</th>
-                                <td>Introduce new functionality</td>
-                                <td>22/10/2020 08:45</td>
-                                <td>
-                                    <a class="btn btn-block btn-primary text-white mb-3" href="/Commits/Delete">Delete</a>
-                                </td>
-                            </tr>
+                        @foreach(var item int Model.ToList())
+                        {
+                        <tr class="table-light">
+                            <th scope="row">@item.RepositoryName</th>
+                            <td>@item.Description</td>
+                            <td>@item.CreatedOn</td>
+                            <td>
+                                <a class="btn btn-block btn-primary text-white mb-3" href="/Commits/Delete">Delete</a>
+                            </td>
+                        </tr>
+                        }
                         </tbody>
                     </table>
                 </div>

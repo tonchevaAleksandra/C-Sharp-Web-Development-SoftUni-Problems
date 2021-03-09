@@ -35,6 +35,11 @@ namespace Git.Controllers
                 return this.Redirect("/Users/Login");
             }
 
+            if (String.IsNullOrEmpty(model.Name) || model.Name.Length < 3 || model.Name.Length > 10)
+            {
+                return this.Redirect("/Repositories/Create");
+            }
+
             var userId = this.GetUserId();
             this.repositoriesService.CreateRepository(model.Name, model.RepositoryType, userId);
 

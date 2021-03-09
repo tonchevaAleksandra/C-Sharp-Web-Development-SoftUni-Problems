@@ -1,5 +1,4 @@
-﻿@using Microsoft.EntityFrameworkCore
-<div class="container">
+﻿<div class="container">
     <div class="section">
         <div class="row">
             <div class="col-md-8 offset-md-2">
@@ -24,10 +23,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach (var item in Model.ToList())
+                        @foreach(var item in Model.ToList())
                         {
                             <tr class="table-light">
-                                <th scope="row">A@item.Name</th>
+                                <th scope="row">@item.Name</th>
                                 <td>@item.Owner</td>
                                 <td>@item.CreatedOn</td>
                                 <td>@item.CommitsCount</td>

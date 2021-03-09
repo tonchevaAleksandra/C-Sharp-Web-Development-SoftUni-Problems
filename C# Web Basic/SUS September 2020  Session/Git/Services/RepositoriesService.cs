@@ -40,5 +40,10 @@ namespace Git.Services
                 Owner = x.Owner.Username
             }).ToList();
         }
+
+        public string GetRepositoryName(string id)
+        {
+            return this.db.Repositories.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
+        }
     }
 }

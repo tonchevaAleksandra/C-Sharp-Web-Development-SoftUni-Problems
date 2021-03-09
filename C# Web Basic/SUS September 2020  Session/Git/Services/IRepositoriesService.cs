@@ -8,5 +8,7 @@ namespace Git.Services
         void CreateRepository(string name, string repositoryType, string userId);
 
         ICollection<RepositoryViewModel> GetAllPublicRepositories();
+
+        string GetRepositoryName(string id);
     }
 }

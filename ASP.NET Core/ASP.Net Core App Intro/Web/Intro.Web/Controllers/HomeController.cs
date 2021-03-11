@@ -1,4 +1,6 @@
-﻿namespace Intro.Web.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace Intro.Web.Controllers
 {
     using System.Diagnostics;
 
@@ -13,6 +15,7 @@
             return this.View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return this.View();

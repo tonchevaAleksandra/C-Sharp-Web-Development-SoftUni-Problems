@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<table class="table table-hover table-active table-bordered table-sm">
+    @for(int i=1; i<11; i++)
+    {
+        @for (int j = 1; j < 11; j++)
+        {
+            <tr><th>@i</th><th>*</th><th>@j</th><th>=</th><th>@(i*j)</th></tr>
+        }
+    }
+</table>

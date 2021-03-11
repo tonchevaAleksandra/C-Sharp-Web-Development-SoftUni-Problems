@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.312" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Intro.Common\Intro.Common.csproj" />
+    <ProjectReference Include="..\..\Data\Intro.Data.Common\Intro.Data.Common.csproj" />
+    <ProjectReference Include="..\..\Data\Intro.Data.Models\Intro.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\Intro.Data\Intro.Data.csproj" />
+    <ProjectReference Include="..\..\Services\Intro.Services.Data\Intro.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\Intro.Services.Mapping\Intro.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\Intro.Services.Messaging\Intro.Services.Messaging.csproj" />
+    <ProjectReference Include="..\..\Services\Intro.Services\Intro.Services.csproj" />
+  </ItemGroup>
+
+</Project>

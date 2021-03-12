@@ -7,7 +7,8 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<partial name="_HomePageStart" model="Model.Name" />
+<partial name="_HomePageStart" />
+
 <form asp-action="Index">
     <textarea asp-for="Description"></textarea>
     <input asp-for="Name"/>

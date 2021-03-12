@@ -1,3 +1,4 @@
 ﻿@{
     Layout = "_Layout";
+    this.ViewData["Title"] = ViewContext.RouteData.Values["Action"]; //this will make title named of the action invoked for every page that not have custom Title
 }

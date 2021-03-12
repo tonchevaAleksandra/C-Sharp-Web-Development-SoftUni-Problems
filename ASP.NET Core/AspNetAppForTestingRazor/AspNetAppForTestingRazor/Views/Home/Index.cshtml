@@ -1,12 +1,13 @@
 ﻿@using AspNetAppForTestingRazor.ViewModels.Home
 @using AspNetAppForTestingRazor.Services
+@using Microsoft.AspNetCore.SignalR
 @inject IShortStringService ShortString
 @*@inject IHtmlSanitizer Sanitizer*@
 @model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<partial name="_HomePageStart" model="Model.Name" />
 <form asp-action="Index">
     <textarea asp-for="Description"></textarea>
     <input asp-for="Name"/>
@@ -33,8 +34,12 @@
     <p>Description: @ShortString.GetShort(Model.Description, 100)</p>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<!--@await Html.PartialAsync("_HomePageStart")-->
+@*@Html.Partial("_HomePageStart")*@
 
-<table bootstrap-table="">
+
+
+<table bootstrap-table="" table-name="Digits table">
 
     @for (int i = 0; i < 5; i++)
     {

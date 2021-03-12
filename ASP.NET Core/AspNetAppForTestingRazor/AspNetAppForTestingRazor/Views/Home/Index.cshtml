@@ -7,6 +7,15 @@
     ViewData["Title"] = "Home Page";
 }
 
+<form asp-action="Index">
+    <textarea asp-for="Description"></textarea>
+    <input asp-for="Name"/>
+</form>
+
+@*@Html.ActionLink("Privacy page", "Privacy", "Home", "https")
+<hr />
+@Html.EditorForModel()*@
+
 <div class="text-center">
     @if (User.Identity.IsAuthenticated)
     {
@@ -24,8 +33,9 @@
     <p>Description: @ShortString.GetShort(Model.Description, 100)</p>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
-<table class="table table-active table-bordered table=small table-sm"
-       style="align-content: center">
+
+<table bootstrap-table="">
+
     @for (int i = 0; i < 5; i++)
     {
         <tr><td>@(i+1)</td></tr>

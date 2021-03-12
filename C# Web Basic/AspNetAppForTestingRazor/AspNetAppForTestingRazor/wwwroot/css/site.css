@@ -5,14 +5,14 @@ a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
-   color: red;
-    background-color: cyan
+
+   
 }
 
 /* Provide sufficient contrast against white background */
 a {
-    color: red;
-    background-color: cyan
+    color: blue;
+  
 }
 
 .btn-primary {

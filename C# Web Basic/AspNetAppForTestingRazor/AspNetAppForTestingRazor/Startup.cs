@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetAppForTestingRazor.Services;
 
 namespace AspNetAppForTestingRazor
 {
@@ -34,6 +35,7 @@ namespace AspNetAppForTestingRazor
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddTransient<IShortStringService, ShortStringService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

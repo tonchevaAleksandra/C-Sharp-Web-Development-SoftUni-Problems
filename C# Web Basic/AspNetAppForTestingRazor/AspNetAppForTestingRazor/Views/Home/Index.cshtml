@@ -1,4 +1,7 @@
-﻿@model AspNetAppForTestingRazor.ViewModels.Home.IndexViewModel
+﻿@using AspNetAppForTestingRazor.ViewModels.Home
+@using AspNetAppForTestingRazor.Services
+@inject IShortStringService ShortString
+@model IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -9,8 +12,16 @@
     <p>Current registered users: @Model.UsersCount</p>
     <p>ProcessorCount @Model.ProcessorsCount</p>
     <p>Id: @Model.Id</p>
+    <p>Description: @ShortString.GetShort(Model.Description,100)</p>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<table class="table table-active table-bordered table=small table-sm"
+       style="align-content: center">
+    @for (int i = 0; i < 5; i++)
+    {
+        <tr><td>@(i+1)</td></tr>
+    }
+</table>
 
 <!--HTML Encoding /> HTML Entities -->
 List&lt;string&gt;

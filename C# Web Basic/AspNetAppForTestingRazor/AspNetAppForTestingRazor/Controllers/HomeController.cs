@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetAppForTestingRazor.Data;
+using AspNetAppForTestingRazor.Services;
 using AspNetAppForTestingRazor.ViewModels.Home;
 
 namespace AspNetAppForTestingRazor.Controllers
@@ -15,11 +16,13 @@ namespace AspNetAppForTestingRazor.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private ApplicationDbContext dbContext;
+        private readonly IShortStringService _shortStringService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext, IShortStringService shortStringService)
         {
             _logger = logger;
             this.dbContext = dbContext;
+            _shortStringService = shortStringService;
         }
 
         public IActionResult Index(int id)
@@ -44,8 +47,10 @@ namespace AspNetAppForTestingRazor.Controllers
                 Name = "Aleks",
                 Year = DateTime.UtcNow.Year,
                 UsersCount = this.dbContext.Users.Count(),
-                ProcessorsCount = Environment.ProcessorCount
+                ProcessorsCount = Environment.ProcessorCount,
+                Description = "Google LLC is an American multinational technology company that specializes in Internet-related services and products, which include online advertising technologies, a search engine, cloud computing, software, and hardware."
             };
+            //viewModel.Description = this._shortStringService.GetShort(viewModel.Description, 200);
 
             return View(viewModel);
         }

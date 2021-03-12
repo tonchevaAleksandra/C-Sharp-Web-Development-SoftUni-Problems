@@ -1,0 +1,42 @@
+﻿@using AspNetAppForTestingRazor.ViewModels.Home
+@using AspNetAppForTestingRazor.Services
+@inject IShortStringService ShortString
+@*@inject IHtmlSanitizer Sanitizer*@
+@model IndexViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h1 class="display-4">Welcome, @User.Identity.Name</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome, @Model.Name</h1>
+    }
+
+    <h2>It @Model.Year Year</h2>
+    <p>Current registered users: @Model.UsersCount</p>
+    <p>ProcessorCount @Model.ProcessorsCount</p>
+    <p>Id: @Model.Id</p>
+    <p>Description: @ShortString.GetShort(Model.Description, 100)</p>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<table class="table table-active table-bordered table=small table-sm"
+       style="align-content: center">
+    @for (int i = 0; i < 5; i++)
+    {
+        <tr><td>@(i+1)</td></tr>
+    }
+</table>
+
+@section Links{
+    <li class="nav-item">
+        <a class="nav-link text-dark" href="https://google.com">Google</a>
+    </li>
+}
+
+<!--HTML Encoding /> HTML Entities -->
+List&lt;string&gt;

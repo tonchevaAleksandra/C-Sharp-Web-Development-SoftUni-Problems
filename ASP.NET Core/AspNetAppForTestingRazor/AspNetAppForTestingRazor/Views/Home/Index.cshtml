@@ -7,13 +7,13 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<input type="datetime-local"/>
+<input type="datetime-local" class="form-control"/>
 
 <partial name="_HomePageStart" />
 
 <form asp-action="Index">
     <textarea asp-for="Description"></textarea>
-    <input asp-for="Name"/>
+    <input asp-for="Name" class="form-control"/>
 </form>
 
 @*@Html.ActionLink("Privacy page", "Privacy", "Home", "https")
@@ -52,7 +52,7 @@
 
 @section Links{
     <li class="nav-item">
-        <a class="nav-link text-dark" href="https://google.com">Google</a>
+        <a class="nav-link text-white" href="https://google.com">Google</a>
     </li>
 }
 

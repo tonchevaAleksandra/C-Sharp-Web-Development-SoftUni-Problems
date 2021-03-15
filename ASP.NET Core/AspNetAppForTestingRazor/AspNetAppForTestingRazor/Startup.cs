@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetAppForTestingRazor.Filters;
 using AspNetAppForTestingRazor.Services;
 
 namespace AspNetAppForTestingRazor
@@ -33,7 +34,13 @@ namespace AspNetAppForTestingRazor
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(configure => //global registration of a filter => this filter will be invoke on every action
+            {
+                configure.Filters.Add(new AddHeaderActionFilterAttribute());                configure.Filters.Add(new MyAuthFilter());          
+                configure.Filters.Add(new MyExceptionFilter());                configure.Filters.Add(new MyResourceFilter());                configure.Filters.Add(new MyResultFilterAttribute());
+                //configure.Filters.Add(typeof(AddHeaderActionFilter));
+
+            });
             services.AddRazorPages();
 
             // Singleton
@@ -43,8 +50,10 @@ namespace AspNetAppForTestingRazor
             //services.AddScoped<IInstanceCounter, InstanceCounter>();
 
             // Transient  // Transient is the most used option, makes new instance on every invoke
+           
             services.AddTransient<IInstanceCounter, InstanceCounter>();
 
+            //services.AddSingleton<AddHeaderActionFilterAttribute>(); => if we need to use DI and ServiceFilter(typeof(AddHeaderActionFilterAttribute))] we need to register not just the service we inject in the constructor but also the Filter-Attribute 
             services.AddTransient<IShortStringService, ShortStringService>();
         }
 

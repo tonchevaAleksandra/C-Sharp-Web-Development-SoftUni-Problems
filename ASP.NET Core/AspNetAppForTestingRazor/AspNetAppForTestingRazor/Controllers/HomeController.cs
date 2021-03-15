@@ -7,12 +7,18 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetAppForTestingRazor.Data;
+using AspNetAppForTestingRazor.Filters;
 using AspNetAppForTestingRazor.Services;
 using AspNetAppForTestingRazor.ViewModels.Home;
 using Microsoft.Extensions.Configuration;
 
 namespace AspNetAppForTestingRazor.Controllers
 {
+    //[TypeFilter(typeof(AddHeaderActionFilterAttribute))] // We use TypeFilter when we need DI in constructor of an attribute class
+
+    //[ServiceFilter(typeof(AddHeaderActionFilterAttribute))] // Same approach but we need to register the filter also in the Dependency Container
+
+    [AddHeaderActionFilter]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

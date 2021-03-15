@@ -2,6 +2,7 @@
 @using AspNetAppForTestingRazor.Services
 @using Microsoft.AspNetCore.SignalR
 @inject IShortStringService ShortString
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment WebEnvironment
 @*@inject IHtmlSanitizer Sanitizer*@
 @model IndexViewModel
 @{
@@ -11,6 +12,7 @@
 
 <partial name="_HomePageStart" />
 
+<h1>@WebEnvironment.EnvironmentName</h1>
 <form asp-action="Index">
     <textarea asp-for="Description"></textarea>
     <input asp-for="Name" class="form-control"/>

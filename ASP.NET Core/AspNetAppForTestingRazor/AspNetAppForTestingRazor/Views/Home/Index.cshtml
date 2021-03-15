@@ -10,23 +10,24 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<input type="datetime-local" class="form-control"/>
+<input type="datetime-local" class="form-control" />
 
 <partial name="_HomePageStart" />
 
 <h1>Instances: @InstanceCounter.Instances</h1>
 <h1>@WebEnvironment.EnvironmentName</h1>
-<h2>@this.Configuration["EmailSettings:Server:Port"]</h2>
+@*<h2>@this.Configuration["EmailSettings:Server:Port"]</h2>*@
+<h2>@this.Configuration["HelloMessage"]</h2>
 <vc:registered-users title="Regitered users"></vc:registered-users>
 
 <form asp-action="Index">
     <textarea asp-for="Description"></textarea>
-    <input asp-for="Name" class="form-control"/>
+    <input asp-for="Name" class="form-control" />
 </form>
 
 @*@Html.ActionLink("Privacy page", "Privacy", "Home", "https")
-<hr />
-@Html.EditorForModel()*@
+    <hr />
+    @Html.EditorForModel()*@
 
 <div class="text-center">
     @if (User.Identity.IsAuthenticated)

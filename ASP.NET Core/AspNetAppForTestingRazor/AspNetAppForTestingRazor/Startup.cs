@@ -42,7 +42,7 @@ namespace AspNetAppForTestingRazor
             // Scoped - every request makes one instance
             //services.AddScoped<IInstanceCounter, InstanceCounter>();
 
-            // Transient 
+            // Transient  // Transient is the most used option, makes new instance on every invoke
             services.AddTransient<IInstanceCounter, InstanceCounter>();
 
             services.AddTransient<IShortStringService, ShortStringService>();
@@ -51,17 +51,18 @@ namespace AspNetAppForTestingRazor
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseStatusCodePagesWithRedirects("/Home/StatusCodeError?errorCode={0}");
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseDatabaseErrorPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

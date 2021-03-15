@@ -75,5 +75,10 @@ namespace AspNetAppForTestingRazor.Controllers
         //{
         //    throw new Exception();
         //}
+
+        public IActionResult StatusCodeError(int errorCode)
+        {
+            return this.View();
+        }
     }
 }

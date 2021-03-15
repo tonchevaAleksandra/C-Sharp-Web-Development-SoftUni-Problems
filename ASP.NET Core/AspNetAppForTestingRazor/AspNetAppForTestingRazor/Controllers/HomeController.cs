@@ -9,20 +9,25 @@ using System.Threading.Tasks;
 using AspNetAppForTestingRazor.Data;
 using AspNetAppForTestingRazor.Services;
 using AspNetAppForTestingRazor.ViewModels.Home;
+using Microsoft.Extensions.Configuration;
 
 namespace AspNetAppForTestingRazor.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private ApplicationDbContext dbContext;
+        private readonly ApplicationDbContext _dbContext;
         private readonly IShortStringService _shortStringService;
+        private readonly IConfiguration _configuration;
+        private readonly IInstanceCounter _instanceCounter;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext, IShortStringService shortStringService)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext, IShortStringService shortStringService, IConfiguration configuration,IInstanceCounter instanceCounter)
         {
             _logger = logger;
-            this.dbContext = dbContext;
+            this._dbContext = dbContext;
             _shortStringService = shortStringService;
+            _configuration = configuration;
+            _instanceCounter = instanceCounter;
         }
 
         public IActionResult Index(int id)
@@ -46,7 +51,7 @@ namespace AspNetAppForTestingRazor.Controllers
                 Id = id,
                 Name = "Aleks",
                 Year = DateTime.UtcNow.Year,
-                UsersCount = this.dbContext.Users.Count(),
+                UsersCount = this._dbContext.Users.Count(),
                 ProcessorsCount = Environment.ProcessorCount,
                 Description = "Google LLC is an American multinational technology company that specializes in Internet-related services and products, which include online advertising technologies, a search engine, cloud computing, software, and hardware."
             };

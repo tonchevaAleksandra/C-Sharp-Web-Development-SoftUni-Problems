@@ -3,6 +3,8 @@
 @using Microsoft.AspNetCore.SignalR
 @inject IShortStringService ShortString
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment WebEnvironment
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject IInstanceCounter InstanceCounter
 @*@inject IHtmlSanitizer Sanitizer*@
 @model IndexViewModel
 @{
@@ -12,7 +14,11 @@
 
 <partial name="_HomePageStart" />
 
+<h1>Instances: @InstanceCounter.Instances</h1>
 <h1>@WebEnvironment.EnvironmentName</h1>
+<h2>@this.Configuration["EmailSettings:Server:Port"]</h2>
+<vc:registered-users title="Regitered users"></vc:registered-users>
+
 <form asp-action="Index">
     <textarea asp-for="Description"></textarea>
     <input asp-for="Name" class="form-control"/>

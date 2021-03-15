@@ -35,6 +35,16 @@ namespace AspNetAppForTestingRazor
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            // Singleton
+            //services.AddSingleton<IInstanceCounter, InstanceCounter>();// One instance till the program is running
+
+            // Scoped - every request makes one instance
+            //services.AddScoped<IInstanceCounter, InstanceCounter>();
+
+            // Transient 
+            services.AddTransient<IInstanceCounter, InstanceCounter>();
+
             services.AddTransient<IShortStringService, ShortStringService>();
         }
 

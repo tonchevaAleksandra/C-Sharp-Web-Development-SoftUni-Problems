@@ -71,5 +71,10 @@ namespace AspNetAppForTestingRazor.Controllers
         {
             return this.View();
         }
+
+        public IActionResult Image()
+        {
+            return this.PhysicalFile(this._webHostEnvironment.WebRootPath + "/user.png" , "image/png");
+        }
     }
 }

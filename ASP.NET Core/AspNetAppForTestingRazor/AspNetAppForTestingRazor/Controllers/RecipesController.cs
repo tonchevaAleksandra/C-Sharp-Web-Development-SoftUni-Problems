@@ -15,8 +15,8 @@ namespace AspNetAppForTestingRazor.Controllers
     {
         //public int Id { get; set; }
         //public string Name { get; set; }
-
-        [ModelBinder(typeof(ExtractYearModelBinder))]
+        public RecipeType RecipeType { get; set; }
+        //[ModelBinder(typeof(ExtractYearModelBinder))]
         public int Year { get; set; }
 
         public DateTime FirstCooked { get; set; }
@@ -24,6 +24,13 @@ namespace AspNetAppForTestingRazor.Controllers
         //public DateTime Date { get; set; }
         //public bool Bool { get; set; }
         //public string[] Ingredients { get; set; }
+    }
+
+    public enum RecipeType
+    {
+        Unknown=0,
+        FastFood=1,
+        LongCookingMeal=2
     }
     
     public class RecipesController : Controller

@@ -6,7 +6,7 @@ namespace AspNetAppForTestingRazor.ModelBinders
     {
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            if (context.Metadata.Name.ToLower() == "year" && context.Metadata.ModelType == typeof(int))
+            if (context.Metadata?.Name.ToLower() == "year" && context.Metadata?.ModelType == typeof(int))
             {
                 return new ExtractYearModelBinder();
             }

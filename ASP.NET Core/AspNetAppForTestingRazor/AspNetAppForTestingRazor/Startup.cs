@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetAppForTestingRazor.Filters;
+using AspNetAppForTestingRazor.ModelBinders;
 using AspNetAppForTestingRazor.Services;
 
 namespace AspNetAppForTestingRazor
@@ -36,9 +37,10 @@ namespace AspNetAppForTestingRazor
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews(configure => //global registration of a filter => this filter will be invoke on every action
             {
-                //configure.Filters.Add(new AddHeaderActionFilterAttribute());                configure.Filters.Add(new MyAuthFilter());          
-                //configure.Filters.Add(new MyExceptionFilter());                configure.Filters.Add(new MyResourceFilter());                configure.Filters.Add(new MyResultFilterAttribute());
+                configure.Filters.Add(new AddHeaderActionFilterAttribute()); configure.Filters.Add(new MyAuthFilter());
+                configure.Filters.Add(new MyExceptionFilter()); configure.Filters.Add(new MyResourceFilter()); configure.Filters.Add(new MyResultFilterAttribute());
                 //configure.Filters.Add(typeof(AddHeaderActionFilter));
+                configure.ModelBinderProviders.Insert(0,new ExtractYearModelBinderProvider());
 
             });
             services.AddRazorPages();

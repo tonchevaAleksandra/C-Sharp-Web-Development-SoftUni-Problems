@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AspNetAppForTestingRazor.ModelBinders;
 using AspNetAppForTestingRazor.ValidationAttributes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -26,11 +27,11 @@ namespace AspNetAppForTestingRazor.ViewModels.Recipes
         [Display(Name="Recipe type")]
         public RecipeType RecipeType { get; set; }
 
-        [ModelBinder(typeof(ExtractYearModelBinder))]
+        //[ModelBinder(typeof(ExtractYearModelBinder))]
 
-        //[Range(1900, int.MaxValue)]
-        [CurrentYearMAxValue(1900)]
-        public int Year { get; set; }
+        ////[Range(1900, int.MaxValue)]
+        //[CurrentYearMAxValue(1900)]
+        //public int Year { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name="First tiem the recipe is cooked")]
@@ -42,5 +43,6 @@ namespace AspNetAppForTestingRazor.ViewModels.Recipes
         public DateTime Date { get; set; }
         //public bool Bool { get; set; }
         public IEnumerable<SelectListItem> Ingredients { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

@@ -1,20 +1,13 @@
 using AspNetAppForTestingRazor.Data;
+using AspNetAppForTestingRazor.Filters;
+using AspNetAppForTestingRazor.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AspNetAppForTestingRazor.Filters;
-using AspNetAppForTestingRazor.ModelBinders;
-using AspNetAppForTestingRazor.Services;
 
 namespace AspNetAppForTestingRazor
 {
@@ -40,7 +33,7 @@ namespace AspNetAppForTestingRazor
                 configure.Filters.Add(new AddHeaderActionFilterAttribute()); configure.Filters.Add(new MyAuthFilter());
                 configure.Filters.Add(new MyExceptionFilter()); configure.Filters.Add(new MyResourceFilter()); configure.Filters.Add(new MyResultFilterAttribute());
                 //configure.Filters.Add(typeof(AddHeaderActionFilter));
-                configure.ModelBinderProviders.Insert(0,new ExtractYearModelBinderProvider());
+                //configure.ModelBinderProviders.Insert(0,new ExtractYearModelBinderProvider());
 
             });
             services.AddRazorPages();
@@ -52,7 +45,7 @@ namespace AspNetAppForTestingRazor
             //services.AddScoped<IInstanceCounter, InstanceCounter>();
 
             // Transient  // Transient is the most used option, makes new instance on every invoke
-           
+
             services.AddTransient<IInstanceCounter, InstanceCounter>();
 
             //services.AddSingleton<AddHeaderActionFilterAttribute>(); => if we need to use DI and ServiceFilter(typeof(AddHeaderActionFilterAttribute))] we need to register not just the service we inject in the constructor but also the Filter-Attribute 

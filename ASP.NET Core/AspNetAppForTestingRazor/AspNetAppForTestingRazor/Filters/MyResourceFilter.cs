@@ -7,12 +7,12 @@ namespace AspNetAppForTestingRazor.Filters
     {
         public void OnResourceExecuted(ResourceExecutedContext context)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

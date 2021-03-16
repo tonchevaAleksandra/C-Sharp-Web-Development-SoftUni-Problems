@@ -36,8 +36,8 @@ namespace AspNetAppForTestingRazor
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews(configure => //global registration of a filter => this filter will be invoke on every action
             {
-                configure.Filters.Add(new AddHeaderActionFilterAttribute());                configure.Filters.Add(new MyAuthFilter());          
-                configure.Filters.Add(new MyExceptionFilter());                configure.Filters.Add(new MyResourceFilter());                configure.Filters.Add(new MyResultFilterAttribute());
+                //configure.Filters.Add(new AddHeaderActionFilterAttribute());                configure.Filters.Add(new MyAuthFilter());          
+                //configure.Filters.Add(new MyExceptionFilter());                configure.Filters.Add(new MyResourceFilter());                configure.Filters.Add(new MyResultFilterAttribute());
                 //configure.Filters.Add(typeof(AddHeaderActionFilter));
 
             });
@@ -85,6 +85,10 @@ namespace AspNetAppForTestingRazor
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "blog",
+                    pattern: "blog/{year}/{month}/{day}");
                 endpoints.MapRazorPages();
             });
         }

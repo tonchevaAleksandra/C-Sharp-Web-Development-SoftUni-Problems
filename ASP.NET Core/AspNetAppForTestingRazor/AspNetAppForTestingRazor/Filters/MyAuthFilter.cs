@@ -7,7 +7,7 @@ namespace AspNetAppForTestingRazor.Filters
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

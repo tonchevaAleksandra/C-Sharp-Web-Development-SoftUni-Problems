@@ -18,7 +18,7 @@ namespace AspNetAppForTestingRazor.Controllers
 
     //[ServiceFilter(typeof(AddHeaderActionFilterAttribute))] // Same approach but we need to register the filter also in the Dependency Container
 
-    [AddHeaderActionFilter]
+    //[AddHeaderActionFilter]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -1,25 +1,35 @@
-﻿using System;
-using AspNetAppForTestingRazor.ModelBinders;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspNetAppForTestingRazor.Controllers
 {
 
     public class RecipeTimeInputModel
     {
+        [Range(1, 24 * 60)]
         public int PreparationTime { get; set; }
+
+        [Range(1, 2 * 24 * 60)]
         public int CookingTime { get; set; }
     }
     public class AddRecipeInputModel
     {
-        //public int Id { get; set; }
-        //public string Name { get; set; }
-        public RecipeType RecipeType { get; set; }
-        //[ModelBinder(typeof(ExtractYearModelBinder))]
-        public int Year { get; set; }
 
-        public DateTime FirstCooked { get; set; }
+        public int Id { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [RegularExpression("[A-Z][^_]+")]
+        public string Name { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+        //public RecipeType RecipeType { get; set; }
+        ////[ModelBinder(typeof(ExtractYearModelBinder))]
+        //public int Year { get; set; }
+
+        //public DateTime FirstCooked { get; set; }
         //public RecipeTimeInputModel Time { get; set; }
         //public DateTime Date { get; set; }
         //public bool Bool { get; set; }
@@ -28,16 +38,21 @@ namespace AspNetAppForTestingRazor.Controllers
 
     public enum RecipeType
     {
-        Unknown=0,
-        FastFood=1,
-        LongCookingMeal=2
+        Unknown = 0,
+        FastFood = 1,
+        LongCookingMeal = 2
     }
-    
+
     public class RecipesController : Controller
     {
         public IActionResult Add(/*[FromForm]*/ /*[FromQuery]*/ AddRecipeInputModel input)
         {
-          //var count= this.HttpContext.Request.Cookies.Keys.Count;
+            if (!ModelState.IsValid)
+            {
+                return this.Json(ModelState);
+            }
+
+            //var count= this.HttpContext.Request.Cookies.Keys.Count;
             return this.Json(input);
         }
     }

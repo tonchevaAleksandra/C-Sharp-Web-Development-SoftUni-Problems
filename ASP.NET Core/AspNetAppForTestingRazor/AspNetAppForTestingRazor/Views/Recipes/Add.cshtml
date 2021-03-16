@@ -1,0 +1,44 @@
+﻿@using AspNetAppForTestingRazor.ViewModels.Recipes
+@model AddRecipeInputModel
+<h1>Add recipe</h1>
+
+<form method="post" class="col-md-6 align-content-sm-center">
+    <div asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger text-justify"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Date"></label>
+        <input asp-for="Date" class="form-control"/>
+        <span asp-validation-for="Date" class="text-danger text-justify"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control"/>
+        <span asp-validation-for="Description" class="text-danger text-justify"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RecipeType"></label>
+        <input asp-for="RecipeType" class="form-control"/>
+        <span asp-validation-for="RecipeType" class="text-danger text-justify"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="FirstCooked"></label>
+        <input asp-for="FirstCooked" class="form-control"/>
+        <span asp-validation-for="FirstCooked" class="text-danger text-justify"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Time.CookingTime"></label>
+        <input asp-for="Time.CookingTime" class="form-control"/>
+        <span asp-validation-for="Time.CookingTime" class="text-danger text-justify"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Time.PreparationTime"></label>
+        <input asp-for="Time.PreparationTime" class="form-control"/>
+        <span asp-validation-for="Time.PreparationTime" class="text-danger text-justify"></span>
+    </div>
+
+    <input type="submit" class="btn badge-primary"/>
+</form>

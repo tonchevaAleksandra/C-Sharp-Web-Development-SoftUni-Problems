@@ -1,4 +1,5 @@
 ﻿using System;
+using AspNetAppForTestingRazor.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
@@ -12,10 +13,14 @@ namespace AspNetAppForTestingRazor.Controllers
     }
     public class AddRecipeInputModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        //public int Id { get; set; }
+        //public string Name { get; set; }
 
-        public RecipeTimeInputModel Time { get; set; }
+        [ModelBinder(typeof(ExtractYearModelBinder))]
+        public int Year { get; set; }
+
+        public DateTime FirstCooked { get; set; }
+        //public RecipeTimeInputModel Time { get; set; }
         //public DateTime Date { get; set; }
         //public bool Bool { get; set; }
         //public string[] Ingredients { get; set; }

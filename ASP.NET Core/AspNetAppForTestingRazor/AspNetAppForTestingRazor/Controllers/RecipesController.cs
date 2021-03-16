@@ -1,4 +1,5 @@
-﻿using AspNetAppForTestingRazor.ViewModels.Recipes;
+﻿using System;
+using AspNetAppForTestingRazor.ViewModels.Recipes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetAppForTestingRazor.Controllers
@@ -7,7 +8,18 @@ namespace AspNetAppForTestingRazor.Controllers
     {
         public IActionResult Add()
         {
-            return this.View();
+            var model = new AddRecipeInputModel()
+            {
+                Date = DateTime.UtcNow,
+                Time = new RecipeTimeInputModel()
+                {
+                    CookingTime = 20,
+                    PreparationTime = 30
+                },
+                Name = "Banica",
+                FirstCooked = DateTime.UtcNow.AddYears(+130)
+            };
+            return this.View(model);
         }
 
         [HttpPost]
@@ -19,7 +31,7 @@ namespace AspNetAppForTestingRazor.Controllers
             }
 
             //var count= this.HttpContext.Request.Cookies.Keys.Count;
-            return this.RedirectToAction("ThankYou");
+            return this.RedirectToAction(nameof(ThankYou));
         }
 
         public IActionResult ThankYou()

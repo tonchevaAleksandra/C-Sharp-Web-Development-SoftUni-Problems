@@ -7,9 +7,11 @@ namespace AspNetAppForTestingRazor.ViewModels.Recipes
     public class RecipeTimeInputModel : IValidatableObject
     {
         [Range(1, 24 * 60)]
+        [Display(Name="Preparation time")]
         public int PreparationTime { get; set; }
 
         [Range(1, 2 * 24 * 60)]
+        [Display(Name = "Cooking time")]
         public int CookingTime { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

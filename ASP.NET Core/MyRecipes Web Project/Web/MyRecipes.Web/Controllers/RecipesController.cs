@@ -1,28 +1,44 @@
-﻿using MyRecipes.Web.ViewModels.Recipes;
+﻿using System.Threading.Tasks;
 
 namespace MyRecipes.Web.Controllers
 {
+    using System.Data.SqlTypes;
 
     using Microsoft.AspNetCore.Mvc;
+    using MyRecipes.Services.Data;
+    using MyRecipes.Web.ViewModels.Recipes;
 
     public class RecipesController : Controller
     {
+        private readonly ICategoriesService categoriesService;
+        private readonly IRecipesService recipesService;
+
+        public RecipesController(ICategoriesService categoriesService, IRecipesService recipesService)
+        {
+            this.categoriesService = categoriesService;
+            this.recipesService = recipesService;
+        }
+
         public IActionResult Create()
         {
-            return this.View();
+            var viewModel = new CreateRecipeInputModel();
+            viewModel.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
+            return this.View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(CreateRecipeInputModel input)
+        public async Task<IActionResult> Create(CreateRecipeInputModel input)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                input.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
+                return this.View(input);
             }
 
-            // TODO: Create recipe using service method
+            await this.recipesService.CreateAsync(input);
+            // TODO: CreateAsync recipe using service method
             // TODO: Redirect to recipe info page
-            return this.View();
+            return this.Redirect("/");
         }
     }
 }

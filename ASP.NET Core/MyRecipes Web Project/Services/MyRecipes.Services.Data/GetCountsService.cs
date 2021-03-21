@@ -1,4 +1,6 @@
-﻿namespace MyRecipes.Services.Data
+﻿using MyRecipes.Services.Data.Models;
+
+namespace MyRecipes.Services.Data
 {
     using System;
     using System.Linq;
@@ -22,9 +24,9 @@
             this.recipiesRepository = recipiesRepository;
         }
 
-        public IndexViewModel GetCounts()
+        public CountsDto GetCounts()
         {
-            var viewModel = new IndexViewModel()
+            var data = new CountsDto()
             {
                 RecipesCount = this.recipiesRepository.All().Count(),
                 CategoriesCount = this.categoriesRepository.All().Count(),
@@ -32,7 +34,7 @@
                 IntIngredientsCount = this.ingredientsRepository.All().Count(),
             };
 
-            return viewModel;
+            return data;
         }
     }
 }

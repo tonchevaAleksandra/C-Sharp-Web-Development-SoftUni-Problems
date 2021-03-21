@@ -1,0 +1,19 @@
+﻿@model MyRecipes.Web.ViewModels.Recipes.CreateRecipeInputModel
+@{
+    this.ViewData["Title"] = "Add new recipe";
+}
+<h1>Add new recipe</h1>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Instructions"></label>
+        <textarea asp-for="Instructions" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Instructions" class="text-danger"></span>
+    </div>
+    <input type="submit" class="btn btn-primary"/>
+</form>

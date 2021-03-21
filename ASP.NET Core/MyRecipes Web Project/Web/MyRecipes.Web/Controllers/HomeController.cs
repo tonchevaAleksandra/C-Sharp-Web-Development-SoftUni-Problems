@@ -1,4 +1,7 @@
-﻿namespace MyRecipes.Web.Controllers
+﻿using AutoMapper;
+using MyRecipes.Web.ViewModels.Home;
+
+namespace MyRecipes.Web.Controllers
 {
     using System.Diagnostics;
 
@@ -17,7 +20,14 @@
 
         public IActionResult Index()
         {
-            var viewModel = this.countsService.GetCounts();
+            var countsDto = this.countsService.GetCounts();
+            var viewModel = new IndexViewModel
+            {
+                CategoriesCount = countsDto.CategoriesCount,
+                IngredientsCount = countsDto.IntIngredientsCount,
+                ImagesCount = countsDto.ImagesCount,
+                RecipesCount = countsDto.RecipesCount,
+            };
             return this.View(viewModel);
         }
 

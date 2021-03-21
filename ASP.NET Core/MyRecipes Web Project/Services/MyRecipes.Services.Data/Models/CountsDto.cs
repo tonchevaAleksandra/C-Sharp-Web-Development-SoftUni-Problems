@@ -1,12 +1,12 @@
-﻿namespace MyRecipes.Web.ViewModels.Home
+﻿namespace MyRecipes.Services.Data.Models
 {
-    public class IndexViewModel
+    public class CountsDto
     {
         public int RecipesCount { get; set; }
 
         public int CategoriesCount { get; set; }
 
-        public int IngredientsCount { get; set; }
+        public int IntIngredientsCount { get; set; }
 
         public int ImagesCount { get; set; }
     }

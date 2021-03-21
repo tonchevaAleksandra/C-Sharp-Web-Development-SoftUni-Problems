@@ -10,6 +10,7 @@
         public Recipe()
         {
             this.Ingredients = new HashSet<RecipeIngredient>();
+            this.Images = new HashSet<Image>();
         }
 
         public string Name { get; set; }
@@ -22,6 +23,7 @@
 
         public int PortionCount { get; set; }
 
+        // TODO: Url to original site
         public string CreatedByUserId { get; set; }
 
         public virtual ApplicationUser CreatedByUser { get; set; }
@@ -31,5 +33,7 @@
         public virtual Category Category { get; set; }
 
         public virtual ICollection<RecipeIngredient> Ingredients { get; set; }
+
+        public virtual ICollection<Image> Images { get; set; }
     }
 }

@@ -3,9 +3,8 @@
     using System;
     using System.Threading.Tasks;
 
-    using MyRecipes.Data.Common;
-
     using Microsoft.EntityFrameworkCore;
+    using MyRecipes.Data.Common;
 
     public class DbQueryRunner : IDbQueryRunner
     {

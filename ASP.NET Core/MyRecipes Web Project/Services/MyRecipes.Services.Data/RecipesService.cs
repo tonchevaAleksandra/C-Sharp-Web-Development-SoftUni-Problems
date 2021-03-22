@@ -33,11 +33,11 @@
 
             foreach (var inputIngredient in input.Ingredients)
             {
-                var ingredient = this.ingredientsRepository.All().FirstOrDefault(x => x.Name == inputIngredient.Name);
+                var ingredient = this.ingredientsRepository.All().FirstOrDefault(x => x.Name == inputIngredient.IngredientName);
 
                 if (ingredient == null)
                 {
-                    ingredient = new Ingredient() { Name = inputIngredient.Name };
+                    ingredient = new Ingredient() { Name = inputIngredient.IngredientName };
                 }
 
                 recipe.Ingredients.Add(new RecipeIngredient()

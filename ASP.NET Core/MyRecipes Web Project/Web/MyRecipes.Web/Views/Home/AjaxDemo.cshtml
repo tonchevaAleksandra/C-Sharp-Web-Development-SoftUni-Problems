@@ -1,0 +1,31 @@
+﻿<h1>Hello AJAX</h1>
+
+<table id="DataTable" class="table table-sm table-striped">
+    <tr>
+        <td>Aleks</td>
+        <td>2021-03-22</td>
+    </tr>
+    <tr>
+        <td>Georgi</td>
+        <td>2021-03-22</td>
+    </tr>
+</table>
+<button onclick="RefreshData()">Refresh</button>
+<script>
+    function RefreshData() {
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var people = JSON.parse(this.responseText);
+                document.getElementById("DataTable").innerHTML = '';
+                for (var i = 0; i < people.length; i++) {
+                    var person = people[i];
+                    document.getElementById("DataTable").innerHTML += "<tr><td>" + person.name + "</td><td>" + person.Date + "</td></tr>";
+                    console.log(person);
+                }
+            }
+        };
+        xhr.open("GET", "/Home/AjaxDemoData");
+        xhr.send();
+    }
+</script>

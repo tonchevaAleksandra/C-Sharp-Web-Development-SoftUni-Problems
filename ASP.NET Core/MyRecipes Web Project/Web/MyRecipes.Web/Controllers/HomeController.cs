@@ -54,8 +54,8 @@ namespace MyRecipes.Web.Controllers
           return this.Json(new[]
             {
                 new {Name = "Niki", Date = DateTime.UtcNow.ToString("O")},
-                new {Name = "Stoyan", Date = DateTime.UtcNow.AddDays(+1).ToString("O")},
-                new {Name = "Ivaylo", Date = DateTime.UtcNow.AddDays(+2).ToString("O")},
+                new {Name = "Stoyan", Date = DateTime.UtcNow.AddDays(1).ToString("O")},
+                new {Name = "Ivaylo", Date = DateTime.UtcNow.AddDays(2).ToString("O")},
             });
         }
     }

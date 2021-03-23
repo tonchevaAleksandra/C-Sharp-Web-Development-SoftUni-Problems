@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using AspNetAppForTestingRazor.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetAppForTestingRazor.Data
 {
@@ -12,5 +14,7 @@ namespace AspNetAppForTestingRazor.Data
             : base(options)
         {
         }
+
+        public DbSet<Product> Products { get; set; }
     }
 }

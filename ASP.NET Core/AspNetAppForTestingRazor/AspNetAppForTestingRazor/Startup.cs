@@ -34,8 +34,8 @@ namespace AspNetAppForTestingRazor
                 configure.Filters.Add(new MyExceptionFilter()); configure.Filters.Add(new MyResourceFilter()); configure.Filters.Add(new MyResultFilterAttribute());
                 //configure.Filters.Add(typeof(AddHeaderActionFilter));
                 //configure.ModelBinderProviders.Insert(0,new ExtractYearModelBinderProvider());
-
-            });
+              
+            }).AddXmlSerializerFormatters(); 
             services.AddRazorPages();
 
             // Singleton

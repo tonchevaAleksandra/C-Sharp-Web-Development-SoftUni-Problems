@@ -20,10 +20,22 @@ namespace AspNetAppForTestingRazor.Controllers
                 Name = "name"
             };
         }
+
         [HttpDelete]
         public string SomeMethod()
         {
             return "DELETE";
+        }
+
+        [HttpPost]
+        public ActionResult<Product> PostMethod(Product product, int id )
+        {
+            if (id<1)
+            {
+                return this.NotFound();
+            }
+            product.Id = id;
+            return product;
         }
     }
 }

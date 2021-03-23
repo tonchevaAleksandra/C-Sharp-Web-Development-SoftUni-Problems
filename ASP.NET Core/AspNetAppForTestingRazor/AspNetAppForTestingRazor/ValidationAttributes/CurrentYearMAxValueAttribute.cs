@@ -27,6 +27,14 @@ namespace AspNetAppForTestingRazor.ValidationAttributes
                 }
             }
 
+            if (value is DateTime dtValue)
+            {
+                if (dtValue.Year <= DateTime.UtcNow.Year && dtValue.Year >= this.MinYear)
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
     }

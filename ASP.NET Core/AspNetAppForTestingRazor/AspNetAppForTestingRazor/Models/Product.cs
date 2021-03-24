@@ -7,11 +7,11 @@ namespace AspNetAppForTestingRazor.Models
 {
     public class Product
     {
-        [Range(1,10000)]
+        //[Range(1,10000)]
         public int Id { get; set; }
 
         [Required]
-        [MinLength(10)]
+        //[MinLength(10)]
         public string Name { get; set; }
 
         [MinLength(10)]

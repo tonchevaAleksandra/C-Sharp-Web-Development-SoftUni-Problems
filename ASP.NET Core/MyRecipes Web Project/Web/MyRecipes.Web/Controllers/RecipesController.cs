@@ -1,8 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace MyRecipes.Web.Controllers
+﻿namespace MyRecipes.Web.Controllers
 {
     using System.Data.SqlTypes;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using MyRecipes.Services.Data;

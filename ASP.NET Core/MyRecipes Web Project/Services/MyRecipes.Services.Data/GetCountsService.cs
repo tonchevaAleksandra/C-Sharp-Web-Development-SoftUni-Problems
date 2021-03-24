@@ -1,12 +1,11 @@
-﻿using MyRecipes.Services.Data.Models;
-
-namespace MyRecipes.Services.Data
+﻿namespace MyRecipes.Services.Data
 {
     using System;
     using System.Linq;
 
     using MyRecipes.Data.Common.Repositories;
     using MyRecipes.Data.Models;
+    using MyRecipes.Services.Data.Models;
     using MyRecipes.Web.ViewModels.Home;
 
     public class GetCountsService : IGetCountsService

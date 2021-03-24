@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace MyRecipes.Web.Controllers
+﻿namespace MyRecipes.Web.Controllers
 {
+    using System;
     using System.Diagnostics;
 
     using AutoMapper;

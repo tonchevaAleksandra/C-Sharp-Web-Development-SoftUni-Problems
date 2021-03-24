@@ -1,11 +1,12 @@
 ﻿namespace MyRecipes.Services.Data
 {
-    using MyRecipes.Data.Common.Repositories;
-    using MyRecipes.Data.Models;
-    using MyRecipes.Web.ViewModels.Recipes;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using MyRecipes.Data.Common.Repositories;
+    using MyRecipes.Data.Models;
+    using MyRecipes.Web.ViewModels.Recipes;
 
     public class RecipesService : IRecipesService
     {

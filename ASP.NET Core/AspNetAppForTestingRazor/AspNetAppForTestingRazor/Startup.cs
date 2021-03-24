@@ -37,6 +37,7 @@ namespace AspNetAppForTestingRazor
               
             }).AddXmlSerializerFormatters(); 
             services.AddRazorPages();
+            services.AddCors();
 
             // Singleton
             //services.AddSingleton<IInstanceCounter, InstanceCounter>();// One instance till the program is running
@@ -71,6 +72,12 @@ namespace AspNetAppForTestingRazor
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(policy =>
+            {
+                policy.WithOrigins("https://mysite.com").AllowAnyMethod().AllowAnyHeader();
+                policy.WithOrigins("htps://github.com").WithMethods("POST").AllowAnyHeader();
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

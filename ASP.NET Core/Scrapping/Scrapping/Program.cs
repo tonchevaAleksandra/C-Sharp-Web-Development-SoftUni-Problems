@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,6 +23,32 @@ namespace Scrapping
 
             var htmlDoc = web.Load(html);
 
+            var recipeName = GetRecipeName(htmlDoc);
+
+            var category = GetCategoryName(htmlDoc);
+
+            var author = GetAuthorName(htmlDoc);
+
+            var preparationTime = TimeSpan.MinValue;
+            var cookingTime = TimeSpan.MinValue;
+            GetTimes(htmlDoc, ref preparationTime, ref cookingTime);
+
+
+            var portions = GetPortions(htmlDoc);
+
+
+            List<string> photoLinks = GetLinksOfPhotos(htmlDoc, web);
+
+
+            Dictionary<string, string> ingredientsWithQuantities = GetIngredientsWithTheirQuantities(htmlDoc);
+
+
+            Console.WriteLine(GetInstructions(htmlDoc));
+
+        }
+
+        private static string GetRecipeName(HtmlDocument htmlDoc)
+        {
             var name = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//div[@class='combocolumn mr']/h1")
@@ -31,6 +58,11 @@ namespace Scrapping
 
             Console.WriteLine(name);
 
+            return name;
+        }
+
+        private static string GetCategoryName(HtmlDocument htmlDoc)
+        {
             var category = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//div[@class='breadcrumb']/div/a/span")
@@ -41,6 +73,11 @@ namespace Scrapping
 
             Console.WriteLine(category);
 
+            return category;
+        }
+
+        private static string GetAuthorName(HtmlDocument htmlDoc)
+        {
             var author = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//div[@class='autbox']/a")
@@ -49,18 +86,23 @@ namespace Scrapping
 
             Console.WriteLine(author);
 
+            return author;
+        }
+
+        private static void GetTimes(HtmlDocument htmlDoc, ref TimeSpan preparationTime, ref TimeSpan cookingTime)
+        {
             var times = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//div[@class='feat small']");
-            var preparationTime = TimeSpan.MinValue;
-            var cookingTime = TimeSpan.MinValue;
+
             if (!times.Any())
             {
-                ;
+                return;
             }
-            if (times.Count==2)
+
+            if (times.Count == 2)
             {
-                var preparation = times[0].InnerText.Replace("Приготвяне","").Split(" ").FirstOrDefault();
+                var preparation = times[0].InnerText.Replace("Приготвяне", "").Split(" ").FirstOrDefault();
 
                 preparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
                 Console.WriteLine(preparationTime);
@@ -68,15 +110,18 @@ namespace Scrapping
                 var cooking = times[1].InnerText.Replace("Готвене", "").Split(" ").FirstOrDefault();
                 cookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
                 Console.WriteLine(cookingTime);
+
             }
-            else if (times.Count==1)
+
+            else if (times.Count == 1)
             {
                 if (times[0].InnerText.Contains("Приготвяне"))
                 {
                     var preparation = times[0].InnerText.Replace("Приготвяне", "").Split(" ").FirstOrDefault();
 
-                   preparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
+                    preparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
                 }
+
                 else
                 {
                     var cooking = times[1].InnerText.Replace("Готвене", "").Split(" ").FirstOrDefault();
@@ -84,18 +129,23 @@ namespace Scrapping
                     Console.WriteLine(cookingTime);
                 }
             }
-          
+        }
 
+        private static int GetPortions(HtmlDocument htmlDoc)
+        {
             var portions = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//div[@class='feat']/span")
                 .LastOrDefault()
                 .InnerHtml
                 .ToString();
+            var portionsCount = 0;
+            int.TryParse(portions, out portionsCount);
+            return portionsCount;
+        }
 
-            Console.WriteLine(portions);
-
-          
+        private static List<string> GetLinksOfPhotos(HtmlDocument htmlDoc, HtmlWeb web)
+        {
             var photos = new List<string>();
             var photosUrls = htmlDoc
                 .DocumentNode
@@ -108,30 +158,32 @@ namespace Scrapping
                     ?.GetAttributeValue("href", "unknown");
 
                 var link = web.Load(urlPhoros);
-               var photosUrlsToLoad = link
-                   .DocumentNode
-                   .SelectNodes(@"//div[@class='main']/div/img");
+                var photosUrlsToLoad = link
+                    .DocumentNode
+                    .SelectNodes(@"//div[@class='main']/div/img");
 
-               if (photosUrlsToLoad!=null)
-               {
-                   var picturesUrls = photosUrlsToLoad.ToList();
+                if (photosUrlsToLoad != null)
+                {
+                    var picturesUrls = photosUrlsToLoad.ToList();
 
-                   if (picturesUrls[0].GetAttributeValue("src", "unknown")== "https://recepti.gotvach.bg/files/recipes/photos/")
-                   {
-                       picturesUrls.Clear();
-                   }
-                   else
-                   {
-                       photos.AddRange(picturesUrls.Select(p=>p.GetAttributeValue("src", "unknown")));
-                   }
-               }
+                    if (picturesUrls[0].GetAttributeValue("src", "unknown") ==
+                        "https://recepti.gotvach.bg/files/recipes/photos/")
+                    {
+                        picturesUrls.Clear();
+                    }
+                    else
+                    {
+                        photos.AddRange(picturesUrls.Select(p => p.GetAttributeValue("src", "unknown")));
+                    }
+                }
             }
 
-            foreach (var photo in photos)
-            {
-                Console.WriteLine(photo);
-            }
+            return photos;
+        }
 
+        private static Dictionary<string, string> GetIngredientsWithTheirQuantities(HtmlDocument htmlDoc)
+        {
+            var ingredientsQuantities = new Dictionary<string, string>();
             var ingredients = new List<string>();
             var ingredientSection = htmlDoc
                 .DocumentNode
@@ -139,35 +191,37 @@ namespace Scrapping
 
             if (ingredientSection.Any())
             {
-                ingredients.AddRange(ingredientSection.Select(s=>s.InnerText).ToList());
+                ingredients.AddRange(ingredientSection.Select(s => s.InnerText).ToList());
             }
 
             foreach (var ingredientInfo in ingredients)
             {
                 var ingredient = ingredientInfo.Split(" - ").FirstOrDefault().Trim();
-                Console.WriteLine(ingredient);
+
                 var quantity = ingredientInfo.Split(" - ").LastOrDefault().Trim();
-                Console.WriteLine(quantity);
+
+                ingredientsQuantities.Add(ingredient, quantity);
                 //краве масло -  100 г меко, на стайна температура
             }
-            Console.WriteLine(string.Join(Environment.NewLine,ingredients));
 
+            return ingredientsQuantities;
+        }
 
+        private static string GetInstructions(HtmlDocument htmlDoc)
+        {
             var instrudctionsToLoad = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//div[@class='text']/p")
-                .Select(x=>x.InnerText)
+                .Select(x => x.InnerText)
                 .ToList();
 
-            Console.WriteLine(string.Join(Environment.NewLine, instrudctionsToLoad));
             var instructions = new StringBuilder();
             if (instrudctionsToLoad.Any())
             {
-
                 instructions.AppendLine(string.Join(Environment.NewLine, instrudctionsToLoad));
             }
 
-            Console.WriteLine(instructions);
+            return instructions.ToString().Trim();
         }
     }
 }

@@ -30,6 +30,16 @@ namespace Scrapping
 
             Console.WriteLine(name);
 
+            var category = htmlDoc
+                .DocumentNode
+                .SelectNodes(@"//div[@class='breadcrumb']/div/a/span")
+                .Skip(2)
+                .FirstOrDefault()
+                .InnerHtml
+                .ToString();
+
+            Console.WriteLine(category);
+
             var author = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//div[@class='autbox']/a")
@@ -121,12 +131,25 @@ namespace Scrapping
                 Console.WriteLine(photo);
             }
 
+            var ingredients = new List<string>();
             var ingredientSection = htmlDoc
                 .DocumentNode
-                .SelectNodes(@"//section[@class='products new']/ul")
-                .Select(s=>s.InnerHtml);
+                .SelectNodes(@"//section[@class='products new']/ul/li");
 
-            Console.WriteLine(string.Join(Environment.NewLine,ingredientSection));
+            if (ingredientSection.Any())
+            {
+                ingredients.AddRange(ingredientSection.Select(s=>s.InnerText).ToList());
+            }
+
+            foreach (var ingredientInfo in ingredients)
+            {
+                var ingredient = ingredientInfo.Split(" - ").FirstOrDefault().Trim();
+                Console.WriteLine(ingredient);
+                var quantity = ingredientInfo.Split(" - ").LastOrDefault().Trim();
+                Console.WriteLine(quantity);
+                //краве масло -  100 г меко, на стайна температура
+            }
+            Console.WriteLine(string.Join(Environment.NewLine,ingredients));
         }
     }
 }

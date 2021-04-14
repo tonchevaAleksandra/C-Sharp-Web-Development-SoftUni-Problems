@@ -1,0 +1,8 @@
+Asp.Net Core Template Niki Kostov =>
+In the source folder open the Power Shell
+and run command=>
+dotnet new -i AspNetCoreTemplate
+
+then run this command =>  dotnet new aspnet-core -n Intro 
+ 
+after N is the name of your application

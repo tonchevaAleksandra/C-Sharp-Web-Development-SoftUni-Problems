@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Io;
@@ -150,6 +151,23 @@ namespace Scrapping
                 //краве масло -  100 г меко, на стайна температура
             }
             Console.WriteLine(string.Join(Environment.NewLine,ingredients));
+
+
+            var instrudctionsToLoad = htmlDoc
+                .DocumentNode
+                .SelectNodes(@"//div[@class='text']/p")
+                .Select(x=>x.InnerText)
+                .ToList();
+
+            Console.WriteLine(string.Join(Environment.NewLine, instrudctionsToLoad));
+            var instructions = new StringBuilder();
+            if (instrudctionsToLoad.Any())
+            {
+
+                instructions.AppendLine(string.Join(Environment.NewLine, instrudctionsToLoad));
+            }
+
+            Console.WriteLine(instructions);
         }
     }
 }

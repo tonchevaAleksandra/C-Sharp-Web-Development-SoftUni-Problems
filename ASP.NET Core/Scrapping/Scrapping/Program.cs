@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Io;
@@ -17,76 +18,128 @@ namespace Scrapping
     {
         static async Task Main(string[] args)
         {
-            var html = @"https://recepti.gotvach.bg/r-174963";
+
 
             HtmlWeb web = new HtmlWeb();
+            HttpStatusCode statusCode = HttpStatusCode.OK;
 
+            web.PostResponse += (request, response) =>
+            {
+                if (response != null)
+                {
+                    statusCode = response.StatusCode;
+                }
+            };
+            //Parallel.For(1, 2000 + 1, i =>
+            //{
+            //    try
+            //    {
+            //        GetRecipeData(web, i);
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e.Message);
+            //    }
+            //});
+
+            for (int i = 0; i < 200; i++)
+            {
+                try
+                {
+                    GetRecipeData(web, i);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+
+        }
+
+        private static void GetRecipeData(HtmlWeb web, int i)
+        {
+            var html = $"https://recepti.gotvach.bg/r-{i}";
             var htmlDoc = web.Load(html);
 
             var recipeName = GetRecipeName(htmlDoc);
-
+            if (recipeName == null)
+            {
+                return;
+            }
+            Console.WriteLine("Recipe " + recipeName);
             var category = GetCategoryName(htmlDoc);
-
+            if (category == null)
+            {
+                return;
+            }
+            Console.WriteLine("Categpry " + category);
             var author = GetAuthorName(htmlDoc);
-
-            var preparationTime = TimeSpan.MinValue;
-            var cookingTime = TimeSpan.MinValue;
+            if (author == null)
+            {
+                return;
+            }
+            Console.WriteLine("Username " + author);
+            var preparationTime = TimeSpan.Zero;
+            var cookingTime = TimeSpan.Zero;
             GetTimes(htmlDoc, ref preparationTime, ref cookingTime);
-
-
+            Console.WriteLine("Preparation time " + preparationTime);
+            Console.WriteLine("Cooking time " + cookingTime);
             var portions = GetPortions(htmlDoc);
-
+            Console.WriteLine("Portions " + portions);
 
             List<string> photoLinks = GetLinksOfPhotos(htmlDoc, web);
+            Console.WriteLine("Links of pictures :" + string.Join(Environment.NewLine, photoLinks));
 
+            List<string> ingredientsWithQuantities = GetIngredientsWithTheirQuantities(htmlDoc);
+            Console.WriteLine("Ingedients: " + string.Join(Environment.NewLine, ingredientsWithQuantities));
 
-            Dictionary<string, string> ingredientsWithQuantities = GetIngredientsWithTheirQuantities(htmlDoc);
-
-
-            Console.WriteLine(GetInstructions(htmlDoc));
-
+            Console.WriteLine("Instructions " + GetInstructions(htmlDoc));
         }
 
         private static string GetRecipeName(HtmlDocument htmlDoc)
         {
             var name = htmlDoc
                 .DocumentNode
-                .SelectNodes(@"//div[@class='combocolumn mr']/h1")
-                .FirstOrDefault()
-                .InnerHtml
-                .ToString();
+                .SelectNodes(@"//div[@class='combocolumn mr']/h1");
 
-            Console.WriteLine(name);
+            if (name != null)
+            {
+                return name.Select(r => r.InnerText)
+                    .FirstOrDefault().ToString();
+            }
 
-            return name;
+            return string.Empty;
         }
 
         private static string GetCategoryName(HtmlDocument htmlDoc)
         {
             var category = htmlDoc
                 .DocumentNode
-                .SelectNodes(@"//div[@class='breadcrumb']/div/a/span")
-                .Skip(2)
-                .FirstOrDefault()
-                .InnerHtml
-                .ToString();
+                .SelectNodes(@"//div[@class='breadcrumb']/div/a/span");
+            if (category != null)
+            {
+                return category.Skip(2)
+                    .FirstOrDefault()
+                    .InnerHtml
+                    .ToString();
+            }
 
-            Console.WriteLine(category);
-
-            return category;
+            return string.Empty;
         }
 
         private static string GetAuthorName(HtmlDocument htmlDoc)
         {
             var author = htmlDoc
                 .DocumentNode
-                .SelectNodes(@"//div[@class='autbox']/a")
-                .FirstOrDefault()
-                .InnerHtml;
+                .SelectNodes(@"//div[@class='autbox']/a");
 
-            Console.WriteLine(author);
+            if (author != null)
+            {
+                return author.Select(x => x.InnerHtml).FirstOrDefault();
+            }
 
-            return author;
+            return string.Empty;
         }
 
         private static void GetTimes(HtmlDocument htmlDoc, ref TimeSpan preparationTime, ref TimeSpan cookingTime)
@@ -95,7 +148,7 @@ namespace Scrapping
                 .DocumentNode
                 .SelectNodes(@"//div[@class='feat small']");
 
-            if (!times.Any())
+            if (times == null)
             {
                 return;
             }
@@ -105,12 +158,9 @@ namespace Scrapping
                 var preparation = times[0].InnerText.Replace("Приготвяне", "").Split(" ").FirstOrDefault();
 
                 preparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
-                Console.WriteLine(preparationTime);
 
                 var cooking = times[1].InnerText.Replace("Готвене", "").Split(" ").FirstOrDefault();
                 cookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
-                Console.WriteLine(cookingTime);
-
             }
 
             else if (times.Count == 1)
@@ -120,13 +170,14 @@ namespace Scrapping
                     var preparation = times[0].InnerText.Replace("Приготвяне", "").Split(" ").FirstOrDefault();
 
                     preparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
+
                 }
 
                 else
                 {
                     var cooking = times[1].InnerText.Replace("Готвене", "").Split(" ").FirstOrDefault();
                     cookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
-                    Console.WriteLine(cookingTime);
+
                 }
             }
         }
@@ -135,12 +186,20 @@ namespace Scrapping
         {
             var portions = htmlDoc
                 .DocumentNode
-                .SelectNodes(@"//div[@class='feat']/span")
-                .LastOrDefault()
-                .InnerHtml
-                .ToString();
+                .SelectNodes(@"//div[@class='feat']/span");
+
             var portionsCount = 0;
-            int.TryParse(portions, out portionsCount);
+            if (portions != null)
+            {
+
+                int.TryParse(portions.Select(x => x.InnerHtml)
+                    .LastOrDefault().Replace("Порции", string.Empty)
+                       .Replace("бр", string.Empty)
+                       .Replace("бр.", string.Empty)
+                       .Replace("броя", string.Empty)
+                       .Replace("бройки", string.Empty), out portionsCount);
+            }
+
             return portionsCount;
         }
 
@@ -151,7 +210,7 @@ namespace Scrapping
                 .DocumentNode
                 .SelectNodes(@"//a[@class='morebtn']");
 
-            if (photosUrls.Any())
+            if (photosUrls != null)
             {
                 var urlPhoros = photosUrls
                     .FirstOrDefault()
@@ -181,17 +240,17 @@ namespace Scrapping
             return photos;
         }
 
-        private static Dictionary<string, string> GetIngredientsWithTheirQuantities(HtmlDocument htmlDoc)
+        private static List<string> GetIngredientsWithTheirQuantities(HtmlDocument htmlDoc)
         {
-            var ingredientsQuantities = new Dictionary<string, string>();
+
             var ingredients = new List<string>();
             var ingredientSection = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//section[@class='products new']/ul/li");
 
-            if (ingredientSection.Any())
+            if (ingredientSection != null)
             {
-                ingredients.AddRange(ingredientSection.Select(s => s.InnerText).ToList());
+                ingredients.AddRange(ingredientSection.Select(s => s.InnerHtml).ToList());
             }
 
             foreach (var ingredientInfo in ingredients)
@@ -199,26 +258,30 @@ namespace Scrapping
                 var ingredient = ingredientInfo.Split(" - ").FirstOrDefault().Trim();
 
                 var quantity = ingredientInfo.Split(" - ").LastOrDefault().Trim();
+                if (ingredient == null || quantity == null)
+                {
+                    continue;
+                }
+                ingredients.Add(ingredient + ":" + quantity);
 
-                ingredientsQuantities.Add(ingredient, quantity);
+                Console.WriteLine(ingredient + ":" + quantity);
                 //краве масло -  100 г меко, на стайна температура
             }
 
-            return ingredientsQuantities;
+            return ingredients;
         }
 
         private static string GetInstructions(HtmlDocument htmlDoc)
         {
             var instrudctionsToLoad = htmlDoc
                 .DocumentNode
-                .SelectNodes(@"//div[@class='text']/p")
-                .Select(x => x.InnerText)
-                .ToList();
+                .SelectNodes(@"//div[@class='text']/p");
 
             var instructions = new StringBuilder();
-            if (instrudctionsToLoad.Any())
+            if (instrudctionsToLoad != null)
             {
-                instructions.AppendLine(string.Join(Environment.NewLine, instrudctionsToLoad));
+                instructions.AppendLine(string.Join(Environment.NewLine, instrudctionsToLoad.Select(x => x.InnerText)
+                    .ToList()));
             }
 
             return instructions.ToString().Trim();

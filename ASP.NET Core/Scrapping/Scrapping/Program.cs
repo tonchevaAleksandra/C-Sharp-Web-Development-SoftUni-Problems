@@ -61,6 +61,12 @@ namespace Scrapping
         {
             var html = $"https://recepti.gotvach.bg/r-{i}";
             var htmlDoc = web.Load(html);
+            if (web.StatusCode != HttpStatusCode.OK)
+            {
+                return;
+            }
+
+            var originalUrl = html;
 
             var recipeName = GetRecipeName(htmlDoc);
             if (recipeName == null)
@@ -116,13 +122,15 @@ namespace Scrapping
         {
             var category = htmlDoc
                 .DocumentNode
-                .SelectNodes(@"//div[@class='breadcrumb']/div/a/span");
+                .SelectNodes(@"//div[@class='breadcrumb']");
             if (category != null)
             {
-                return category.Skip(2)
+                return category
+                    .Select(x=>x.InnerText)
                     .FirstOrDefault()
-                    .InnerHtml
-                    .ToString();
+                   ?.Split(" »")
+                    .Reverse()
+                    .ToList()[1];
             }
 
             return string.Empty;
@@ -244,28 +252,16 @@ namespace Scrapping
         {
 
             var ingredients = new List<string>();
-            var ingredientSection = htmlDoc
+
+            var ingredientsParse = htmlDoc
                 .DocumentNode
                 .SelectNodes(@"//section[@class='products new']/ul/li");
 
-            if (ingredientSection != null)
+            if (ingredientsParse != null)
             {
-                ingredients.AddRange(ingredientSection.Select(s => s.InnerHtml).ToList());
-            }
-
-            foreach (var ingredientInfo in ingredients)
-            {
-                var ingredient = ingredientInfo.Split(" - ").FirstOrDefault().Trim();
-
-                var quantity = ingredientInfo.Split(" - ").LastOrDefault().Trim();
-                if (ingredient == null || quantity == null)
-                {
-                    continue;
-                }
-                ingredients.Add(ingredient + ":" + quantity);
-
-                Console.WriteLine(ingredient + ":" + quantity);
-                //краве масло -  100 г меко, на стайна температура
+                ingredients.AddRange(ingredientsParse
+                    .Select(li => li.InnerText)
+                    .ToList());
             }
 
             return ingredients;

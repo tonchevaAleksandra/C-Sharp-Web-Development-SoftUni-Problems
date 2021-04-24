@@ -1,7 +1,9 @@
-﻿namespace MyRecipes.Services
+﻿using System.Threading.Tasks;
+
+namespace MyRecipes.Services
 {
     public interface IScraperService
     {
-        void PopulateDbWithRecipes();
+        Task PopulateDbWithRecipes();
     }
 }

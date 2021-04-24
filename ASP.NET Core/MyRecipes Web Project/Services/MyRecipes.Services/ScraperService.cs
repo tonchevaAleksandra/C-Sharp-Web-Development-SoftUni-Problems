@@ -1,26 +1,58 @@
 ﻿namespace MyRecipes.Services
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Text;
     using System.Threading.Tasks;
 
+    using Data.Common.Repositories;
     using HtmlAgilityPack;
+    using Models;
+    using MyRecipes.Data.Models;
 
     public class ScraperService : IScraperService
     {
         private readonly HtmlWeb web;
+        private readonly ConcurrentBag<RecipeDto> concurrentBag;
+
+        private readonly IDeletableEntityRepository<Category> categoriesRepository;
+        private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
+        private readonly IDeletableEntityRepository<Recipe> recipesRepository;
+        private readonly IRepository<RecipeIngredient> recipeIngredientsRepository;
+        private readonly IRepository<Image> imagesRepository;
         private HttpStatusCode statusCode;
 
-        public ScraperService()
+        public ScraperService(HtmlWeb web,
+            IDeletableEntityRepository<Category> categoriesRepository,
+            IDeletableEntityRepository<Ingredient> ingredientsRepository,
+            IDeletableEntityRepository<Recipe> recipeRepository,
+            IRepository<RecipeIngredient> recipeIngredientsRepository,
+            IRepository<Image> imagesRepository)
         {
-            this.web = new HtmlWeb();
+            this.web = web;
+            this.web.PostResponse += (request, response) =>
+            {
+                if (response != null)
+                {
+                    this.statusCode = response.StatusCode;
+                }
+            };
+
+            this.concurrentBag = new ConcurrentBag<RecipeDto>();
+
+            this.categoriesRepository = categoriesRepository;
+            this.ingredientsRepository = ingredientsRepository;
+            this.recipesRepository = recipeRepository;
+            this.recipeIngredientsRepository = recipeIngredientsRepository;
+            this.imagesRepository = imagesRepository;
+
             this.statusCode = HttpStatusCode.OK;
         }
 
-        public void PopulateDbWithRecipes()
+        public async Task PopulateDbWithRecipes()
         {
             web.PostResponse += (request, response) =>
             {
@@ -34,7 +66,7 @@
             {
                 try
                 {
-                  GetRecipeData(web, i);
+                    RecipeDto recipe = GetRecipeData(web, i);
                 }
                 catch (Exception e)
                 {
@@ -43,42 +75,39 @@
             });
         }
 
-        private static void GetRecipeData(HtmlWeb web, int i)
+        private static RecipeDto GetRecipeData(HtmlWeb web, int i)
         {
-            var html = $"https://recepti.gotvach.bg/r-{i}";
-            var htmlDoc = web.LoadFromWebAsync(html).GetAwaiter().GetResult();
+            string html = $"https://recepti.gotvach.bg/r-{i}";
+            HtmlDocument htmlDoc = web.LoadFromWebAsync(html).GetAwaiter().GetResult();
             if (web.StatusCode != HttpStatusCode.OK)
             {
-                return;
+                return null;
             }
 
-            var originalUrl = html;
+            RecipeDto recipe = new RecipeDto();
+            recipe.OriginalUrl = html;
 
-            var recipeName = GetRecipeName(htmlDoc);
-            if (recipeName == null)
+            recipe.RecipeName = GetRecipeName(htmlDoc);
+            if (recipe.RecipeName == null)
             {
-                return;
+                return null;
             }
 
-            var category = GetCategoryName(htmlDoc);
-            if (category == null)
+            recipe.CategoryName = GetCategoryName(htmlDoc);
+            if (recipe.CategoryName == null)
             {
-                return;
+                return null;
             }
 
-            var author = GetAuthorName(htmlDoc);
-            if (author == null)
-            {
-                return;
-            }
-
-            var preparationTime = TimeSpan.Zero;
-            var cookingTime = TimeSpan.Zero;
-            GetTimes(htmlDoc, ref preparationTime, ref cookingTime);
-            var portions = GetPortions(htmlDoc);
-
+            recipe.PreparationTime = TimeSpan.Zero;
+            recipe.CookingTime = TimeSpan.Zero;
+            GetTimes(htmlDoc, recipe);
+            recipe.PortionsCount = GetPortions(htmlDoc);
+            recipe.Instructions = GetInstructions(htmlDoc);
             List<string> photoLinks = GetLinksOfPhotos(htmlDoc, web);
             List<string> ingredientsWithQuantities = GetIngredientsWithTheirQuantities(htmlDoc);
+
+            return recipe;
         }
 
         private static string GetRecipeName(HtmlDocument htmlDoc)
@@ -115,21 +144,7 @@
             return string.Empty;
         }
 
-        private static string GetAuthorName(HtmlDocument htmlDoc)
-        {
-            var author = htmlDoc
-                .DocumentNode
-                .SelectNodes(@"//div[@class='autbox']/a");
-
-            if (author != null)
-            {
-                return author.Select(x => x.InnerHtml).FirstOrDefault();
-            }
-
-            return string.Empty;
-        }
-
-        private static void GetTimes(HtmlDocument htmlDoc, ref TimeSpan preparationTime, ref TimeSpan cookingTime)
+        private static void GetTimes(HtmlDocument htmlDoc, RecipeDto recipe)
         {
             var times = htmlDoc
                 .DocumentNode
@@ -144,10 +159,10 @@
             {
                 var preparation = times[0].InnerText.Replace("Приготвяне", string.Empty).Split(" ").FirstOrDefault();
 
-                preparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
+                recipe.PreparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
 
                 var cooking = times[1].InnerText.Replace("Готвене", string.Empty).Split(" ").FirstOrDefault();
-                cookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
+                recipe.CookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
             }
             else if (times.Count == 1)
             {
@@ -155,12 +170,12 @@
                 {
                     var preparation = times[0].InnerText.Replace("Приготвяне", string.Empty).Split(" ").FirstOrDefault();
 
-                    preparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
+                    recipe.PreparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
                 }
                 else
                 {
                     var cooking = times[1].InnerText.Replace("Готвене", string.Empty).Split(" ").FirstOrDefault();
-                    cookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
+                    recipe.CookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
                 }
             }
         }

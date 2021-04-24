@@ -16,7 +16,7 @@ namespace Scrapping
 {
     public class Program
     {
-        static async Task Main(string[] args)
+        static void  Main(string[] args)
         {
 
 
@@ -30,29 +30,30 @@ namespace Scrapping
                     statusCode = response.StatusCode;
                 }
             };
-            //Parallel.For(1, 2000 + 1, i =>
-            //{
-            //    try
-            //    {
-            //        GetRecipeData(web, i);
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine(e.Message);
-            //    }
-            //});
 
-            for (int i = 0; i < 200; i++)
+            Parallel.For(1, 2000 + 1, i =>
             {
                 try
                 {
-                    GetRecipeData(web, i);
+                     GetRecipeData(web, i);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
-            }
+            });
+
+            //for (int i = 0; i < 2000; i++)
+            //{
+            //    //try
+            //    //{
+            //      await  GetRecipeData(web, i);
+            //    //}
+            //    //catch (Exception e)
+            //    //{
+            //    //    Console.WriteLine(e.Message);
+            //    //}
+            //}
 
 
         }
@@ -60,14 +61,14 @@ namespace Scrapping
         private static void GetRecipeData(HtmlWeb web, int i)
         {
             var html = $"https://recepti.gotvach.bg/r-{i}";
-            var htmlDoc = web.Load(html);
+            var htmlDoc = web.LoadFromWebAsync(html).GetAwaiter().GetResult();
             if (web.StatusCode != HttpStatusCode.OK)
             {
                 return;
             }
 
             var originalUrl = html;
-
+          
             var recipeName = GetRecipeName(htmlDoc);
             if (recipeName == null)
             {
@@ -201,9 +202,11 @@ namespace Scrapping
             {
 
                 int.TryParse(portions.Select(x => x.InnerHtml)
-                    .LastOrDefault().Replace("Порции", string.Empty)
+                    .LastOrDefault()
+                    ?.Replace("Порции", string.Empty)
                        .Replace("бр", string.Empty)
                        .Replace("бр.", string.Empty)
+
                        .Replace("броя", string.Empty)
                        .Replace("бройки", string.Empty), out portionsCount);
             }

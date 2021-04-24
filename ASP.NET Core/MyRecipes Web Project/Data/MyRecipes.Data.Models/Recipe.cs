@@ -23,7 +23,8 @@
 
         public int PortionCount { get; set; }
 
-        // TODO: Url to original site
+        public string OriginalUrl { get; set; }
+
         public string CreatedByUserId { get; set; }
 
         public virtual ApplicationUser CreatedByUser { get; set; }

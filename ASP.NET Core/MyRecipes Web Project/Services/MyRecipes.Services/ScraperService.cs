@@ -15,7 +15,6 @@
 
     public class ScraperService : IScraperService
     {
-
         private readonly object lockObj = new();
 
         private readonly HtmlWeb web;
@@ -122,7 +121,7 @@
 
         private void ScrapeRecipes()
         {
-            Parallel.For(100000, 200000 + 1, i =>
+            Parallel.For(2000, 10000 + 1, i =>
             {
                 try
                 {
@@ -146,7 +145,7 @@
         {
             var recipe = new Recipe()
             {
-                PortionsCount = recipeDto.PortionsCount,
+                PortionCount = recipeDto.PortionsCount,
                 CategoryId = categoryId,
                 Instructions = recipeDto.Instructions,
                 Name = recipeDto.RecipeName,
@@ -578,7 +577,7 @@
         //    recipe.PreparationTime = TimeSpan.Zero;
         //    recipe.CookingTime = TimeSpan.Zero;
         //    GetTimes(htmlDoc, recipe);
-        //    recipe.PortionsCount = GetPortions(htmlDoc);
+        //    recipe.PortionCount = GetPortions(htmlDoc);
         //    recipe.Instructions = GetInstructions(htmlDoc);
         //    List<string> photoLinks = GetLinksOfPhotos(htmlDoc, web);
         //    List<string> ingredientsWithQuantities = GetIngredientsWithTheirQuantities(htmlDoc);

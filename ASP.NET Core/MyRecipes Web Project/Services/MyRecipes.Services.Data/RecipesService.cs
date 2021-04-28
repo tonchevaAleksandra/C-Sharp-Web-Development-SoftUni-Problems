@@ -28,7 +28,7 @@
                 PreparationTime = TimeSpan.FromMinutes(input.PreparationTime),
                 Instructions = input.Instructions,
                 Name = input.Name,
-                PortionsCount = input.PortionCount,
+                PortionCount = input.PortionCount,
 
             };
 

@@ -19,7 +19,6 @@ namespace Scrapping
         static void  Main(string[] args)
         {
 
-
             HtmlWeb web = new HtmlWeb();
             HttpStatusCode statusCode = HttpStatusCode.OK;
 
@@ -37,6 +36,7 @@ namespace Scrapping
                 {
                      GetRecipeData(web, i);
                 }
+
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);

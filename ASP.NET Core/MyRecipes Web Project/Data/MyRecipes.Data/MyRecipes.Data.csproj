@@ -44,4 +44,8 @@
     <ProjectReference Include="..\MyRecipes.Data.Models\MyRecipes.Data.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

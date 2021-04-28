@@ -1,4 +1,5 @@
-﻿using MyRecipes.Services;
+﻿using HtmlAgilityPack;
+using MyRecipes.Services;
 
 namespace MyRecipes.Web
 {
@@ -69,6 +70,7 @@ namespace MyRecipes.Web
             services.AddTransient<IGetCountsService, GetCountsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IRecipesService, RecipesService>();
+            services.AddTransient<HtmlWeb>();
             services.AddTransient<IScraperService, ScraperService>();
         }
 

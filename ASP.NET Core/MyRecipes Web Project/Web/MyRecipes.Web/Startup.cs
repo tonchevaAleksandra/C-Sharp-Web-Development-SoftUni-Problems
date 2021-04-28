@@ -1,4 +1,6 @@
-﻿namespace MyRecipes.Web
+﻿using MyRecipes.Services;
+
+namespace MyRecipes.Web
 {
     using System.Reflection;
 
@@ -67,6 +69,7 @@
             services.AddTransient<IGetCountsService, GetCountsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IRecipesService, RecipesService>();
+            services.AddTransient<IScraperService, ScraperService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

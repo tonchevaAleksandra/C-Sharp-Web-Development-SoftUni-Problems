@@ -5,6 +5,8 @@
 
     public class RecipeDto
     {
+        public int OriginalRecipeId { get; set; }
+
         public string RecipeName { get; set; }
 
         public string CategoryName { get; set; }

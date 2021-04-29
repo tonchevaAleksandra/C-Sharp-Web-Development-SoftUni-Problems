@@ -121,7 +121,7 @@
 
         private void ScrapeRecipes()
         {
-            Parallel.For(2000, 10000 + 1, i =>
+            Parallel.For(10000, 15000 + 1, i =>
             {
                 try
                 {

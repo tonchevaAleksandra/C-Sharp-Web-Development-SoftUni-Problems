@@ -25,8 +25,7 @@ namespace MyRecipes.Web.Controllers
         public async Task<IActionResult> Add()
         {
            await this.scraperService.PopulateDbWithRecipesAsync();
-
-           return this.View();
+           return this.Redirect("/");
         }
     }
 }

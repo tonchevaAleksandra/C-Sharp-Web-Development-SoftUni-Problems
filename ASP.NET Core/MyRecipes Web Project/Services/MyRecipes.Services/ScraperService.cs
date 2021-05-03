@@ -121,7 +121,7 @@
 
         private void ScrapeRecipes()
         {
-            Parallel.For(10000, 15000 + 1, i =>
+            Parallel.For(40000, 50000 + 1, i =>
             {
                 try
                 {
@@ -135,8 +135,9 @@
                 {
                     Console.WriteLine(e.Message + " => " + i + " index");
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine("Exception " + e.Message + " => " + i + " index");
                 }
             });
         }
@@ -746,6 +747,6 @@
 
         //    return instructions.ToString().Trim();
         //}
-      
+
     }
 }

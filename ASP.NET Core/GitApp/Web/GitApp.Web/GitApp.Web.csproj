@@ -36,4 +36,10 @@
     <ProjectReference Include="..\GitApp.Web.Infrastructure\GitApp.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\GitApp.Web.ViewModels\GitApp.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\img\imgCooker.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

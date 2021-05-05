@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-
-namespace MyRecipes.Web.ViewModels.Recipes
+﻿namespace MyRecipes.Web.ViewModels.Recipes
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     public class RecipeIngredientInputModel

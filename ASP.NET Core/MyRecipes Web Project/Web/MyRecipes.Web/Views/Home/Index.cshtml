@@ -2,7 +2,10 @@
 @model MyRecipes.Web.ViewModels.Home.IndexViewModel
 @{
     this.ViewData["Title"] = "Home Page";
+    //var data = "<script>alert('hacked!');</script>";
 }
+@*@data*@
+@*@Html.Raw(data); - never use this*@
 
 <div class="text-center">
     <h1 class="display-4">Добре дошли в @GlobalConstants.SystemName!</h1>

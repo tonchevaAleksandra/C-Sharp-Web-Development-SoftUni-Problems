@@ -55,9 +55,15 @@ namespace MyRecipes.Web.Controllers
             return this.Redirect("/");
         }
 
+        // Recipes/All/1
         public IActionResult All(int id)
         {
-            return this.View();
+            var viewMoel = new RecipesListViewModel()
+            {
+                PageNumber = id,
+                Recipes = this.recipesService.GetAll(id, 12),
+            };
+            return this.View(viewMoel);
         }
     }
 }

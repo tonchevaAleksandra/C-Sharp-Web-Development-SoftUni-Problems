@@ -1,4 +1,8 @@
-﻿namespace MyRecipes.Services.Data
+﻿using System.Collections.Generic;
+using AutoMapper.QueryableExtensions;
+using MyRecipes.Services.Mapping;
+
+namespace MyRecipes.Services.Data
 {
     using System;
     using System.Linq;
@@ -50,6 +54,22 @@
 
             await this.recipesRepository.AddAsync(recipe);
             await this.recipesRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<RecipeInListViewModel> GetAll(int page, int itemsPerPage = 12)
+        {
+            // 1-12 - page 1
+            // 13-24 page 2 ...
+            var skippedItemsCount = (page - 1) * itemsPerPage;
+
+            var recipes = this.recipesRepository.AllAsNoTracking()
+                  .OrderByDescending(x => x.Id)
+                  .Skip(skippedItemsCount)
+                  .Take(itemsPerPage)
+                  .To<RecipeInListViewModel>()
+                  .ToList();
+
+            return recipes;
         }
     }
 }

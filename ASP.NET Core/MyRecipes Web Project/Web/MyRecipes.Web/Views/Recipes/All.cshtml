@@ -6,15 +6,17 @@
 <h1>@this.ViewData["Title"]</h1>
 <hr />
 <div class="row">
-    @for (int i = 0; i < 12; i++)
+    @foreach(var recipe in this.Model.Recipes)
     {
-        <div class="media col-md-3">
-            <img src="..." class="mr-3" alt="...">
+        <div class="media col-md-4">
+            <img src="@recipe.ImageUrl" width="100px" class="mr-3 img-responsive" >
             <div class="media-body">
-                <h5 class="mt-0">Media heading</h5>
-                <p>Will you do the same for me? It's time to face the music I'm no longer your muse. Heard it's beautiful, be the judge and my girls gonna take a vote. I can feel a phoenix inside of me. Heaven is jealous of our love, angels are crying from up above. Yeah, you take me to utopia.</p>
+                <h5 class="mt-0">@recipe.Name</h5>
+                @recipe.CategoryName
+                <p></p>
             </div>
         </div>
+        <hr/>
     }
 </div>
 <hr/>

@@ -34,7 +34,7 @@ namespace MyRecipes.Web.ViewModels.Recipes
         [Range(1, 100)]
         public int PortionsCount { get; set; }
 
-        // TODO: Url to original site
+        // TODO: ImageUrl to original site
         public string CreatedByUserId { get; set; }
 
         [DisplayName("Категория")]

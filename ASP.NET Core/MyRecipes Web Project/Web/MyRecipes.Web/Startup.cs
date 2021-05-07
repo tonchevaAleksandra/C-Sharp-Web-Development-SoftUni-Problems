@@ -46,6 +46,11 @@ namespace MyRecipes.Web
                 options.AppId = this.configuration["AppId"];
                 options.AppSecret = this.configuration["AppSecret"];
             });
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = this.configuration["ClientId"];
+                options.ClientSecret = this.configuration["ClientSecret"];
+            });
             services.Configure<CookiePolicyOptions>(
                 options =>
                     {

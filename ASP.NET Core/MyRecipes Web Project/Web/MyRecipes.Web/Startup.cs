@@ -1,4 +1,8 @@
-﻿namespace MyRecipes.Web
+﻿using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using MyRecipes.Web.Settings;
+
+namespace MyRecipes.Web
 {
     using System.Reflection;
 
@@ -35,6 +39,14 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //// Configure strongly typed settings objects
+            // var jwtSettingsSection =
+            //    this.configuration.GetSection("JwtSettings");
+            // services.Configure<JwtSettings>(jwtSettingsSection);
+
+            //// Configure JWT authentication
+            // var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
+            // var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
@@ -44,18 +56,30 @@
             {
                 options.AppId = this.configuration["AppId"];
                 options.AppSecret = this.configuration["AppSecret"];
-            });
-            services.AddAuthentication().AddGoogle(options =>
+            })
+                .AddGoogle(options =>
             {
                 options.ClientId = this.configuration["ClientId"];
                 options.ClientSecret = this.configuration["ClientSecret"];
-            });
-            services.Configure<CookiePolicyOptions>(
-                options =>
-                    {
-                        options.CheckConsentNeeded = context => true;
-                        options.MinimumSameSitePolicy = SameSiteMode.None;
-                    });
+            })
+            // .AddJwtBearer(options =>
+            //    {
+            //        options.RequireHttpsMetadata = false;
+            //        options.SaveToken = true;
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuerSigningKey = true,
+            //            IssuerSigningKey = new SymmetricSecurityKey(key),
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false,
+            //        };
+            //    });
+            // services.Configure<CookiePolicyOptions>(
+            //    options =>
+            //        {
+            //            options.CheckConsentNeeded = context => true;
+            //            options.MinimumSameSitePolicy = SameSiteMode.None;
+            //        });
 
             services.AddControllersWithViews(
                 options =>

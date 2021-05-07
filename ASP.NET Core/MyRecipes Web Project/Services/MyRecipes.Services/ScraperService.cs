@@ -490,23 +490,23 @@
                     .FirstOrDefault();
             }
         }
-        //private readonly HtmlWeb web;
-        //private readonly ConcurrentBag<RecipeDto> concurrentBag;
+        // private readonly HtmlWeb web;
+        // private readonly ConcurrentBag<RecipeDto> concurrentBag;
 
-        //private readonly IDeletableEntityRepository<Category> categoriesRepository;
-        //private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
-        //private readonly IDeletableEntityRepository<Recipe> recipesRepository;
-        //private readonly IRepository<RecipeIngredient> recipeIngredientsRepository;
-        //private readonly IRepository<Image> imagesRepository;
-        //private HttpStatusCode statusCode;
+        // private readonly IDeletableEntityRepository<Category> categoriesRepository;
+        // private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
+        // private readonly IDeletableEntityRepository<Recipe> recipesRepository;
+        // private readonly IRepository<RecipeIngredient> recipeIngredientsRepository;
+        // private readonly IRepository<Image> imagesRepository;
+        // private HttpStatusCode statusCode;
 
-        //public ScraperService(HtmlWeb web,
+        // public ScraperService(HtmlWeb web,
         //    IDeletableEntityRepository<Category> categoriesRepository,
         //    IDeletableEntityRepository<Ingredient> ingredientsRepository,
         //    IDeletableEntityRepository<Recipe> recipeRepository,
         //    IRepository<RecipeIngredient> recipeIngredientsRepository,
         //    IRepository<Image> imagesRepository)
-        //{
+        // {
         //    this.web = web;
         //    this.web.PostResponse += (request, response) =>
         //    {
@@ -516,19 +516,19 @@
         //        }
         //    };
 
-        //    this.concurrentBag = new ConcurrentBag<RecipeDto>();
+        // this.concurrentBag = new ConcurrentBag<RecipeDto>();
 
-        //    this.categoriesRepository = categoriesRepository;
+        // this.categoriesRepository = categoriesRepository;
         //    this.ingredientsRepository = ingredientsRepository;
         //    this.recipesRepository = recipeRepository;
         //    this.recipeIngredientsRepository = recipeIngredientsRepository;
         //    this.imagesRepository = imagesRepository;
 
-        //    this.statusCode = HttpStatusCode.OK;
-        //}
+        // this.statusCode = HttpStatusCode.OK;
+        // }
 
-        //public async Task PopulateDbWithRecipes()
-        //{
+        // public async Task PopulateDbWithRecipes()
+        // {
         //    web.PostResponse += (request, response) =>
         //    {
         //        if (response != null)
@@ -537,22 +537,22 @@
         //        }
         //    };
 
-        //    Parallel.For(1, 2000 + 1, i =>
+        // Parallel.For(1, 2000 + 1, i =>
         //    {
         //        try
         //        {
         //            RecipeDto recipe = GetRecipeData(web, i);
 
-        //        }
+        // }
         //        catch (Exception e)
         //        {
         //            Console.WriteLine(e.Message);
         //        }
         //    });
-        //}
+        // }
 
-        //private static RecipeDto GetRecipeData(HtmlWeb web, int i)
-        //{
+        // private static RecipeDto GetRecipeData(HtmlWeb web, int i)
+        // {
         //    string html = $"https://recepti.gotvach.bg/r-{i}";
         //    HtmlDocument htmlDoc = web.LoadFromWebAsync(html).GetAwaiter().GetResult();
         //    if (web.StatusCode != HttpStatusCode.OK)
@@ -560,22 +560,22 @@
         //        return null;
         //    }
 
-        //    RecipeDto recipe = new RecipeDto();
+        // RecipeDto recipe = new RecipeDto();
         //    recipe.OriginalUrl = html;
 
-        //    recipe.RecipeName = GetRecipeName(htmlDoc);
+        // recipe.RecipeName = GetRecipeName(htmlDoc);
         //    if (recipe.RecipeName == null)
         //    {
         //        return null;
         //    }
 
-        //    recipe.CategoryName = GetCategoryName(htmlDoc);
+        // recipe.CategoryName = GetCategoryName(htmlDoc);
         //    if (recipe.CategoryName == null)
         //    {
         //        return null;
         //    }
 
-        //    recipe.PreparationTime = TimeSpan.Zero;
+        // recipe.PreparationTime = TimeSpan.Zero;
         //    recipe.CookingTime = TimeSpan.Zero;
         //    GetTimes(htmlDoc, recipe);
         //    recipe.PortionCount = GetPortions(htmlDoc);
@@ -583,27 +583,27 @@
         //    List<string> photoLinks = GetLinksOfPhotos(htmlDoc, web);
         //    List<string> ingredientsWithQuantities = GetIngredientsWithTheirQuantities(htmlDoc);
 
-        //    return recipe;
-        //}
+        // return recipe;
+        // }
 
-        //private static string GetRecipeName(HtmlDocument htmlDoc)
-        //{
+        // private static string GetRecipeName(HtmlDocument htmlDoc)
+        // {
         //    var name = htmlDoc
         //        .DocumentNode
         //        .SelectNodes(@"//div[@class='combocolumn mr']/h1");
 
-        //    if (name != null)
+        // if (name != null)
         //    {
         //        return name.Select(r => r.InnerText)
         //            .FirstOrDefault()
         //            ?.ToString();
         //    }
 
-        //    return string.Empty;
-        //}
+        // return string.Empty;
+        // }
 
-        //private static string GetCategoryName(HtmlDocument htmlDoc)
-        //{
+        // private static string GetCategoryName(HtmlDocument htmlDoc)
+        // {
         //    var category = htmlDoc
         //        .DocumentNode
         //        .SelectNodes(@"//div[@class='breadcrumb']");
@@ -617,27 +617,27 @@
         //            .ToList()[1];
         //    }
 
-        //    return string.Empty;
-        //}
+        // return string.Empty;
+        // }
 
-        //private static void GetTimes(HtmlDocument htmlDoc, RecipeDto recipe)
-        //{
+        // private static void GetTimes(HtmlDocument htmlDoc, RecipeDto recipe)
+        // {
         //    var times = htmlDoc
         //        .DocumentNode
         //        .SelectNodes(@"//div[@class='feat small']");
 
-        //    if (times == null)
+        // if (times == null)
         //    {
         //        return;
         //    }
 
-        //    if (times.Count == 2)
+        // if (times.Count == 2)
         //    {
         //        var preparation = times[0].InnerText.Replace("Приготвяне", string.Empty).Split(" ").FirstOrDefault();
 
-        //        recipe.PreparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
+        // recipe.PreparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
 
-        //        var cooking = times[1].InnerText.Replace("Готвене", string.Empty).Split(" ").FirstOrDefault();
+        // var cooking = times[1].InnerText.Replace("Готвене", string.Empty).Split(" ").FirstOrDefault();
         //        recipe.CookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
         //    }
         //    else if (times.Count == 1)
@@ -646,7 +646,7 @@
         //        {
         //            var preparation = times[0].InnerText.Replace("Приготвяне", string.Empty).Split(" ").FirstOrDefault();
 
-        //            recipe.PreparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
+        // recipe.PreparationTime = TimeSpan.FromMinutes(int.Parse(preparation));
         //        }
         //        else
         //        {
@@ -654,15 +654,15 @@
         //            recipe.CookingTime = TimeSpan.FromMinutes(int.Parse(cooking));
         //        }
         //    }
-        //}
+        // }
 
-        //private static int GetPortions(HtmlDocument htmlDoc)
-        //{
+        // private static int GetPortions(HtmlDocument htmlDoc)
+        // {
         //    var portions = htmlDoc
         //        .DocumentNode
         //        .SelectNodes(@"//div[@class='feat']/span");
 
-        //    var portionsCount = 0;
+        // var portionsCount = 0;
         //    if (portions != null)
         //    {
         //        int.TryParse(portions.Select(x => x.InnerHtml)
@@ -674,32 +674,32 @@
         //               .Replace("бройки", string.Empty), out portionsCount);
         //    }
 
-        //    return portionsCount;
-        //}
+        // return portionsCount;
+        // }
 
-        //private static List<string> GetLinksOfPhotos(HtmlDocument htmlDoc, HtmlWeb web)
-        //{
+        // private static List<string> GetLinksOfPhotos(HtmlDocument htmlDoc, HtmlWeb web)
+        // {
         //    var photos = new List<string>();
         //    var photosUrls = htmlDoc
         //        .DocumentNode
         //        .SelectNodes(@"//a[@class='morebtn']");
 
-        //    if (photosUrls != null)
+        // if (photosUrls != null)
         //    {
         //        var urlPhoros = photosUrls
         //            .FirstOrDefault()
         //            ?.GetAttributeValue("href", "unknown");
 
-        //        var link = web.Load(urlPhoros);
+        // var link = web.Load(urlPhoros);
         //        var photosUrlsToLoad = link
         //            .DocumentNode
         //            .SelectNodes(@"//div[@class='main']/div/img");
 
-        //        if (photosUrlsToLoad != null)
+        // if (photosUrlsToLoad != null)
         //        {
         //            var picturesUrls = photosUrlsToLoad.ToList();
 
-        //            if (picturesUrls[0].GetAttributeValue("src", "unknown") ==
+        // if (picturesUrls[0].GetAttributeValue("src", "unknown") ==
         //                "https://recepti.gotvach.bg/files/recipes/photos/")
         //            {
         //                picturesUrls.Clear();
@@ -711,42 +711,42 @@
         //        }
         //    }
 
-        //    return photos;
-        //}
+        // return photos;
+        // }
 
-        //private static List<string> GetIngredientsWithTheirQuantities(HtmlDocument htmlDoc)
-        //{
+        // private static List<string> GetIngredientsWithTheirQuantities(HtmlDocument htmlDoc)
+        // {
         //    var ingredients = new List<string>();
 
-        //    var ingredientsParse = htmlDoc
+        // var ingredientsParse = htmlDoc
         //        .DocumentNode
         //        .SelectNodes(@"//section[@class='products new']/ul/li");
 
-        //    if (ingredientsParse != null)
+        // if (ingredientsParse != null)
         //    {
         //        ingredients.AddRange(ingredientsParse
         //            .Select(li => li.InnerText)
         //            .ToList());
         //    }
 
-        //    return ingredients;
-        //}
+        // return ingredients;
+        // }
 
-        //private static string GetInstructions(HtmlDocument htmlDoc)
-        //{
+        // private static string GetInstructions(HtmlDocument htmlDoc)
+        // {
         //    var instrudctionsToLoad = htmlDoc
         //        .DocumentNode
         //        .SelectNodes(@"//div[@class='text']/p");
 
-        //    var instructions = new StringBuilder();
+        // var instructions = new StringBuilder();
         //    if (instrudctionsToLoad != null)
         //    {
         //        instructions.AppendLine(string.Join(Environment.NewLine, instrudctionsToLoad.Select(x => x.InnerText)
         //            .ToList()));
         //    }
 
-        //    return instructions.ToString().Trim();
-        //}
+        // return instructions.ToString().Trim();
+        // }
 
     }
 }

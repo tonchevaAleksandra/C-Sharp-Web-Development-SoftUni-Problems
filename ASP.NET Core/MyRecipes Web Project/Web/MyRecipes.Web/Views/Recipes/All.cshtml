@@ -1,0 +1,35 @@
+﻿@model MyRecipes.Web.ViewModels.Recipes.RecipesListViewModel
+@{
+    this.ViewData["Title"] = "Всички рецепти - стр...";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    @for (int i = 0; i < 12; i++)
+    {
+        <div class="media col-md-3">
+            <img src="..." class="mr-3" alt="...">
+            <div class="media-body">
+                <h5 class="mt-0">Media heading</h5>
+                <p>Will you do the same for me? It's time to face the music I'm no longer your muse. Heard it's beautiful, be the judge and my girls gonna take a vote. I can feel a phoenix inside of me. Heaven is jealous of our love, angels are crying from up above. Yeah, you take me to utopia.</p>
+            </div>
+        </div>
+    }
+</div>
+<hr/>
+<nav  aria-label="...">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+</nav>

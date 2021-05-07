@@ -19,7 +19,7 @@
             this.ingredientsRepository = ingredientsRepository;
         }
 
-        public async Task CreateAsync(CreateRecipeInputModel input)
+        public async Task CreateAsync(CreateRecipeInputModel input, string userId)
         {
             var recipe = new Recipe()
             {
@@ -29,7 +29,7 @@
                 Instructions = input.Instructions,
                 Name = input.Name,
                 PortionCount = input.PortionsCount,
-
+                CreatedByUserId = userId,
             };
 
             foreach (var inputIngredient in input.Ingredients)

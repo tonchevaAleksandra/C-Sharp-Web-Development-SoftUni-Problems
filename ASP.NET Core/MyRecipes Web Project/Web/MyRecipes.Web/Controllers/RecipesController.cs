@@ -1,4 +1,10 @@
-﻿namespace MyRecipes.Web.Controllers
+﻿using System.Security.Claims;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using MyRecipes.Data.Models;
+
+namespace MyRecipes.Web.Controllers
 {
     using System.Data.SqlTypes;
     using System.Threading.Tasks;
@@ -11,13 +17,16 @@
     {
         private readonly ICategoriesService categoriesService;
         private readonly IRecipesService recipesService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public RecipesController(ICategoriesService categoriesService, IRecipesService recipesService)
+        public RecipesController(ICategoriesService categoriesService, IRecipesService recipesService, UserManager<ApplicationUser> userManager)
         {
             this.categoriesService = categoriesService;
             this.recipesService = recipesService;
+            this.userManager = userManager;
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             var viewModel = new CreateRecipeInputModel();
@@ -25,6 +34,7 @@
             return this.View(viewModel);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateRecipeInputModel input)
         {
@@ -34,10 +44,20 @@
                 return this.View(input);
             }
 
-            await this.recipesService.CreateAsync(input);
+            var user = await this.userManager.GetUserAsync(this.User);
+            var userId = user.Id;
+
+            // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await this.recipesService.CreateAsync(input, userId);
+
             // TODO: CreateAsync recipe using service method
             // TODO: Redirect to recipe info page
             return this.Redirect("/");
+        }
+
+        public IActionResult All(int id)
+        {
+            return this.View();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+
 using Microsoft.IdentityModel.Tokens;
 using MyRecipes.Web.Settings;
 
@@ -53,15 +54,16 @@ namespace MyRecipes.Web
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthentication().AddFacebook(options =>
-            {
-                options.AppId = this.configuration["AppId"];
-                options.AppSecret = this.configuration["AppSecret"];
-            })
+                {
+                    options.AppId = this.configuration["AppId"];
+                    options.AppSecret = this.configuration["AppSecret"];
+                })
                 .AddGoogle(options =>
-            {
-                options.ClientId = this.configuration["ClientId"];
-                options.ClientSecret = this.configuration["ClientSecret"];
-            })
+                {
+                    options.ClientId = this.configuration["ClientId"];
+                    options.ClientSecret = this.configuration["ClientSecret"];
+                });
+
             // .AddJwtBearer(options =>
             //    {
             //        options.RequireHttpsMetadata = false;

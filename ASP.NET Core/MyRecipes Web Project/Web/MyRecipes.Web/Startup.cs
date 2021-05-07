@@ -1,10 +1,8 @@
-﻿using HtmlAgilityPack;
-using MyRecipes.Services;
-
-namespace MyRecipes.Web
+﻿namespace MyRecipes.Web
 {
     using System.Reflection;
 
+    using HtmlAgilityPack;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -19,6 +17,7 @@ namespace MyRecipes.Web
     using MyRecipes.Data.Models;
     using MyRecipes.Data.Repositories;
     using MyRecipes.Data.Seeding;
+    using MyRecipes.Services;
     using MyRecipes.Services.Data;
     using MyRecipes.Services.Mapping;
     using MyRecipes.Services.Messaging;

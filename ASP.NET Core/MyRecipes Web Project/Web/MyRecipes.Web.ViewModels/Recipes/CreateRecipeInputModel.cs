@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using AutoMapper;
+using MyRecipes.Services.Mapping;
 
 namespace MyRecipes.Web.ViewModels.Recipes
 {
@@ -8,7 +10,7 @@ namespace MyRecipes.Web.ViewModels.Recipes
 
     using MyRecipes.Data.Models;
 
-    public class CreateRecipeInputModel
+    public class CreateRecipeInputModel /*: IMapTo<Recipe>, IHaveCustomMappings*/
     {
         [DisplayName("Име на рецептата")]
         [Required]
@@ -44,5 +46,19 @@ namespace MyRecipes.Web.ViewModels.Recipes
         public IEnumerable<RecipeIngredientInputModel> Ingredients { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CategoriesItems { get; set; }
+
+        //public void CreateMappings(IProfileExpression configuration)
+        //{
+        //   configuration.CreateMap<CreateRecipeInputModel, Recipe>()
+        //       .ForMember(x=> x.CookingTime, opt =>
+        //       {
+        //           opt.MapFrom(cr=> TimeSpan.FromMinutes(cr.CookingTime));
+        //       })
+        //       .ForMember(x => x.PreparationTime, opt =>
+        //       {
+        //           opt.MapFrom(cr => TimeSpan.FromMinutes(cr.PreparationTime));
+        //       });
+               
+        //}
     }
 }

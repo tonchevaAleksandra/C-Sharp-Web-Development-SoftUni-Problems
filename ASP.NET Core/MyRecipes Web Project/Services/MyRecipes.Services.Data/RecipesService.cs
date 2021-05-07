@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using AutoMapper.QueryableExtensions;
-using MyRecipes.Services.Mapping;
-
-namespace MyRecipes.Services.Data
+﻿namespace MyRecipes.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AutoMapper.QueryableExtensions;
     using MyRecipes.Data.Common.Repositories;
     using MyRecipes.Data.Models;
+    using MyRecipes.Services.Mapping;
     using MyRecipes.Web.ViewModels.Recipes;
 
     public class RecipesService : IRecipesService
@@ -36,6 +35,7 @@ namespace MyRecipes.Services.Data
                 CreatedByUserId = userId,
             };
 
+
             foreach (var inputIngredient in input.Ingredients)
             {
                 var ingredient = this.ingredientsRepository.All().FirstOrDefault(x => x.Name == inputIngredient.IngredientName);
@@ -56,7 +56,7 @@ namespace MyRecipes.Services.Data
             await this.recipesRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<RecipeInListViewModel> GetAll(int page, int itemsPerPage = 12)
+        public IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12)
         {
             // 1-12 - page 1
             // 13-24 page 2 ...
@@ -66,7 +66,7 @@ namespace MyRecipes.Services.Data
                   .OrderByDescending(x => x.Id)
                   .Skip(skippedItemsCount)
                   .Take(itemsPerPage)
-                  .To<RecipeInListViewModel>()
+                  .To<T>()
                   .ToList();
 
             return recipes;

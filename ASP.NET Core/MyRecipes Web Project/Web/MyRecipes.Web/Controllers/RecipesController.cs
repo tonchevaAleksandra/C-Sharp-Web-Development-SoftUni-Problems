@@ -61,8 +61,9 @@ namespace MyRecipes.Web.Controllers
             var viewMoel = new RecipesListViewModel()
             {
                 PageNumber = id,
-                Recipes = this.recipesService.GetAll(id, 12),
+                Recipes = this.recipesService.GetAll<RecipeInListViewModel>(id, 12),
             };
+
             return this.View(viewMoel);
         }
     }

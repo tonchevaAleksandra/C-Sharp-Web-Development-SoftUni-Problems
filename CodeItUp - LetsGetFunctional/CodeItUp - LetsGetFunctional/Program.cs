@@ -11,4 +11,5 @@ namespace CodeItUp___LetsGetFunctional
     }
 
     public record CatRecord(string Name, int Age);
+
 }

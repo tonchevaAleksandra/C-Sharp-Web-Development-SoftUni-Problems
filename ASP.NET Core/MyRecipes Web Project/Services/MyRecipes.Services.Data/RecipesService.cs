@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using AutoMapper.QueryableExtensions;
     using MyRecipes.Data.Common.Repositories;
     using MyRecipes.Data.Models;
     using MyRecipes.Services.Mapping;
@@ -34,7 +33,6 @@
                 PortionCount = input.PortionsCount,
                 CreatedByUserId = userId,
             };
-
 
             foreach (var inputIngredient in input.Ingredients)
             {
@@ -74,7 +72,7 @@
 
         public int GetCount()
         {
-          return  this.recipesRepository.All().Count();
+            return this.recipesRepository.All().Count();
         }
     }
 }

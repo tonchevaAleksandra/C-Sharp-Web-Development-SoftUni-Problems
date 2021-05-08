@@ -1,11 +1,8 @@
 ﻿namespace MyRecipes.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
-    using MyRecipes.Data.Common.Models;
     using MyRecipes.Data.Common.Repositories;
     using MyRecipes.Data.Models;
 

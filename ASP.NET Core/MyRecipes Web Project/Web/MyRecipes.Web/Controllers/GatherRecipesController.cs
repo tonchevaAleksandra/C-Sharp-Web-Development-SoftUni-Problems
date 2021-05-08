@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
-using MyRecipes.Services;
-
-namespace MyRecipes.Web.Controllers
+﻿namespace MyRecipes.Web.Controllers
 {
-    public class GatherRecipesController:BaseController
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using MyRecipes.Services;
+
+    public class GatherRecipesController : BaseController
     {
         private readonly IScraperService scraperService;
 
@@ -27,8 +24,8 @@ namespace MyRecipes.Web.Controllers
         [Authorize("Admin")]
         public async Task<IActionResult> Add()
         {
-           await this.scraperService.PopulateDbWithRecipesAsync();
-           return this.Redirect("/");
+            await this.scraperService.PopulateDbWithRecipesAsync();
+            return this.Redirect("/");
         }
     }
 }

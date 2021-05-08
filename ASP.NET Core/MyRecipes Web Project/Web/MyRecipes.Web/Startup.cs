@@ -1,16 +1,10 @@
-﻿using System.Text;
-
-using Microsoft.IdentityModel.Tokens;
-using MyRecipes.Web.Settings;
-
-namespace MyRecipes.Web
+﻿namespace MyRecipes.Web
 {
     using System.Reflection;
 
     using HtmlAgilityPack;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -82,7 +76,6 @@ namespace MyRecipes.Web
             //            options.CheckConsentNeeded = context => true;
             //            options.MinimumSameSitePolicy = SameSiteMode.None;
             //        });
-
             services.AddControllersWithViews(
                 options =>
                     {

@@ -3,7 +3,6 @@
     using System;
     using System.Diagnostics;
 
-    using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using MyRecipes.Services.Data;
     using MyRecipes.Web.ViewModels;
@@ -50,12 +49,12 @@
 
         public IActionResult AjaxDemoData()
         {
-          return this.Json(new[]
-            {
-                new {Name = "Niki", Date = DateTime.UtcNow.ToString("O")},
-                new {Name = "Stoyan", Date = DateTime.UtcNow.AddDays(1).ToString("O")},
-                new {Name = "Ivaylo", Date = DateTime.UtcNow.AddDays(2).ToString("O")},
-            });
+            return this.Json(new[]
+              {
+                new { Name = "Niki", Date = DateTime.UtcNow.ToString("O") },
+                new { Name = "Stoyan", Date = DateTime.UtcNow.AddDays(1).ToString("O") },
+                new { Name = "Ivaylo", Date = DateTime.UtcNow.AddDays(2).ToString("O") },
+              });
         }
     }
 }

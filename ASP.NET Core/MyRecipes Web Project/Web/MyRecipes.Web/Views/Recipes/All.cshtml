@@ -6,32 +6,35 @@
 <h1>@this.ViewData["Title"]</h1>
 <hr />
 <div class="row">
-    @foreach(var recipe in this.Model.Recipes)
+    @foreach (var recipe in this.Model.Recipes)
     {
         <div class="media col-md-4">
-            <img src="@recipe.ImageUrl" width="100px" class="mr-3 img-responsive" >
+            <img src="@recipe.ImageUrl" width="100px" class="mr-3 img-responsive">
             <div class="media-body">
                 <h5 class="mt-0">@recipe.Name</h5>
                 @recipe.CategoryName
                 <p></p>
             </div>
         </div>
-        <hr/>
+        <hr />
     }
 </div>
-<hr/>
-<nav  aria-label="...">
+<hr />
+<nav aria-label="...">
     <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        <li class="page-item @if (!Model.HasPreviousPage){<text>disabled</text> } ">
+            <a class="page-link" asp-action="All" asp-route-id="@Model.PreviousPageNumber">Previous</a>
         </li>
         <li class="page-item"><a class="page-link" href="#">1</a></li>
         <li class="page-item active" aria-current="page">
-            <a class="page-link" href="#">2</a>
+            <span class="page-link">
+                @Model.PageNumber
+                <span class="sr-only">(current)</span>
+            </span>
         </li>
         <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
+        <li class="page-item @if (!Model.HasNextPage){<text>disabled</text> } ">
+            <a class="page-link" asp-action="All" asp-route-id="@Model.NextPageNumber">Next</a>
         </li>
     </ul>
 </nav>

@@ -56,15 +56,18 @@ namespace MyRecipes.Web.Controllers
         }
 
         // Recipes/All/1
-        public IActionResult All(int id)
+        public IActionResult All(int id = 1)
         {
-            var viewMoel = new RecipesListViewModel()
+            const int itemsPerPage = 12;
+            var viewModel = new RecipesListViewModel()
             {
+                ItemsPerPage=itemsPerPage,
                 PageNumber = id,
-                Recipes = this.recipesService.GetAll<RecipeInListViewModel>(id, 12),
+                Recipes = this.recipesService.GetAll<RecipeInListViewModel>(id, itemsPerPage),
+                RecipesCount = this.recipesService.GetCount(),
             };
 
-            return this.View(viewMoel);
+            return this.View(viewModel);
         }
     }
 }

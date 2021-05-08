@@ -58,10 +58,15 @@ namespace MyRecipes.Web.Controllers
         // Recipes/All/1
         public IActionResult All(int id = 1)
         {
+            if (id <= 0)
+            {
+                return this.NotFound();
+            }
+
             const int itemsPerPage = 12;
             var viewModel = new RecipesListViewModel()
             {
-                ItemsPerPage=itemsPerPage,
+                ItemsPerPage = itemsPerPage,
                 PageNumber = id,
                 Recipes = this.recipesService.GetAll<RecipeInListViewModel>(id, itemsPerPage),
                 RecipesCount = this.recipesService.GetCount(),

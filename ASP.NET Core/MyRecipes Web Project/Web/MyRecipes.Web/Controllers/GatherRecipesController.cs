@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 using MyRecipes.Services;
@@ -18,11 +18,13 @@ namespace MyRecipes.Web.Controllers
             this.scraperService = scraperService;
         }
 
+        [Authorize("Admin")]
         public IActionResult Index()
         {
             return this.View();
         }
 
+        [Authorize("Admin")]
         public async Task<IActionResult> Add()
         {
            await this.scraperService.PopulateDbWithRecipesAsync();

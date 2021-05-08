@@ -5,6 +5,8 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
+    using Microsoft.AspNetCore.Http;
+
     public class CreateRecipeInputModel /*: IMapTo<Recipe>, IHaveCustomMappings*/
     {
         [DisplayName("Име на рецептата")]
@@ -41,6 +43,9 @@
         public IEnumerable<RecipeIngredientInputModel> Ingredients { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CategoriesItems { get; set; }
+
+        [Range(1, 10)]
+        public IEnumerable<IFormFile> Images { get; set; }
 
         // public void CreateMappings(IProfileExpression configuration)
         // {

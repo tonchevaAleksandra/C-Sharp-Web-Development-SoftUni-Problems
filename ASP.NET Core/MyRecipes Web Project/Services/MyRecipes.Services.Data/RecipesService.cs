@@ -17,13 +17,13 @@ namespace MyRecipes.Services.Data
         private readonly IDeletableEntityRepository<Recipe> recipesRepository;
         private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
 
-        public RecipesService(IDeletableEntityRepository<Recipe> recipesRepository, IDeletableEntityRepository<Ingredient> ingredientsRepository, IWebHostEnvironment environment)
+        public RecipesService(IDeletableEntityRepository<Recipe> recipesRepository, IDeletableEntityRepository<Ingredient> ingredientsRepository)
         {
             this.recipesRepository = recipesRepository;
             this.ingredientsRepository = ingredientsRepository;
         }
 
-        public async Task CreateAsync(CreateRecipeInputModel input, string userId)
+        public async Task CreateAsync(CreateRecipeInputModel input, string userId, string imagePath)
         {
             var recipe = new Recipe()
             {
@@ -62,7 +62,7 @@ namespace MyRecipes.Services.Data
                     Extension = extension,
                 };
                 recipe.Images.Add(dbImage);
-                var physicalPath = $"wwwroot/images/recipes/{dbImage.Id}.{extension}";
+                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}.{extension}";
             }
 
             await this.recipesRepository.AddAsync(recipe);

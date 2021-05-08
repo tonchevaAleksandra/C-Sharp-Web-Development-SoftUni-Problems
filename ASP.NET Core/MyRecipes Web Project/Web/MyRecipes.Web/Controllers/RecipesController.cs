@@ -1,4 +1,6 @@
-﻿namespace MyRecipes.Web.Controllers
+﻿using Microsoft.AspNetCore.Hosting;
+
+namespace MyRecipes.Web.Controllers
 {
     using System.Threading.Tasks;
 
@@ -14,12 +16,14 @@
         private readonly ICategoriesService categoriesService;
         private readonly IRecipesService recipesService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IWebHostEnvironment environment;
 
-        public RecipesController(ICategoriesService categoriesService, IRecipesService recipesService, UserManager<ApplicationUser> userManager)
+        public RecipesController(ICategoriesService categoriesService, IRecipesService recipesService, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
         {
             this.categoriesService = categoriesService;
             this.recipesService = recipesService;
             this.userManager = userManager;
+            this.environment = environment;
         }
 
         [Authorize]
@@ -42,9 +46,10 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
             var userId = user.Id;
+            var imagePath = this.environment.ContentRootPath + "/images";
 
             // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await this.recipesService.CreateAsync(input, userId);
+            await this.recipesService.CreateAsync(input, userId, imagePath);
 
             // TODO: CreateAsync recipe using service method
             // TODO: Redirect to recipe info page

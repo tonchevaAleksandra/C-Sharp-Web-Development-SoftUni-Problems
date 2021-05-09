@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
-
-namespace MyRecipes.Web.Controllers
+﻿namespace MyRecipes.Web.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using MyRecipes.Data.Models;
@@ -46,10 +46,19 @@ namespace MyRecipes.Web.Controllers
 
             var user = await this.userManager.GetUserAsync(this.User);
             var userId = user.Id;
-            var imagePath = this.environment.ContentRootPath + "/images";
+            var imagePath = $"{this.environment.ContentRootPath}\\wwwroot\\img";
 
             // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await this.recipesService.CreateAsync(input, userId, imagePath);
+            try
+            {
+                await this.recipesService.CreateAsync(input, userId, imagePath);
+            }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError(string.Empty, e.Message);
+                input.CategoriesItems = this.categoriesService.GetAllAsKeyValuePairs();
+                return this.View(input);
+            }
 
             // TODO: CreateAsync recipe using service method
             // TODO: Redirect to recipe info page

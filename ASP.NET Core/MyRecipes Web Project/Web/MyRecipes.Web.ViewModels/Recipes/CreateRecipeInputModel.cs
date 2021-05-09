@@ -39,12 +39,13 @@
         [DisplayName("Категория")]
         public int CategoryId { get; set; }
 
+        [Required]
         [DisplayName("Съставки")]
         public IEnumerable<RecipeIngredientInputModel> Ingredients { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CategoriesItems { get; set; }
 
-        [Range(1, 10)]
+        [Required]
         public IEnumerable<IFormFile> Images { get; set; }
 
         // public void CreateMappings(IProfileExpression configuration)

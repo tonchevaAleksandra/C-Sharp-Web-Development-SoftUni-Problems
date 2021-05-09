@@ -1,12 +1,11 @@
-﻿using System.IO;
-
-namespace MyRecipes.Services.Data
+﻿namespace MyRecipes.Services.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Hosting;
+
     using MyRecipes.Data.Common.Repositories;
     using MyRecipes.Data.Models;
     using MyRecipes.Services.Mapping;
@@ -14,6 +13,8 @@ namespace MyRecipes.Services.Data
 
     public class RecipesService : IRecipesService
     {
+        private readonly string[] allowedExtensions = new[] { "jpg", "png", "jpeg", "gif" };
+
         private readonly IDeletableEntityRepository<Recipe> recipesRepository;
         private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
 
@@ -52,17 +53,28 @@ namespace MyRecipes.Services.Data
                 });
             }
 
+            Directory.CreateDirectory($"{imagePath}/recipes/");
+
             // /wwwroot/images/recipes/{id}.{extension}
             foreach (var image in input.Images)
             {
                 var extension = Path.GetExtension(image.FileName);
+                if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
+                {
+                    throw new Exception($"Invalid image extension {extension}.");
+                }
+
                 var dbImage = new Image()
                 {
                     CreatedByUserId = userId,
                     Extension = extension,
                 };
                 recipe.Images.Add(dbImage);
-                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}.{extension}";
+
+                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}{extension}";
+                dbImage.Url = physicalPath;
+                using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
+                await image.CopyToAsync(fileStream);
             }
 
             await this.recipesRepository.AddAsync(recipe);

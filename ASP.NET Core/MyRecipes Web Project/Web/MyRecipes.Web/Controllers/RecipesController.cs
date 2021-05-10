@@ -86,9 +86,10 @@
         }
 
         [HttpGet]
-        public IActionResult ById()
+        public IActionResult ById(int id)
         {
-            return this.View();
+            var viewModel = this.recipesService.GetById<SingleRecipeViewModel>(id);
+            return this.View(viewModel);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace MyRecipes.Web.ViewModels.Recipes
+﻿using System.Collections.Generic;
+
+namespace MyRecipes.Web.ViewModels.Recipes
 {
     using System;
     using System.Linq;
@@ -29,9 +31,13 @@
 
         public string ImageUrl { get; set; }
 
+        public int CategoryRecipesCount { get; set; }
+
+        public IEnumerable<IngredientViewModel> Ingredients { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Recipe, RecipeInListViewModel>()
+            configuration.CreateMap<Recipe, SingleRecipeViewModel>()
                 .ForMember(x => x.ImageUrl, opt =>
                 {
                     opt.MapFrom(r => r.Images.FirstOrDefault().Url != null

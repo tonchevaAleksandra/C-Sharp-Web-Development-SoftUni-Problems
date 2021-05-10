@@ -13,7 +13,7 @@
 
     public class RecipesService : IRecipesService
     {
-        private readonly string[] allowedExtensions = new[] { "jpg", "png", "jpeg", "gif" };
+        private readonly string[] allowedExtensions = new[] { ".jpg", ".png", ".jpeg", ".gif" };
 
         private readonly IDeletableEntityRepository<Recipe> recipesRepository;
         private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
@@ -67,12 +67,12 @@
                 var dbImage = new Image()
                 {
                     CreatedByUserId = userId,
+                    Recipe = recipe,
                     Extension = extension,
                 };
                 recipe.Images.Add(dbImage);
 
-                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}{extension}";
-                dbImage.Url = physicalPath;
+                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}{dbImage.Extension}";
                 using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
                 await image.CopyToAsync(fileStream);
             }

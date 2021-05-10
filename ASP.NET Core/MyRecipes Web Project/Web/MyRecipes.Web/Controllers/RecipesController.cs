@@ -46,7 +46,7 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
             var userId = user.Id;
-            var imagePath = $"{this.environment.ContentRootPath}\\wwwroot\\img";
+            var imagePath = $"{this.environment.WebRootPath}/images";
 
             // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             try

@@ -13,7 +13,7 @@
 
     public class RecipesService : IRecipesService
     {
-        private readonly string[] allowedExtensions = new[] { ".jpg", ".png", ".jpeg", ".gif" };
+        private readonly string[] allowedExtensions = new[] { "jpg", "png", "jpeg", "gif" };
 
         private readonly IDeletableEntityRepository<Recipe> recipesRepository;
         private readonly IDeletableEntityRepository<Ingredient> ingredientsRepository;
@@ -58,8 +58,8 @@
             // /wwwroot/images/recipes/{id}.{extension}
             foreach (var image in input.Images)
             {
-                var extension = Path.GetExtension(image.FileName);
-                if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
+                var extension = Path.GetExtension(image.FileName).TrimStart('.');
+                if (!this.allowedExtensions.Any(x => extension.ToLower().EndsWith(x)))
                 {
                     throw new Exception($"Invalid image extension {extension}.");
                 }
@@ -72,7 +72,7 @@
                 };
                 recipe.Images.Add(dbImage);
 
-                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}{dbImage.Extension}";
+                var physicalPath = $"{imagePath}/recipes/{dbImage.Id}.{dbImage.Extension}";
                 using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
                 await image.CopyToAsync(fileStream);
             }

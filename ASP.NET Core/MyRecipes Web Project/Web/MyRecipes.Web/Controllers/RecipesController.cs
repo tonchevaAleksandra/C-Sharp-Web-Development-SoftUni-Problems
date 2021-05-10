@@ -84,5 +84,11 @@
 
             return this.View(viewModel);
         }
+
+        [HttpGet]
+        public IActionResult ById()
+        {
+            return this.View();
+        }
     }
 }

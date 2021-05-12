@@ -14,8 +14,15 @@
                     <i class="far fa-calendar-alt"></i> @this.Model.CreatedOn.ToShortDateString()
                 </li>
                 <li class="single-meta">
-                    <i class="fas fa-user"></i> <span>
-                        @this.Model.CreatedByUserUserName
+                    <i class="fas fa-user"></i> by<span>
+                    @if (string.IsNullOrWhiteSpace(this.Model.CreatedByUserUserName))
+                    {
+                        <a href="@Model.OriginalUrl" target="_blank">recepti.gotvach.bg</a>
+                    }
+                    else
+                    {
+                        <span>@this.Model.CreatedByUserUserName</span>
+                    }
                     </span>
                 </li>
                 <li class="single-meta">
@@ -25,7 +32,7 @@
                         <li class="star-fill"><i class="fas fa-star"></i></li>
                         <li class="star-fill"><i class="fas fa-star"></i></li>
                         <li class="star-empty"><i class="fas fa-star"></i></li>
-                        <li><span>9<span> / 10</span></span> </li>
+                        <li><span>4<span> / 5</span></span> </li>
                     </ul>
                 </li>
             </ul>
@@ -54,7 +61,8 @@
                 <div class="feature-wrap">
                     <div class="media">
                         <div class="feature-icon">
-                            <i class="fas fa-utensils"></i>
+                            @*<i class="fas fa-utensils"></i>*@
+                            <i class="far fa-hourglass"></i>
                         </div>
                         <div class="media-body space-sm">
                             <div class="feature-title">Време за готвене</div>
@@ -80,10 +88,10 @@
                 <div class="feature-wrap">
                     <div class="media">
                         <div class="feature-icon">
-                            <i class="far fa-eye"></i>
+                            <i class="far fa-arrow-alt-circle-right"></i>
                         </div>
                         <div class="media-body space-sm">
-                            <div class="feature-title">Рецепти в категорията</div>
+                            <div class="feature-title"> Рецепти в категорията</div>
                             <div class="feature-sub-title">@Model.CategoryRecipesCount</div>
                         </div>
                     </div>
@@ -95,7 +103,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <h3 class="item-title"><i class="fas fa-list-ul"></i>Начин на приготвяне</h3>
+                <h3 class="item-title"><i class="far fa-file-alt"></i>Начин на приготвяне</h3>
                 <p class="item-description">
                     @this.Model.Instructions
                 </p>

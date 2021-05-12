@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace MyRecipes.Web.ViewModels.Recipes
+﻿namespace MyRecipes.Web.ViewModels.Recipes
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using AutoMapper;

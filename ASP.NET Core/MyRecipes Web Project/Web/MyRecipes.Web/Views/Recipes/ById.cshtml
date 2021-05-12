@@ -15,33 +15,44 @@
                 </li>
                 <li class="single-meta">
                     <i class="fas fa-user"></i> by<span>
-                    @if (string.IsNullOrWhiteSpace(this.Model.CreatedByUserUserName))
-                    {
-                        <a href="@Model.OriginalUrl" target="_blank">recepti.gotvach.bg</a>
-                    }
-                    else
-                    {
-                        <span>@this.Model.CreatedByUserUserName</span>
-                    }
+                        @if (string.IsNullOrWhiteSpace(this.Model.CreatedByUserUserName))
+                        {
+                            <a href="@Model.OriginalUrl" target="_blank">recepti.gotvach.bg</a>
+                        }
+                        else
+                        {
+                            <span>@this.Model.CreatedByUserUserName</span>
+                        }
                     </span>
                 </li>
                 <li class="single-meta">
                     <ul class="item-rating">
-                        <li class="star-fill"><i class="fas fa-star"></i></li>
-                        <li class="star-fill"><i class="fas fa-star"></i></li>
-                        <li class="star-fill"><i class="fas fa-star"></i></li>
-                        <li class="star-fill"><i class="fas fa-star"></i></li>
-                        <li class="star-empty"><i class="fas fa-star"></i></li>
-                        <li><span>4<span> / 5</span></span> </li>
+                        <li class="star-fill" style="cursor: pointer;" data-vote="1"><i class="fas fa-star"></i></li>
+                        <li class="star-fill" style="cursor: pointer;" data-vote="2"><i class="fas fa-star"></i></li>
+                        <li class="star-fill" style="cursor: pointer;" data-vote="3"><i class="fas fa-star"></i></li>
+                        <li class="star-fill" style="cursor: pointer;" data-vote="4"><i class="fas fa-star"></i></li>
+                        <li class="star-fill" style="cursor: pointer;" data-vote="5"><i class="fas fa-star"></i></li>
+                        <li>
+                            <span id="averageVoteValue">
+                                @if (Model.AverageVote % 1 == 0)
+                                {
+                                    @Model.AverageVote
+                                }
+                                else
+                                {
+                                    @Model.AverageVote.ToString("0.0")
+                                }
+                            </span><span>/ 5</span>
+                        </li>
                     </ul>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="item-figure" >
-        <img class="conta-fluid w-100" style="width: 26rem"; src="@this.Model.ImageUrl" alt=@Model.Name>
+    <div class="item-figure">
+        <img class="conta-fluid w-100" style="width: 26rem" ; src="@this.Model.ImageUrl" alt=@Model.Name>
     </div>
-    <hr/>
+    <hr />
     <div class="item-feature">
         <ul>
             <li>
@@ -124,3 +135,28 @@
     </div>
 </div>
 
+<form method="post" id="antiForgeryForm"></form>
+@section Scripts {
+    <script>
+        $("li[data-vote]").each(function (el) {
+            $(this).click(function () {
+                var value = $(this).attr("data-vote");
+                var recipeId = @Model.Id;
+                var antiForgeryToken = $('#antiForgeryForm input[name=__RequestVerificationToken]').val();
+                var data = { recipeId: recipeId, value: value };
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Votes",
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-TOKEN': antiForgeryToken
+                    },
+                    success: function (data) {
+                        $('#averageVoteValue').html(data.averageVote % 1 == 0 ? data.averageVote : data.averageVote.toFixed(1));
+                    },
+                    contentType: 'application/json',
+                });
+            })
+        });
+    </script>
+}

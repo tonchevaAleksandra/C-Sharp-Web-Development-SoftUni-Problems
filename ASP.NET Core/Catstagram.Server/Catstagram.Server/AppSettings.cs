@@ -1,7 +1,7 @@
 ﻿
 namespace Catstagram.Server
 {
-    public class ApplicationSettings
+    public class AppSettings
     {
         public string Secret { get; set; }
     }

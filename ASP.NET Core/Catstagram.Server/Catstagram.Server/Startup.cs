@@ -33,10 +33,10 @@ namespace Catstagram.Server
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<CatstagramDbContext>();
 
-            IConfigurationSection applicationSettingsConfig = this.Configuration.GetSection("ApplicationSettings");
-            services.Configure<ApplicationSettings>(applicationSettingsConfig);
+            IConfigurationSection applicationSettingsConfig = this.Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(applicationSettingsConfig);
 
-            var appSettings = applicationSettingsConfig.Get<ApplicationSettings>();
+            var appSettings = applicationSettingsConfig.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
             services.AddAuthentication(x =>

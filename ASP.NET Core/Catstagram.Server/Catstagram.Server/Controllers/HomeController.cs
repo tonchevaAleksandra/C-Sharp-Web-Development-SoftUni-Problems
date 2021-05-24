@@ -6,9 +6,9 @@ namespace Catstagram.Server.Controllers
 
     public class HomeController : ApiController
     {
-         [Authorize]
-       
-        public IActionResult Get()
+        [Authorize]
+
+        public ActionResult Get()
         {
             return this.Ok("Works");
         }
